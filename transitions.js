@@ -30,7 +30,11 @@
   function retarget(){if(queued)return;queued=true;requestAnimationFrame(function(){queued=false;sy=window.scrollY;tc=currentColor();});}
   addEventListener('scroll',retarget,{passive:true});
   addEventListener('load',retarget);
+  /* A late font swap or a layout shift moves the section centres without a scroll event, so
+     fonts.ready and a ResizeObserver on <body> re-target as well; otherwise a page that sat
+     still after a reflow kept the colour of whichever section was nearest before it. */
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(retarget);
+  if(window.ResizeObserver)new ResizeObserver(retarget).observe(document.body);
 
   var running=false;
   function frame(){
