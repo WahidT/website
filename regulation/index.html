@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Hmm Ventures | What remains valuable when software becomes free</title>
+  <meta name="description" content="An investment thesis: regulation is the last moat in a world where AI compresses everything else.">
+
+  <!-- Brand faces: the site's own fonts/ -->
+  <link rel="preload" href="../fonts/raela-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/kufam-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../fonts/fonts.css">
+
+  <!-- Stylesheets -->
+  <!-- Canonical design tokens: the site's own hmm-tokens.css (generated; do not edit) -->
+  <link rel="stylesheet" href="../hmm-tokens.css">
+  <link rel="stylesheet" href="./base.css">
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./assets/hmm_logo_cream.svg">
+</head>
+<body>
+  <!-- Skip to content -->
+  <a href="#thesis" class="sr-only" style="position:absolute;top:0;left:0;padding:1rem;background:var(--color-accent);color:var(--color-pearl);z-index:100;">Skip to content</a>
+
+  <!-- ============================================
+       FIXED NAV
+       ============================================ -->
+  <nav class="site-nav" id="site-nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo" aria-label="Hmm Ventures, return to top">
+        <img src="./assets/hmm_logo_cream.svg" alt="Hmm" class="nav-logo-img">
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#thesis" class="nav-link">Thesis</a>
+        <a href="#moats" class="nav-link">Moats</a>
+        <a href="#markets" class="nav-link">Markets</a>
+        <a href="#evidence" class="nav-link">Evidence</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <a href="./reg-map.html" class="nav-link">Regulation Map</a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       SECTION 1: HERO
+       ============================================ -->
+  <section class="section section--hero section--dark" id="hero">
+    <div class="hero-content">
+      <div class="hero-logo" id="hero-logo" aria-label="hmm ventures logo">
+        <img src="./assets/hmm_logo_cream.svg" alt="Hmm Ventures" class="hero-logo-img">
+      </div>
+      <p class="hero-tagline" id="hero-tagline"><em>What remains valuable when software becomes free</em></p>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SECTION 2: THE SOFTWARE CEILING
+       ============================================ -->
+  <section class="section section--dark" id="thesis">
+    <div class="section-inner two-col">
+      <div class="col-narrative">
+        <h2 class="section-heading reveal">The Software Ceiling</h2>
+        <p class="body-text reveal">Something broke in software in 2022. Not a correction. A structural repricing of what software, by itself, is worth.</p>
+        <p class="body-text reveal">Public SaaS valuations compressed roughly 80% from their 2021 peak. The median EV/NTM Revenue for tracked public SaaS sits at 3.4x as of early 2026. That compression had nothing to do with bad companies. The market repriced what software moats are worth in a world where software itself is becoming free to produce.</p>
+        <span class="source-cite reveal">Source: Clouded Judgement, Meritech Capital (Feb 2026)</span>
+        <p class="body-text reveal">AI models that can replicate software functionality at near-zero marginal cost are the equivalent of a massive new entrant arriving in every software market simultaneously.</p>
+        <p class="body-text reveal">The pattern repeats every time. The barrier to competition disappears. New entrants price aggressively. Margins collapse. The industry consolidates.</p>
+        <p class="body-text reveal display-italic">The question is not whether software moats are eroding. The question is: what replaces them?</p>
+      </div>
+      <div class="col-data">
+        <div class="data-card has-tooltip reveal">
+          <p class="data-label">SaaS Median EV/NTM Revenue</p>
+          <div class="data-comparison">
+            <div class="data-point data-point--before">
+              <span class="data-number" data-count="20" data-prefix="~" data-suffix="x">~20x</span>
+              <span class="data-year">2021</span>
+            </div>
+            <div class="data-arrow" aria-hidden="true">&rarr;</div>
+            <div class="data-point data-point--after">
+              <span class="data-number data-number--accent" data-count="3.4" data-suffix="x" data-decimals="1">3.4x</span>
+              <span class="data-year">2026</span>
+            </div>
+          </div>
+          <p class="data-footnote">&asymp;80% compression</p>
+          <span class="source-cite">Source: Clouded Judgement SaaS Index (Feb 2026)</span>
+          <span class="tooltip">Clouded Judgement SaaS Index tracks 80+ public SaaS companies</span>
+        </div>
+      </div>
+    </div>
+    <div class="visual-full reveal" style="margin-top:var(--space-12);">
+      <div class="visual-container">
+        <img src="./assets/commoditisation_curve.png" alt="SaaS median EV/NTM Revenue compression from ~20x (2021) to 3.4x (2026)" class="visual-img" loading="lazy">
+      </div>
+      <span class="source-cite">Source: Clouded Judgement, Meritech Capital (Feb 2026)</span>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SECTION 3: THE LAST MOAT
+       ============================================ -->
+  <section class="section section--dark" id="last-moat">
+    <div class="section-inner">
+      <h2 class="section-heading reveal">The Last Moat</h2>
+      <blockquote class="pull-quote reveal">
+        <p>Regulation is the one thing AI cannot compress. A government approval takes as long as a government approval takes. A regulator issues a licence when they decide to issue it. No language model can generate a compliance certification.</p>
+      </blockquote>
+
+      <!-- Two-column compare -->
+      <div class="moat-compare">
+        <div class="moat-col moat-col--compressed">
+          <h3 class="moat-col-heading reveal">What AI Compresses</h3>
+          <ul class="moat-list" role="list">
+            <li class="moat-item moat-item--strike reveal"><span>Code</span></li>
+            <li class="moat-item moat-item--strike reveal"><span>Content</span></li>
+            <li class="moat-item moat-item--strike reveal"><span>Design</span></li>
+            <li class="moat-item moat-item--strike reveal"><span>Analysis</span></li>
+            <li class="moat-item moat-item--strike reveal"><span>Customer Service</span></li>
+          </ul>
+        </div>
+        <div class="moat-col moat-col--durable">
+          <h3 class="moat-col-heading reveal">What AI Cannot Compress</h3>
+          <ul class="moat-list" role="list">
+            <li class="moat-item moat-item--solid reveal"><span>Government Approvals</span></li>
+            <li class="moat-item moat-item--solid reveal"><span>Regulatory Licences</span></li>
+            <li class="moat-item moat-item--solid reveal"><span>Compliance Mandates</span></li>
+            <li class="moat-item moat-item--solid reveal"><span>Safety Certifications</span></li>
+            <li class="moat-item moat-item--solid reveal"><span>Building Permits</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Two mechanism cards -->
+      <p class="body-text body-text--centered reveal" style="margin-top:var(--space-16);">Two mechanisms create durable moats in regulated markets:</p>
+      <div class="tier-cards">
+        <div class="tier-card reveal">
+          <h4 class="tier-card-title">Tier 1: The Direct Moat</h4>
+          <p class="tier-card-body">The product requires a government approval that takes 12–36 months and costs $500K–$5M to obtain. Once obtained, every competitor must start from zero.</p>
+        </div>
+        <div class="tier-card reveal">
+          <h4 class="tier-card-title">Tier 2: The Indirect Moat</h4>
+          <p class="tier-card-body">The buyer is legally required to purchase compliant solutions. Non-compliance carries financial penalties, licence revocation, and reputational damage. The switching cost is legal, not financial.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SECTION: HOW THE MOATS WORK
+       ============================================ -->
+  <section class="section section--dark" id="moats">
+    <div class="section-inner">
+      <h2 class="section-heading reveal">How the Moats Work</h2>
+
+      <!-- TIER 1 -->
+      <div class="moat-detail">
+        <h3 class="moat-detail-heading reveal">Tier 1: The Direct Moat <span class="moat-badge">T1</span></h3>
+        <p class="body-text reveal" style="font-family:var(--font-display);font-style:italic;font-size:var(--text-lg);color:var(--color-text);margin-bottom:var(--space-4);">Temporal Monopoly</p>
+        <div class="moat-narrative">
+          <p class="body-text reveal">A company obtains regulatory approval that takes 12–36 months and costs $500K–$5M. While they were obtaining it, the market was effectively closed.</p>
+          <p class="body-text reveal">After obtaining it, they have 12–36 months before any well-funded competitor can enter, assuming the competitor starts the process today. In practice, most competitors don't start until they see the first mover succeeding. The temporal monopoly compounds.</p>
+          <p class="body-text reveal">The FDA cleared 295 AI/ML medical devices in 2025 (median 142 days clearance time). Each company holds a temporal monopoly. No shortcut exists. The 2–3 years of pre-submission work (clinical studies, regulatory strategy, documentation) IS the moat.</p>
+          <span class="source-cite reveal">Source: FDA (2025)</span>
+        </div>
+
+        <div class="visual-full reveal">
+          <div class="visual-container">
+            <img src="./assets/temporal_monopoly.png" alt="Temporal monopoly diagram showing regulatory approval creating competitive windows" class="visual-img" loading="lazy">
+          </div>
+          <span class="source-cite">Source: Hmm Ventures proprietary analysis (2026)</span>
+        </div>
+
+        <!-- T1 Screening Test -->
+        <div class="screening-test reveal" style="margin-top:var(--space-10);">
+          <h4 class="screening-test-title">T1 Screening Test</h4>
+          <ul class="screening-list">
+            <li class="screening-item">
+              <span class="screening-check">&#10003;</span>
+              <span>Does the product require a specific regulatory approval, licence, or certification to operate? <span class="screening-required">YES required</span></span>
+            </li>
+            <li class="screening-item">
+              <span class="screening-check">&#10003;</span>
+              <span>Does obtaining that approval take more than 12 months and cost more than $500K? <span class="screening-required">YES required</span></span>
+            </li>
+            <li class="screening-item">
+              <span class="screening-check">&#10003;</span>
+              <span>Does the first company to obtain it hold a competitive window that later entrants cannot shortcut? <span class="screening-required">YES required</span></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- TIER 2 -->
+      <div class="moat-detail" style="margin-top:var(--space-20);">
+        <h3 class="moat-detail-heading reveal">Tier 2: The Indirect Moat <span class="moat-badge">T2</span></h3>
+        <p class="body-text reveal" style="font-family:var(--font-display);font-style:italic;font-size:var(--text-lg);color:var(--color-text);margin-bottom:var(--space-4);">Compliance Compulsion</p>
+        <div class="moat-narrative">
+          <p class="body-text reveal">The regulated buyer (bank, hospital, government agency) does not choose compliance vendors casually. They choose under legal obligation, where choosing wrong includes regulatory penalties, licence revocation, and reputational damage.</p>
+          <p class="body-text reveal">The switching cost is legal, not just financial. Removing an embedded compliance vendor requires regulatory notification, system replacement, documentation of the transition for auditors, and in many cases approval from the regulator.</p>
+          <p class="body-text reveal">The compliance software market grows from $40.8B (2026) to $74.1B by 2031 at 12.7% CAGR. Every new regulation creates a new procurement cycle.</p>
+          <span class="source-cite reveal">Source: MarketsandMarkets (2026)</span>
+        </div>
+
+        <div class="visual-full reveal">
+          <div class="visual-container">
+            <img src="./assets/compliance_cycle.png" alt="Compliance procurement cycle showing regulation creating mandatory purchasing behaviour" class="visual-img" loading="lazy">
+          </div>
+          <span class="source-cite">Source: Hmm Ventures proprietary analysis (2026)</span>
+        </div>
+
+        <!-- T2 Screening Test -->
+        <div class="screening-test reveal" style="margin-top:var(--space-10);">
+          <h4 class="screening-test-title">T2 Screening Test</h4>
+          <ul class="screening-list">
+            <li class="screening-item">
+              <span class="screening-check">&#10003;</span>
+              <span>Does the product sell to buyers who are legally required to purchase compliant solutions? <span class="screening-required">YES required</span></span>
+            </li>
+            <li class="screening-item">
+              <span class="screening-check">&#10003;</span>
+              <span>Is the cost to the buyer of non-compliance material (financial penalty, licence risk, or reputational damage)? <span class="screening-required">YES required</span></span>
+            </li>
+            <li class="screening-item">
+              <span class="screening-check">&#10003;</span>
+              <span>Is the switching cost high once the vendor is embedded in the buyer's compliance stack? <span class="screening-required">YES required</span></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SECTION: THE EVIDENCE
+       ============================================ -->
+  <section class="section section--light" id="evidence">
+    <div class="section-inner">
+      <h2 class="section-heading section-heading--dark reveal">The Evidence</h2>
+
+      <!-- Three data callouts -->
+      <div class="evidence-stats">
+        <div class="evidence-stat has-tooltip reveal">
+          <span class="evidence-number">14–17x</span>
+          <span class="evidence-label">EV/Revenue for regulated-sector software</span>
+          <span class="evidence-footnote">vs 5.1x standard SaaS median</span>
+          <span class="source-cite source-cite--dark">Source: Pitchbook, Bain Capital (2025)</span>
+          <span class="tooltip tooltip--dark">Pitchbook data shows regulated-sector software commands 3-4x premium over standard SaaS</span>
+        </div>
+        <div class="evidence-stat has-tooltip reveal">
+          <span class="evidence-number evidence-number--range">$40.8B &rarr; $74.1B</span>
+          <span class="evidence-label">Compliance software market, 2026–2031</span>
+          <span class="evidence-footnote">12.7% CAGR, structurally driven</span>
+          <span class="source-cite source-cite--dark">Source: MarketsandMarkets (2026)</span>
+          <span class="tooltip tooltip--dark">MarketsandMarkets compliance software market forecast, 2026–2031</span>
+        </div>
+        <div class="evidence-stat has-tooltip reveal">
+          <span class="evidence-number" data-count="295" data-decimals="0">295</span>
+          <span class="evidence-label">FDA AI/ML device clearances in 2025</span>
+          <span class="evidence-footnote">Each one a temporal monopoly</span>
+          <span class="source-cite source-cite--dark">Source: FDA (2025)</span>
+          <span class="tooltip tooltip--dark">FDA Center for Devices and Radiological Health AI/ML clearance database</span>
+        </div>
+      </div>
+
+      <!-- Historical precedent -->
+      <h3 class="evidence-sub-heading reveal">Historical precedent</h3>
+      <div class="precedent-grid">
+        <div class="precedent-card reveal">
+          <p class="precedent-text">GDPR crystallised in 2018. It created a <strong>$15 billion</strong> compliance services market.</p>
+          <span class="source-cite source-cite--dark">Source: Grand View Research (2024)</span>
+        </div>
+        <div class="precedent-card reveal">
+          <p class="precedent-text">The Dodd-Frank Act generated an <strong>$80 billion</strong> regulatory technology market.</p>
+          <span class="source-cite source-cite--dark">Source: Boston Consulting Group (2024)</span>
+        </div>
+        <div class="precedent-card reveal">
+          <p class="precedent-text">Waymo's decade in California's AV framework became a competitive moat that <strong>prevents competitors from entering</strong>.</p>
+          <span class="source-cite source-cite--dark">Source: CA DMV public filings (2024)</span>
+        </div>
+      </div>
+      <div class="visual-full reveal" style="margin-top:var(--space-12);">
+        <div class="visual-container">
+          <img src="./assets/regulated_vs_unreg_multiples.png" alt="Regulated-sector software trades at 14-17x EV/Revenue vs standard SaaS at 3.4x" class="visual-img" loading="lazy">
+        </div>
+        <span class="source-cite source-cite--dark">Source: Pitchbook, Bain Capital (2025)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       WHY NOW
+       ============================================ -->
+  <section class="section section--dark" id="why-now">
+    <div class="section-inner">
+      <h2 class="section-heading reveal">Why Now</h2>
+      <p class="body-text body-text--centered reveal" style="max-width:55ch;margin-left:auto;margin-right:auto;margin-bottom:var(--space-12);">As AI capability accelerates exponentially, regulatory activity across all three markets is simultaneously increasing. The intersection of these two trends is where the thesis lives.</p>
+      <div class="visual-full reveal">
+        <div class="visual-container">
+          <img src="./assets/why_now_macro.png" alt="AI capability curve rising exponentially alongside increasing regulatory activity across APAC markets" class="visual-img" loading="lazy">
+        </div>
+        <span class="source-cite">Source: Hmm Ventures macro analysis (2026)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SECTION: THREE MARKETS
+       ============================================ -->
+  <section class="section section--dark" id="markets">
+    <div class="section-inner">
+      <h2 class="section-heading reveal">Three Markets</h2>
+
+      <!-- Abstract geographic dots -->
+      <div class="geo-visual reveal" aria-label="Map showing Australia, Japan and New Zealand">
+        <svg class="geo-svg" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <circle cx="680" cy="120" r="6" opacity="0.4"/>
+          <circle cx="695" cy="135" r="4" opacity="0.3"/>
+          <text x="680" y="105" opacity="0.5" font-size="11" text-anchor="middle">JP</text>
+          <circle cx="630" cy="330" r="12" opacity="0.8"/>
+          <circle cx="660" cy="310" r="6" opacity="0.5"/>
+          <circle cx="600" cy="340" r="4" opacity="0.4"/>
+          <text x="630" y="360" opacity="0.7" font-size="11" text-anchor="middle">AU</text>
+          <circle cx="730" cy="370" r="5" opacity="0.5"/>
+          <text x="730" y="390" opacity="0.5" font-size="11" text-anchor="middle">NZ</text>
+          <line x1="630" y1="330" x2="730" y2="370" stroke-width="0.5" opacity="0.15"/>
+        </svg>
+      </div>
+
+      <!-- Three market cards -->
+      <div class="market-grid">
+        <div class="market-card reveal">
+          <h3 class="market-name">Australia</h3>
+          <p class="market-desc">8,791 funded startups in Hmm's dataset. TGA, APRA, and AEMO driving active regulatory calendars.</p>
+          <span class="source-cite">Source: Hmm Ventures proprietary dataset (2026)</span>
+        </div>
+        <div class="market-card reveal">
+          <h3 class="market-name">Japan</h3>
+          <p class="market-desc">World's fastest-aging population. AI Promotion Act, Building Standards Act reforms, PMDA medical device pathways.</p>
+          <span class="source-cite">Source: MLIT, METI official publications (2025)</span>
+        </div>
+        <div class="market-card reveal">
+          <h3 class="market-name">New Zealand</h3>
+          <p class="market-desc">Lowest-barrier entry for medical devices in the OECD. No premarket approval for SaMD.</p>
+          <span class="source-cite">Source: Medsafe regulatory framework (2025)</span>
+        </div>
+      </div>
+
+      <!-- Capital Scarcity subsection -->
+      <h3 class="subsection-heading reveal">Capital Scarcity</h3>
+      <ul class="market-data-list">
+        <li class="market-data-item reveal">Asia's total venture funding in 2024 hit $65.8B, matching the low from 2014.
+          <span class="source-cite">Source: Preqin/Crunchbase (2025)</span>
+        </li>
+        <li class="market-data-item reveal">Japan angel investment: only $89M total in 2023 for the world's 4th largest economy.
+          <span class="source-cite">Source: JVCA (2024)</span>
+        </li>
+        <li class="market-data-item reveal">NZ startup funding: fell to $163M in 2023, deals dropped 34%.
+          <span class="source-cite">Source: NZVCA (2024)</span>
+        </li>
+        <li class="market-data-item reveal">Australia: $5.1B in 2025 across only 390 deals, 61% went to AI alone.
+          <span class="source-cite">Source: Cut Through Venture (2026)</span>
+        </li>
+      </ul>
+      <div class="visual-full reveal">
+        <div class="visual-container">
+          <img src="./assets/capital_scarcity.png" alt="APAC seed funding per capita significantly below US levels" class="visual-img" loading="lazy">
+        </div>
+        <span class="source-cite">Source: Crunchbase, LAVCA, Startup Genome (2025)</span>
+      </div>
+
+      <!-- Regulatory Acceleration subsection -->
+      <h3 class="subsection-heading reveal" style="margin-top:var(--space-20);">Regulatory Acceleration</h3>
+      <div class="reg-highlights">
+        <div class="reg-highlight reveal"><strong>APRA CPS 230:</strong> Operational risk, already in effect</div>
+        <div class="reg-highlight reveal"><strong>TGA ASDER + UDI:</strong> Mandatory device reporting + identification, 2026</div>
+        <div class="reg-highlight reveal"><strong>JP AI Promotion Act:</strong> Passed 2025</div>
+      </div>
+      <div class="visual-full reveal">
+        <div class="visual-container">
+          <img src="./assets/regulatory_direction.png" alt="Regulatory activity increasing across all three markets, 2020-2028" class="visual-img" loading="lazy">
+        </div>
+        <span class="source-cite">Source: APRA, TGA, MLIT official publications (2025-2026)</span>
+      </div>
+
+      <p class="body-text body-text--centered reveal display-italic" style="margin-top:var(--space-16);max-width:55ch;">These are not emerging markets. They are OECD economies with mature regulatory frameworks, rule of law, and institutional capital markets.</p>
+    </div>
+  </section>
+
+  <!-- ============================================
+       BUILT FROM THE INSIDE
+       ============================================ -->
+  <section class="section section--dark" id="network">
+    <div class="section-inner">
+      <h2 class="section-heading reveal">Built From the Inside</h2>
+
+      <div class="visual-full reveal">
+        <div class="visual-container">
+          <img src="./assets/network_map.png" alt="Operating network map spanning Australia, Singapore, Japan, New Zealand with connections into Europe, the US, and the GCC" class="visual-img" loading="lazy">
+        </div>
+      </div>
+
+      <p class="body-text body-text--centered reveal" style="max-width:60ch;margin-left:auto;margin-right:auto;">10 years across compliance, venture capital, and commercial growth in regulated markets. Paddle, Skalata Ventures, GoodFit. Operating networks spanning Australia, Singapore, Japan, and New Zealand with deep connections into Europe, the US, and the GCC.</p>
+    </div>
+  </section>
+
+  <!-- ============================================
+       THE EXIT EVIDENCE
+       ============================================ -->
+  <section class="section section--light" id="exits">
+    <div class="section-inner">
+      <h2 class="section-heading section-heading--dark reveal">The Exit Evidence</h2>
+      <p class="body-text body-text--dark reveal" style="max-width:60ch;margin-bottom:var(--space-12);">Regulated-sector companies in these markets have produced meaningful exits. The regulatory moat translates directly into acquisition premiums.</p>
+
+      <div class="exit-grid">
+        <!-- Payapps -->
+        <div class="exit-card reveal">
+          <span class="exit-company">Payapps</span>
+          <span class="exit-outcome">&rarr; Autodesk</span>
+          <span class="exit-value">~USD $390M</span>
+          <span class="exit-desc">AU/NZ origin · Construction payment compliance</span>
+          <span class="moat-badge">T2</span>
+          <span class="exit-desc">Security of Payments Act compliance, state-level regulatory requirements</span>
+          <span class="exit-source">Source: Autodesk public announcement (Jan 2024)</span>
+        </div>
+
+        <!-- Volpara Health -->
+        <div class="exit-card reveal">
+          <span class="exit-company">Volpara Health</span>
+          <span class="exit-outcome">&rarr; Lunit</span>
+          <span class="exit-value">~A$292M / USD $193M</span>
+          <span class="exit-desc">NZ origin · AI breast cancer screening (FDA, TGA, CE cleared)</span>
+          <span class="moat-badge">T1</span>
+          <span class="exit-desc">FDA 510(k), TGA clearance, CE Mark: multi-jurisdiction regulatory approvals</span>
+          <span class="exit-source">Source: Lunit public announcement (Dec 2023)</span>
+        </div>
+
+        <!-- SafetyCulture -->
+        <div class="exit-card reveal">
+          <span class="exit-company">SafetyCulture</span>
+          <span class="exit-outcome">A$2.5B valuation</span>
+          <span class="exit-value">(2024)</span>
+          <span class="exit-desc">AU origin · Workplace safety compliance, 85,000 businesses</span>
+          <span class="moat-badge">T2</span>
+          <span class="exit-desc">WHS Act compliance, safety regulatory mandates across jurisdictions</span>
+          <span class="exit-source">Source: SafetyCulture press release (Sep 2024)</span>
+        </div>
+
+        <!-- Lumus Imaging -->
+        <div class="exit-card reveal">
+          <span class="exit-company">Lumus Imaging</span>
+          <span class="exit-outcome">&rarr; Affinity Equity Partners</span>
+          <span class="exit-value">~A$965M</span>
+          <span class="exit-desc">AU origin · Medical diagnostic imaging</span>
+          <span class="moat-badge">T1</span>
+          <span class="exit-desc">TGA-regulated diagnostic imaging, NATA-accredited pathology</span>
+          <span class="exit-source">Source: Ansarada FY25 ANZ Deal Indicators (2025)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       THE COUNTER-ARGUMENTS
+       ============================================ -->
+  <section class="section section--dark" id="counter-arguments">
+    <div class="section-inner">
+      <h2 class="section-heading reveal">The Counter-Arguments</h2>
+      <p class="body-text body-text--centered reveal" style="margin-bottom:var(--space-12);max-width:55ch;margin-left:auto;margin-right:auto;">Every thesis has objections. Here are the four most common, and why they actually strengthen the case.</p>
+
+      <div class="accordion-list">
+        <!-- 1 -->
+        <div class="accordion-item reveal">
+          <button class="accordion-trigger" aria-expanded="false">
+            <span>"Regulation moves too slowly"</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-body" role="region">
+            <div class="accordion-body-inner">
+              <p>The slowness IS the moat. NZ has no premarket approval for SaMD, so you can launch immediately. Singapore MAS has sandbox approvals in 3–6 months. Different markets, different speeds. The thesis does not require fast regulation. It requires regulation that exists and takes time for competitors to work through.</p>
+              <span class="source-cite">Source: Medsafe, MAS official guidance (2025)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="accordion-item reveal">
+          <button class="accordion-trigger" aria-expanded="false">
+            <span>"AI will automate the regulators"</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-body" role="region">
+            <div class="accordion-body-inner">
+              <p>AI speeds approvals. The FDA clearance median fell to 142 days. But faster moat formation does not mean eroded moats. The requirement to obtain approval does not disappear. If anything, faster processing means the first movers who file first capture their temporal monopoly sooner.</p>
+              <span class="source-cite">Source: FDA (2025)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="accordion-item reveal">
+          <button class="accordion-trigger" aria-expanded="false">
+            <span>"Incumbents will just acquire these companies"</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-body" role="region">
+            <div class="accordion-body-inner">
+              <p>This IS the exit thesis. Strategic acquirers pay premium multiples for pre-built regulatory infrastructure because the alternative is buying time. Payapps → Autodesk at ~$390M. Volpara → Lunit at ~$193M. The regulatory moat is exactly what makes these companies acquisition targets.</p>
+              <span class="source-cite">Source: Autodesk, Lunit public announcements (2023-2024)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="accordion-item reveal">
+          <button class="accordion-trigger" aria-expanded="false">
+            <span>"Slow commercialisation means slow valuations"</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-body" role="region">
+            <div class="accordion-body-inner">
+              <p>Regulated software trades at 14–17x EV/Revenue vs 5.1x SaaS median. Biotech reaches $1.6–2.2B valuations at Phase III with zero revenue. Markets price regulatory milestones, not just revenue. The valuation inflection comes at approval, not at first dollar earned.</p>
+              <span class="source-cite">Source: Pitchbook, Bain Capital (2025)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CONTACT
+       ============================================ -->
+  <section class="section section--dark section--cta" id="contact">
+    <div class="cta-content">
+      <p class="cta-heading reveal">The thesis is live. The fund is forming.</p>
+      <p class="cta-sub reveal">For institutional enquiries about Hmm Fund I, leave your details below.</p>
+
+      <form class="lp-form reveal" id="lp-form" name="lp-interest" method="POST" action="/regulation/" data-netlify="true" netlify-honeypot="bot-field" autocomplete="on">
+        <input type="hidden" name="form-name" value="lp-interest">
+        <p class="sr-only" aria-hidden="true">
+          <label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+        </p>
+        <div class="lp-form-row">
+          <div class="lp-field">
+            <label for="lp-name" class="lp-label">Name</label>
+            <input type="text" id="lp-name" name="name" class="lp-input" placeholder="Your name" autocomplete="name">
+          </div>
+          <div class="lp-field">
+            <label for="lp-email" class="lp-label">Email <span class="lp-required">*</span></label>
+            <input type="email" id="lp-email" name="email" class="lp-input" placeholder="you@firm.com" required autocomplete="email">
+          </div>
+        </div>
+        <div class="lp-field">
+          <label for="lp-org" class="lp-label">Organisation</label>
+          <input type="text" id="lp-org" name="org" class="lp-input" placeholder="Fund, family office, institution" autocomplete="organization">
+        </div>
+        <div class="lp-field">
+          <label for="lp-message" class="lp-label">Anything you'd like us to know</label>
+          <textarea id="lp-message" name="message" class="lp-input lp-textarea" rows="3" placeholder="Optional"></textarea>
+        </div>
+        <button type="submit" class="cta-button" id="lp-submit">Submit interest</button>
+        <div class="lp-feedback" id="lp-feedback" aria-live="polite"></div>
+      </form>
+
+      <p class="cta-note reveal">Or reach out directly: <a href="mailto:wt@hmm.ventures" style="color:var(--color-text);text-decoration:underline;">wt@hmm.ventures</a></p>
+      <p class="cta-note reveal" style="margin-top:var(--space-1);">Regulation-first seed investing across AU, JP, NZ</p>
+    </div>
+    <footer class="site-footer">
+      <img src="./assets/hmm_logo_cream.svg" alt="Hmm" class="footer-logo">
+      <a href="https://hmm.ventures" class="footer-link" target="_blank" rel="noopener noreferrer">hmm.ventures</a>
+    </footer>
+  </section>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

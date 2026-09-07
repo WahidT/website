@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Regulation Intelligence Map | Hmm Ventures</title>
+  <meta name="description" content="Interactive global regulation intelligence dashboard: 865 regulations across 26 countries and 16 sectors.">
+
+  <!-- Brand faces: the site's own fonts/ -->
+  <link rel="preload" href="../fonts/raela-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/kufam-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../fonts/fonts.css">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H"
+        crossorigin="anonymous">
+
+  <!-- Canonical design tokens: the site's own hmm-tokens.css (generated; do not edit) -->
+  <link rel="stylesheet" href="../hmm-tokens.css">
+  <!-- Site tokens bound to the canonical ones, plus components (no canvas rules) -->
+  <link rel="stylesheet" href="./style.css">
+  <!-- Page styles -->
+  <link rel="stylesheet" href="./reg-map.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./assets/hmm_logo_cream.svg">
+</head>
+<body class="regmap-body">
+
+  <!-- NAV (always scrolled state) -->
+  <nav class="site-nav is-scrolled" id="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="./index.html" class="nav-logo" style="opacity:1;" aria-label="Hmm Ventures, return to main site">
+        <img src="./assets/hmm_logo_cream.svg" alt="Hmm" class="nav-logo-img">
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="./index.html" class="nav-link">Home</a>
+        <a href="./index.html#thesis" class="nav-link">Thesis</a>
+        <a href="./index.html#markets" class="nav-link">Markets</a>
+        <a href="./index.html#evidence" class="nav-link">Evidence</a>
+        <a href="./index.html#contact" class="nav-link">Contact</a>
+        <a href="./reg-map.html" class="nav-link nav-link--active" aria-current="page">Regulation Map</a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       HERO
+       ============================================ -->
+  <section class="regmap-hero" aria-label="Dashboard overview">
+    <div class="regmap-hero-text">
+      <h1 class="regmap-title">Global Regulation Intelligence</h1>
+      <p class="regmap-subtitle" id="live-count">Loading regulation data...</p>
+    </div>
+  </section>
+
+  <!-- ============================================
+       LIVE STATS BAR
+       ============================================ -->
+  <div class="stats-bar" id="stats-bar" role="region" aria-label="Live statistics">
+    <div class="stats-bar-inner">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">-</div>
+        <div class="stat-label">Total Regulations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value stat-value--tomato" id="stat-t1">-</div>
+        <div class="stat-label">T1 Direct Moat</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-t2">-</div>
+        <div class="stat-label">T2 Indirect Moat</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-countries">-</div>
+        <div class="stat-label">Countries</div>
+      </div>
+      <div class="stat-card stat-card--wide">
+        <div class="stat-value stat-value--sm" id="stat-top-sector">-</div>
+        <div class="stat-label">Top Sector</div>
+      </div>
+      <div class="stat-card stat-card--wide">
+        <div class="stat-value stat-value--sm" id="stat-top-country">-</div>
+        <div class="stat-label">Most Regulated Country</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MAP SECTION
+       ============================================ -->
+  <section class="regmap-map-section" aria-label="Regulation map and filters">
+
+    <!-- Filter Bar (sticky) -->
+    <div class="filter-bar" id="filter-bar" role="search" aria-label="Filter regulations">
+      <div class="filter-bar-inner">
+        <!-- Region -->
+        <div class="filter-group">
+          <button class="filter-toggle" data-target="filter-region" aria-expanded="false" aria-haspopup="listbox">
+            Region <span class="filter-caret" aria-hidden="true">&#9662;</span>
+          </button>
+          <div class="filter-dropdown" id="filter-region" role="listbox" aria-label="Region filter"></div>
+        </div>
+        <!-- Sector -->
+        <div class="filter-group">
+          <button class="filter-toggle" data-target="filter-sector" aria-expanded="false" aria-haspopup="listbox">
+            Sector <span class="filter-caret" aria-hidden="true">&#9662;</span>
+          </button>
+          <div class="filter-dropdown filter-dropdown--wide" id="filter-sector" role="listbox" aria-label="Sector filter"></div>
+        </div>
+        <!-- Tier -->
+        <div class="filter-group">
+          <button class="filter-toggle" data-target="filter-tier" aria-expanded="false" aria-haspopup="listbox">
+            Tier <span class="filter-caret" aria-hidden="true">&#9662;</span>
+          </button>
+          <div class="filter-dropdown" id="filter-tier" role="listbox" aria-label="Tier filter"></div>
+        </div>
+        <!-- Status -->
+        <div class="filter-group">
+          <button class="filter-toggle" data-target="filter-status" aria-expanded="false" aria-haspopup="listbox">
+            Status <span class="filter-caret" aria-hidden="true">&#9662;</span>
+          </button>
+          <div class="filter-dropdown" id="filter-status" role="listbox" aria-label="Status filter"></div>
+        </div>
+        <!-- Year Range -->
+        <div class="filter-group filter-group--year">
+          <span class="filter-year-label">Year: <span id="year-display">All years</span></span>
+          <div class="filter-year-sliders">
+            <label class="sr-only" for="year-min">From year</label>
+            <input type="range" id="year-min" min="1300" max="2028" value="1300" class="year-slider" aria-label="Minimum year">
+            <label class="sr-only" for="year-max">To year</label>
+            <input type="range" id="year-max" min="1980" max="2028" value="2028" class="year-slider" aria-label="Maximum year">
+          </div>
+          <label class="filter-undated" for="include-undated">
+            <input type="checkbox" id="include-undated" checked> Include undated
+          </label>
+        </div>
+        <!-- Reset -->
+        <button class="filter-reset" id="filter-reset" aria-label="Reset all filters">Reset</button>
+      </div>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map" class="regmap-map" role="application" aria-label="Global regulation map"></div>
+
+    <!-- Country Detail Panel (slides in from right) -->
+    <aside class="country-panel" id="country-panel" aria-label="Country detail" aria-hidden="true">
+      <button class="country-panel-close" id="panel-close" aria-label="Close country detail panel">&times;</button>
+      <h2 class="country-panel-title" id="panel-title">Country</h2>
+      <p class="country-panel-meta" id="panel-meta"></p>
+      <p class="country-panel-count" id="panel-count"></p>
+      <div class="country-panel-body" id="panel-body"></div>
+    </aside>
+
+  </section>
+
+  <!-- ============================================
+       CHARTS SECTION
+       ============================================ -->
+  <section class="regmap-charts" aria-label="Regulation analytics charts">
+
+    <!-- Chart 1: SaaS Valuation Compression -->
+    <div class="chart-section" id="chart-saas-section">
+      <h2 class="chart-heading">SaaS Valuation Compression</h2>
+      <p class="chart-desc">Median EV/NTM Revenue for public SaaS companies, 2018–2026. AI commoditisation compresses multiples for undifferentiated software.</p>
+      <div class="chart-wrap chart-wrap--line">
+        <canvas id="chart-saas" aria-label="SaaS valuation compression line chart"></canvas>
+      </div>
+      <span class="chart-source">Source: Clouded Judgement, Meritech Capital (Feb 2026)</span>
+    </div>
+
+    <!-- Chart 2: Regulation Surface Area by Country -->
+    <div class="chart-section" id="chart-country-section">
+      <h2 class="chart-heading">Regulation Surface Area by Country</h2>
+      <p class="chart-desc">Total regulations per country, split by tier. T1 (direct moat) requires government approval to operate. T2 (indirect moat) creates mandated purchasing.</p>
+      <div class="chart-wrap chart-wrap--bar">
+        <canvas id="chart-country" aria-label="Regulation surface area by country horizontal stacked bar chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 3: Regulation Timeline -->
+    <div class="chart-section" id="chart-timeline-section">
+      <h2 class="chart-heading">Regulation Timeline</h2>
+      <p class="chart-desc">Cumulative regulation count by year, stacked by legislative status. The pipeline continues to build through 2028.</p>
+      <div class="chart-wrap chart-wrap--area">
+        <canvas id="chart-timeline" aria-label="Regulation timeline cumulative stacked area chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 4: Sector Distribution -->
+    <div class="chart-section" id="chart-sector-section">
+      <h2 class="chart-heading">Sector Distribution</h2>
+      <p class="chart-desc">Bubble size indicates total regulation count. Colour intensity (pearl to tomato) indicates T1 ratio: more tomato means a higher direct-moat concentration.</p>
+      <div class="chart-wrap chart-wrap--bubble">
+        <canvas id="chart-sector" aria-label="Sector distribution bubble chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 5: Regional Comparison -->
+    <div class="chart-section" id="chart-radar-section">
+      <h2 class="chart-heading">Regional Comparison</h2>
+      <p class="chart-desc">Regulation density across sector groups by region. Each axis represents a sector group aggregated from individual sectors.</p>
+      <div class="chart-wrap chart-wrap--radar">
+        <canvas id="chart-radar" aria-label="Regional comparison radar chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 6: Regulated vs Unregulated Multiples -->
+    <div class="chart-section" id="chart-multiples-section">
+      <h2 class="chart-heading">Regulated vs Unregulated Multiples</h2>
+      <p class="chart-desc">EV/Revenue comparison: regulated-sector software commands a 3–4x premium over standard SaaS due to structural moat and sticky revenue.</p>
+      <div class="chart-wrap chart-wrap--multiples">
+        <canvas id="chart-multiples" aria-label="Regulated vs unregulated multiples bar chart"></canvas>
+      </div>
+      <span class="chart-source">Source: Pitchbook, Bain Capital (2025)</span>
+    </div>
+
+    <!-- Chart 7: Exit Evidence -->
+    <div class="chart-section" id="chart-exits-section">
+      <h2 class="chart-heading">Exit Evidence</h2>
+      <p class="chart-desc">Recent regulated-sector exits from the core markets: Australia, New Zealand, Japan. Each exit validates the regulatory moat thesis.</p>
+      <div class="exit-timeline" id="exit-timeline" role="list"></div>
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="regmap-footer" role="contentinfo">
+    <img src="./assets/hmm_logo_cream.svg" alt="Hmm Ventures" class="footer-logo">
+    <a href="./index.html" class="footer-link">Return to main site</a>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH"
+          crossorigin="anonymous"></script>
+  <!-- dist/chart.umd.js is the minified UMD build the npm package ships. The .min.js path is a
+       CDN-side re-minify with no published hash, so it cannot carry a verifiable SRI. -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"
+          integrity="sha384-FcQlsUOd0TJjROrBxhJdUhXTUgNJQxTMcxZe6nHbaEfFL1zjQ+bq/uRoBQxb0KMo"
+          crossorigin="anonymous"></script>
+  <script src="./data/regulations-data.js"></script>
+  <script src="./reg-map.js"></script>
+</body>
+</html>
