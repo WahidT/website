@@ -1,15 +1,8 @@
 /* hmm site - the page script. What index.html carried inline until 2026-09-07: the hero
    ledgers and machines, the three necessity sections and their schematics, the S5 helix, the
    S7 timeline, and the section rail. Moved out so the Content-Security-Policy in _headers can
-   drop unsafe-inline for scripts. Load order is unchanged: after machines.js, before
-   transitions.js. */
-/* Tokens, read at paint time. These figures hardcoded colour because
-   nothing handed it to them; reading the custom property also means a theme
-   change reaches the canvas, which a frozen hex never could. */
-function __T(n, fallback) {
-  var v = getComputedStyle(document.documentElement).getPropertyValue(n);
-  return (v && v.trim()) || fallback;
-}
+   drop unsafe-inline for scripts. Load order is unchanged: after theme.js and machines.js,
+   before transitions.js. Tokens are read through __T from theme.js, at render. */
 
 var h=window.hmmH;
 /* ---------- hero: machines + ledgers + interactions ---------- */
@@ -22,7 +15,10 @@ Object.keys(LEDGERS).forEach(function(nec){var ul=document.querySelector('.ledge
 ["power","eat","heal"].forEach(function(nec){HMM.renderIcon(document.querySelector('.machine[data-machine="'+nec+'"]'),nec);});
 
 /* ---------- necessity section content ---------- */
-var ACCENT={power:__T("--hmm-nec-power", "#FF730B"),eat:__T("--hmm-nec-eat", "#4F8A5B"),heal:__T("--hmm-nec-heal", "#8752A5")};
+/* Token names, read at each render rather than captured here, so a data-theme flip reaches the next paint. */
+var ACCENT_TOKEN={power:["--hmm-nec-power","#FF730B"],eat:["--hmm-nec-eat","#4F8A5B"],heal:["--hmm-nec-heal","#8752A5"]};
+function accentOf(kind){return __T(ACCENT_TOKEN[kind][0],ACCENT_TOKEN[kind][1]);}
+var SCHEMATIC_MOUNTS=[];
 var SECCFG={
   power:{eyebrow:"Necessity 01 · Power",sub:"Distribution transformer · exploded",title:'The transformer, in <em>blow-out</em>',dwg:"hmm-NEC-01-D5",
     exEyebrow:"Why Power is a necessity",exTitle:"The energy system",
@@ -52,7 +48,7 @@ if(SECCFG.power) SECCFG.power.exHTML="Power is the energy system: a resource ext
 if(SECCFG.eat) SECCFG.eat.exHTML="Eat is the food and farming system, crop and livestock in one cycle: grain feeds animals, manure feeds the soil. The cost pressure sits on nitrogen for crops and feed conversion for livestock. hmm backs the field-autonomy layer that bears on both.";
 if(SECCFG.heal) SECCFG.heal.exHTML="Heal is the healthcare system, from prevention through diagnosis and treatment to end-of-life care. Its limits are regulatory and financial: what a regulator approves and what a payer reimburses. hmm's read is that the value sits upstream, at detection, where disease caught early costs least to treat.";
 
-function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=ACCENT[kind];
+function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
   var LAB="rgba(242,236,201,.85)",LINE="rgba(242,236,201,.4)",BRD="rgba(242,236,201,.22)";
   var N=S.length,M=14,BW,BH,vbW,vbH,ctr=[],e=[],kc=0,RING=(kind==='eat');
   if(RING){
@@ -128,12 +124,21 @@ document.addEventListener('click',function(ev){if(!ev.target.closest('.blk')&&!e
     +'<div class="stage-panel" aria-live="polite"></div></div>'
     +'</div>';
   HMM.renderBlowout(sec.querySelector('.machine-wrap'),kind);
-  hmmRender(sec.querySelector('.schematic-wrap'),Schematic(kind));
+  var smount=sec.querySelector('.schematic-wrap');hmmRender(smount,Schematic(kind));SCHEMATIC_MOUNTS.push({mount:smount,kind:kind});
 });
+/* A theme flip redraws each schematic with the accent re-read. hmmRender replaces the
+   tree, so the open stage (a class on one block) is carried across by its data-key. */
+__onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
+  var open=m.mount.querySelector('.blk--active'),key=open&&open.getAttribute('data-key');
+  hmmRender(m.mount,Schematic(m.kind));
+  if(key){var g=m.mount.querySelector('.blk[data-key="'+key.replace(/"/g,'\\"')+'"]');if(g)g.classList.add('blk--active');}
+});});
 
 /* ---------- S5 bifurcation: animated triple-helix of dots, necessity colours ---------- */
 (function(){
-  var NS="http://www.w3.org/2000/svg", NEC=[__T("--hmm-nec-power", "#FF730B"),__T("--hmm-nec-eat", "#4F8A5B"),__T("--hmm-nec-heal", "#8752A5")];
+  var NS="http://www.w3.org/2000/svg";
+  function necFills(){return [__T("--hmm-nec-power", "#FF730B"),__T("--hmm-nec-eat", "#4F8A5B"),__T("--hmm-nec-heal", "#8752A5")];}
+  var NEC=necFills();
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var m=document.getElementById('aiSplit');
   if(m){
@@ -142,6 +147,7 @@ document.addEventListener('click',function(ev){if(!ev.target.closest('.blk')&&!e
     segs.forEach(function(s){var a=s[0],b=s[1],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),N=Math.max(10,Math.round(len/3));
       for(var i=0;i<=N;i++){var t=i/N;NEC.forEach(function(c,ci){var el=document.createElementNS(NS,'circle');el.setAttribute('fill',c);svg.appendChild(el);dots.push({el:el,a:a,dx:dx,dy:dy,t:t,ci:ci,q:Math.random()});});}});
     m.appendChild(svg);
+    __onTheme(function(){NEC=necFills();dots.forEach(function(d){d.el.setAttribute('fill',NEC[d.ci]);});});
     var amp=3.4,cycles=1.7,phase=0;
     function render(){dots.forEach(function(d){var len=Math.hypot(d.dx,d.dy),ux=d.dx/len,uy=d.dy/len,px=-uy,py=ux,ang=d.t*cycles*6.2832+d.ci*2.094+phase,off=amp*Math.sin(ang),depth=(Math.sin(ang)+1)/2,x=d.a[0]+d.dx*d.t+px*off,y=d.a[1]+d.dy*d.t+py*off;
       var big=d.q<.14,r=(big?1.9:(d.q<.5?1.3:.85))*(0.82+depth*0.36),op=(big?.9:.62)*(0.48+depth*0.52);

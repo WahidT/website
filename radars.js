@@ -1,10 +1,3 @@
-/* Tokens, read at paint time. These figures hardcoded colour because
-   nothing handed it to them; reading the custom property also means a theme
-   change reaches the canvas, which a frozen hex never could. */
-function __T(n, fallback) {
-  var v = getComputedStyle(document.documentElement).getPropertyValue(n);
-  return (v && v.trim()) || fallback;
-}
 /* hmm site - THREE hexagon radar charts (Australia, New Zealand, Japan).
    One panel per market. Six spokes 60 degrees apart, same axis order and rotation
    across all three panels: AI · HARDWARE · REGULATION · STARTUP · EXIT · TRADE.
@@ -12,14 +5,20 @@ function __T(n, fallback) {
    the max spoke length. Vanilla SVG (createElementNS), no libraries.
    Renders into an existing #radars container on load; no-ops if it is absent.
    Dark by default (bg #141414) to match the live site; light via prefers-color-scheme
-   and [data-theme="light"]. Honours prefers-reduced-motion (disables the dot pulse). */
+   and [data-theme="light"]. Honours prefers-reduced-motion (disables the dot pulse).
+   Tokens are read through __T from theme.js and re-read on __onTheme. */
 (function () {
   var SVGNS = "http://www.w3.org/2000/svg";
 
   var AXES = ["AI", "HARDWARE", "REGULATION", "STARTUP", "EXIT", "TRADE"];
 
-  // Necessity palette (exact hues, matched to the rest of the site).
-  var HUES = { Power: __T("--hmm-nec-power-dark", "#FF9732"), Eat: __T("--hmm-nec-eat-dark", "#508B5C"), Heal: __T("--hmm-nec-heal-dark", "#9E69BE") };
+  // Necessity palette (exact hues, matched to the rest of the site). Read
+  // from the tokens at every render: hues() is called for the first paint and
+  // again on a data-theme flip, and HUES is refreshed in place so every
+  // reader of it (the swatches, the series paths, the canvas dots) sees the
+  // new value without being rebuilt.
+  function hues() { return { Power: __T("--hmm-nec-power-dark", "#FF9732"), Eat: __T("--hmm-nec-eat-dark", "#508B5C"), Heal: __T("--hmm-nec-heal-dark", "#9E69BE") }; }
+  var HUES = hues();
   var SERIES = ["Power", "Eat", "Heal"];
 
   // dots render on <canvas> using the DWG-NEC machine-flock physics; PANELS collects them per panel.
@@ -86,6 +85,7 @@ function __T(n, fallback) {
     if (d < -6) return "end";
     return "middle";
   }
+
 
   function css() {
     return [
@@ -168,7 +168,8 @@ function __T(n, fallback) {
     "NEW ZEALAND": "New Zealand, the standard-setting market. One house of parliament and top-of-table trust let it move a rule fast, and its food-safety regime is among the strongest. The gene-technology reform reopens the Eat biological-input gate. Hardware runs global at the top end through Fisher and Paykel Healthcare and Rocket Lab, and through Halter in animal agriculture. The venture base is small and global from the first customer. Exits go offshore to Australian and US acquirers.",
     "JAPAN": "Japan, the hardware market under demand stress. It imports roughly 90% of its energy, which makes Power a national-security question, and it holds the world's oldest population, which makes Heal a structural demand. The PMDA is a rigorous medical gate with a fast track for novel devices, and the AI regime is among the most permissive, with copyright law broadly allowing training on protected data. Hardware leads the world in robotics, semiconductor materials, image sensors and batteries. The venture base is thin but rising on a government startup plan, and Tokyo Growth gives it an early IPO exit. Examples include Preferred Networks, Sakana, Spiber and SmartHR."
   };
-  var COUNTRY_ACCENT = { "AUSTRALIA": __T("--hmm-mkt-au-dark", "#A77900"), "NEW ZEALAND": __T("--hmm-mkt-nz-dark", "#C0C0C0"), "JAPAN": __T("--hmm-mkt-jp-dark", "#687DB8") };
+  var COUNTRY_TOKEN = { "AUSTRALIA": ["--hmm-mkt-au-dark", "#A77900"], "NEW ZEALAND": ["--hmm-mkt-nz-dark", "#C0C0C0"], "JAPAN": ["--hmm-mkt-jp-dark", "#687DB8"] };
+  function countryAccent(name) { var t = COUNTRY_TOKEN[name]; return t ? __T(t[0], t[1]) : __T("--hmm-accent", "#C44539"); }
 
   var AXIS_DEFS = {
     "AI": "AI competence. The market's ability to build and apply modern AI, from research base to deployed product.",
@@ -253,7 +254,8 @@ function __T(n, fallback) {
 
     ["tl", "tr", "bl", "br"].forEach(function (p) { panel.appendChild(cornerTick(p)); });
 
-    panel.style.setProperty("--c", COUNTRY_ACCENT[market.name] || __T("--hmm-accent", "#C44539"));
+    panel.setAttribute("data-market", market.name);
+    panel.style.setProperty("--c", countryAccent(market.name));
 
     var title = document.createElement("h3");
     title.className = "radar-title";
@@ -344,6 +346,25 @@ function __T(n, fallback) {
     wrap.className = "radar-wrap";
     MARKETS.forEach(function (m) { wrap.appendChild(buildPanel(m)); });
     root.appendChild(wrap);
+
+    // The re-render path. Refresh HUES in place and re-point every dot, series
+    // path, swatch and panel accent; the frame loop below reads d.hue each
+    // frame, so the canvas repaints on its own.
+    __onTheme(function () {
+      var fresh = hues();
+      SERIES.forEach(function (n) { HUES[n] = fresh[n]; });
+      PANELS.forEach(function (p) { p.dots.forEach(function (d) { d.hue = HUES[d.s]; }); });
+      Array.prototype.forEach.call(root.querySelectorAll(".series"), function (g) {
+        var n = g.getAttribute("data-series"); if (!n || !HUES[n]) return;
+        Array.prototype.forEach.call(g.querySelectorAll(".radar-fill"), function (e) { e.setAttribute("fill", HUES[n]); });
+        Array.prototype.forEach.call(g.querySelectorAll(".radar-line"), function (e) { e.setAttribute("stroke", HUES[n]); });
+      });
+      Array.prototype.forEach.call(root.querySelectorAll(".radar-chip"), function (chip) {
+        var sw = chip.querySelector(".swatch"), n = chip.getAttribute("data-series");
+        if (sw && n && HUES[n]) sw.style.background = HUES[n];
+      });
+      Array.prototype.forEach.call(root.querySelectorAll(".radar-panel"), function (p) { p.style.setProperty("--c", countryAccent(p.getAttribute("data-market"))); });
+    });
 
     // ---- canvas flock engine: draw every panel's dots with the DWG-NEC machine physics ----
     var reduceMo = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;

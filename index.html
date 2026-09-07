@@ -97,13 +97,17 @@
   .box-go{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:var(--hmm-font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-pearl);white-space:nowrap;}
   .box-go-arrow{width:22px;height:8px;flex:0 0 auto;fill:none;stroke:var(--accent);stroke-width:1.4;transition:transform .3s var(--hmm-ease);}
   .box:hover .box-go-arrow,.box:focus-visible .box-go-arrow{transform:translateX(4px);}
-  .box--power{--accent:var(--hmm-nec-power);}.box--eat{--accent:var(--hmm-nec-eat);}.box--heal{--accent:var(--hmm-nec-heal);}
+  /* --accent is the identity colour and stays on dots, ticks, arrows and borders, where the
+     colour is the name. --accent-text is the -dark variant, used wherever the identity colour is
+     set as TEXT on the dark ground: the base hues measure 6.76 (Power), 4.49 (Eat) and 3.32 (Heal)
+     against #141414, and the -dark variants clear 4.5 at 8.53, 4.55 and 4.58. */
+  .box--power{--accent:var(--hmm-nec-power);--accent-text:var(--hmm-nec-power-dark);}.box--eat{--accent:var(--hmm-nec-eat);--accent-text:var(--hmm-nec-eat-dark);}.box--heal{--accent:var(--hmm-nec-heal);--accent-text:var(--hmm-nec-heal-dark);}
   .box::before{content:"";position:absolute;left:12px;top:12px;width:9px;height:1px;background:var(--accent);z-index:2;}
   .box::after{content:"";position:absolute;left:12px;top:12px;width:1px;height:9px;background:var(--accent);z-index:2;}
   .box-stage{flex:1;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;}
   .machine{width:78%;height:70%;display:flex;align-items:center;justify-content:center;transition:transform .5s var(--hmm-ease);}
   .box-info{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 0 22px;text-align:center;transition:flex .5s var(--hmm-ease);}
-  .box-label{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.18em;font-size:13px;color:var(--accent);}
+  .box-label{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.18em;font-size:13px;color:var(--accent-text);}
   .commentary{max-width:34ch;margin-top:12px;font-family:var(--hmm-font-body);font-size:13px;line-height:1.5;color:var(--hmm-text-muted);overflow:hidden;transition:opacity .4s var(--hmm-ease),max-height .4s var(--hmm-ease);}
   .ledger{list-style:none;margin:0;padding:0;width:100%;margin-top:16px;overflow:hidden;transition:opacity .45s var(--hmm-ease),max-height .45s var(--hmm-ease);}
   .ledger li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--hmm-border);font-family:var(--hmm-font-body);font-size:12.5px;color:var(--hmm-pearl);}
@@ -230,9 +234,9 @@
   .sp-facet p{font-size:12.5px;line-height:1.46;color:var(--hmm-pearl);margin:3px 0 0;}
   .stage-panel>*:nth-child(5){animation-delay:.32s;}
   /* per-necessity accent */
-  .sec-power .stage-eyebrow,.sec-power .sp-name{color:var(--hmm-nec-power);}
-  .sec-eat   .stage-eyebrow,.sec-eat   .sp-name{color:var(--hmm-nec-eat);}
-  .sec-heal  .stage-eyebrow,.sec-heal  .sp-name{color:var(--hmm-nec-heal);}
+  .sec-power .stage-eyebrow,.sec-power .sp-name{color:var(--hmm-nec-power-dark);}
+  .sec-eat   .stage-eyebrow,.sec-eat   .sp-name{color:var(--hmm-nec-eat-dark);}
+  .sec-heal  .stage-eyebrow,.sec-heal  .sp-name{color:var(--hmm-nec-heal-dark);}
   /* ---------- lens intro + through-line ---------- */
   .through-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
   .through p b{color:var(--hmm-pearl);font-weight:600;}
@@ -303,7 +307,7 @@
   .rec-m{flex:0 0 24px;font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.06em;}
   .rec-m--AU{color:var(--hmm-mkt-au-dark);}.rec-m--JP{color:var(--hmm-mkt-jp-dark);}.rec-m--NZ{color:var(--hmm-mkt-nz-dark);}
   .rec-tag{flex:0 0 auto;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);}
-  .rec-nec--Power{color:var(--hmm-nec-power);}.rec-nec--Eat{color:var(--hmm-nec-eat);}.rec-nec--Heal{color:var(--hmm-nec-heal);}.rec-nec--DeepTech{color:var(--hmm-caption);}
+  .rec-nec--Power{color:var(--hmm-nec-power-dark);}.rec-nec--Eat{color:var(--hmm-nec-eat-dark);}.rec-nec--Heal{color:var(--hmm-nec-heal-dark);}.rec-nec--DeepTech{color:var(--hmm-caption);}
   .rec-name{font-size:13.5px;color:var(--hmm-pearl);}
   .rec-name sup{color:var(--hmm-accent);font-size:9px;margin-left:1px;}
   .rec-meta{font-family:var(--hmm-font-mono);font-size:10.5px;color:var(--hmm-text-muted);letter-spacing:.02em;}
@@ -328,9 +332,9 @@
   .card-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
   .card-hdr .card-eyebrow{margin-bottom:0;}
   .card-id{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.12em;border:1px solid var(--hmm-border);padding:2px 7px;flex:0 0 auto;}
-  .sec-power .card-id{color:var(--hmm-nec-power);border-color:var(--hmm-nec-power);}
-  .sec-eat .card-id{color:var(--hmm-nec-eat);border-color:var(--hmm-nec-eat);}
-  .sec-heal .card-id{color:var(--hmm-nec-heal);border-color:var(--hmm-nec-heal);}
+  .sec-power .card-id{color:var(--hmm-nec-power-dark);border-color:var(--hmm-nec-power);}
+  .sec-eat .card-id{color:var(--hmm-nec-eat-dark);border-color:var(--hmm-nec-eat);}
+  .sec-heal .card-id{color:var(--hmm-nec-heal-dark);border-color:var(--hmm-nec-heal);}
   .card-foot{display:flex;margin-top:16px;border-top:1px solid var(--hmm-border);}
   .card-foot span{flex:1;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;color:var(--hmm-caption);padding:8px 10px;border-right:1px solid var(--hmm-border);}
   .card-foot span:last-child{border-right:0;text-align:right;}
@@ -679,6 +683,7 @@
   <script src="data/heal_steps.js"></script>
   <script src="scripts/hmm-motion.js"></script>
   <script src="scripts/hmm-svg.js"></script>
+  <script src="theme.js"></script>
   <script src="machines.js?v=14"></script>
   <script src="sections.js"></script>
   <script src="transitions.js?v=13"></script>

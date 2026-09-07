@@ -4,9 +4,14 @@
    Honours prefers-reduced-motion (draws a settled still frame). */
 (function(){
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var PEARL=[242,236,201], THESIS=[184,134,58], C08=[168,59,46], ACC='rgba(196,69,57,0.9)',
-      LINE='rgba(242,236,201,0.22)', FAINT='rgba(242,236,201,0.5)', LBL='rgba(242,236,201,0.42)';
+  /* A token as an [r,g,b] triple for the canvas, parsed from the custom
+     property so the triple cannot drift from the hex. Four bare triples sat
+     here where a hex sweep could not see them. __T comes from theme.js, which
+     loads first. */
+  function __RGB(n,fallback){var v=__T(n,fallback).trim().replace('#','');return [parseInt(v.slice(0,2),16),parseInt(v.slice(2,4),16),parseInt(v.slice(4,6),16)];}
   function rgba(c,a){return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
+  var PEARL=__RGB('--hmm-pearl-beige','#F2ECC9'), THESIS=__RGB('--hmm-thesis','#B8863A'), C08=__RGB('--hmm-c08','#A83B2E'), TOMATO=__RGB('--hmm-tomato-jam','#C44539'),
+      ACC=rgba(TOMATO,0.9), LINE=rgba(PEARL,0.22), FAINT=rgba(PEARL,0.5), LBL=rgba(PEARL,0.42);
   function mono(ctx,px){ctx.font=px+'px "Raela Grotesque","Helvetica Neue",sans-serif';}
 
   function mount(id,h){

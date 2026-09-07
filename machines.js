@@ -1,18 +1,19 @@
-/* Tokens, read at paint time. These figures hardcoded colour because
-   nothing handed it to them; reading the custom property also means a theme
-   change reaches the canvas, which a frozen hex never could. */
-function __T(n, fallback) {
-  var v = getComputedStyle(document.documentElement).getPropertyValue(n);
-  return (v && v.trim()) || fallback;
-}
 /* hmm site - reusable necessity machines (canonical set, GP-ruled).
    Power = distribution transformer (buildXfmr) · Eat = harvester pickup reel (buildReel) ·
    Heal = needle / auto-injector (buildInjector). Geometry lifted verbatim from the demos
    (_demo/transformer-blowout.html, eat.html, heal-blowout.html). Each builder is closured so its
    helper names never collide. Layers are tagged col in {PEARL, ACC (verb-part), FAINT, AXIS}.
-   Necessity accent colours: power #FF730B, eat #4F8A5B, heal #8752A5. Requires scripts/hmm-svg.js (hmmH, hmmRender). */
+   Necessity accent colours: power #FF730B, eat #4F8A5B, heal #8752A5. Requires theme.js (__T, __onTheme)
+   and scripts/hmm-svg.js (hmmH, hmmRender). */
 var HMM = (function(){
-  var h = window.hmmH, PEARL=__T("--hmm-pearl-beige", "#F2ECC9");
+  var h = window.hmmH;
+  /* Read at render, never at load, so a data-theme flip reaches the next paint. */
+  function PEARL_(){return __T("--hmm-pearl-beige", "#F2ECC9");}
+  function accentOf(spec){return __T(spec.tok, spec.fb);}
+  /* The identity colour as TEXT on the dark callout box. The base hues sit at
+     6.76 (Power), 4.49 (Eat) and 3.32 (Heal) against #141414; the -dark
+     variants clear 4.5 at 8.53, 4.55 and 4.58. Dots and strokes keep the base. */
+  function accentText(spec){return __T(spec.tok + "-dark", spec.fbText);}
   function seededRnd(s){s=s||1;return function(){s=(Math.imul(s,1103515245)+12345)&0x7fffffff;return s/0x7fffffff;};}
 
   /* ===================== transformer ===================== */
@@ -95,17 +96,17 @@ var HMM = (function(){
   ];
 
   var MACH = {
-    power:{vb:[0,0,1080,660], iconVB:"384 138 232 476", build:buildXfmr, seed:7,  accent:__T("--hmm-nec-power", "#FF730B"), call:XFMR_CALL, ch1:1056,chy:636},
-    eat:  {vb:[0,0,1080,620], iconVB:"128 152 828 420", build:buildReel, seed:11, accent:__T("--hmm-nec-eat", "#4F8A5B"), call:REEL_CALL, ch1:1064,chy:604},
-    heal: {vb:[0,0,1080,660], iconVB:"432 92 136 566",  build:buildInjector, seed:17, accent:__T("--hmm-nec-heal", "#8752A5"), call:INJ_CALL, ch1:1064,chy:644}
+    power:{vb:[0,0,1080,660], iconVB:"384 138 232 476", build:buildXfmr, seed:7,  tok:"--hmm-nec-power", fb:"#FF730B", fbText:"#FF9732", call:XFMR_CALL, ch1:1056,chy:636},
+    eat:  {vb:[0,0,1080,620], iconVB:"128 152 828 420", build:buildReel, seed:11, tok:"--hmm-nec-eat", fb:"#4F8A5B", fbText:"#508B5C", call:REEL_CALL, ch1:1064,chy:604},
+    heal: {vb:[0,0,1080,660], iconVB:"432 92 136 566",  build:buildInjector, seed:17, tok:"--hmm-nec-heal", fb:"#8752A5", fbText:"#9E69BE", call:INJ_CALL, ch1:1064,chy:644}
   };
 
   function dotsOf(kind){
-    var spec=MACH[kind], rnd=seededRnd(spec.seed), kc=0, out=[];
+    var spec=MACH[kind], rnd=seededRnd(spec.seed), kc=0, out=[], A=accentOf(spec), PEARL=PEARL_();
     spec.build().forEach(function(L){L.pts.forEach(function(p){var q=rnd(),big=L.big,acc=L.col==="ACC";
       var r=big?(q<.16?2.0:q<.5?1.4:1.0):(q<.12?1.6:q<.45?1.1:.8);
       var op=big?(q<.16?1:.55+q*.4):(q<.12?.85:.55+q*.35);
-      var fill=acc?spec.accent:(L.col==="FAINT"?"rgba(242,236,201,.32)":(L.col==="AXIS"?"rgba(242,236,201,.26)":PEARL));
+      var fill=acc?A:(L.col==="FAINT"?"rgba(242,236,201,.32)":(L.col==="AXIS"?"rgba(242,236,201,.26)":PEARL));
       out.push(h("circle",{key:kc++,cx:p[0].toFixed(1),cy:p[1].toFixed(1),r:r,fill:fill,opacity:op}));});});
     return out;
   }
@@ -115,15 +116,15 @@ var HMM = (function(){
 
   /* full blow-out: dots + leader callouts + corner ticks (necessity sections) */
   function Blowout(kind){
-    var spec=MACH[kind], A=spec.accent, FN="rgba(242,236,201,.45)", vb=spec.vb, W=vb[2], BW=232, BH=84, els=[];
-    spec.call.forEach(function(c,i){var left=c[4]==="L",bx=left?24:W-24-BW,by=c[5],col=c[6]?A:PEARL,p=c[3],anchor=[left?bx+BW:bx,by+BH/2],midx=(anchor[0]+p[0])/2;
+    var spec=MACH[kind], A=accentOf(spec), AT=accentText(spec), PEARL=PEARL_(), FN="rgba(242,236,201,.45)", vb=spec.vb, W=vb[2], BW=232, BH=84, els=[];
+    spec.call.forEach(function(c,i){var left=c[4]==="L",bx=left?24:W-24-BW,by=c[5],col=c[6]?A:PEARL,txt=c[6]?AT:PEARL,p=c[3],anchor=[left?bx+BW:bx,by+BH/2],midx=(anchor[0]+p[0])/2;
       els.push(h("polyline",{key:"ld"+i,points:anchor[0]+","+anchor[1]+" "+midx+","+anchor[1]+" "+p[0]+","+p[1],fill:"none",stroke:c[6]?A:"rgba(242,236,201,.5)",strokeWidth:1}));
       els.push(h("circle",{key:"fd"+i,cx:p[0],cy:p[1],r:c[6]?4:3,fill:col}));
       if(c[6])els.push(h("circle",{key:"mg"+i,cx:p[0],cy:p[1],r:22,fill:"none",stroke:A,strokeWidth:1}));
       var box=[
         h("rect",{key:"bx",x:bx,y:by,width:BW,height:BH,fill:"rgba(20,20,20,0.9)",stroke:col,strokeWidth:c[6]?1.5:1}),
-        h("text",{key:"ix",x:bx+13,y:by+21,fontFamily:"Raela Grotesque",fontWeight:700,fontSize:11,letterSpacing:1.4,fill:c[6]?A:FN},c[0]),
-        h("text",{key:"ti",x:bx+36,y:by+21,fontFamily:"Raela Grotesque",fontWeight:700,fontSize:12.5,letterSpacing:.7,fill:col},c[1]),
+        h("text",{key:"ix",x:bx+13,y:by+21,fontFamily:"Raela Grotesque",fontWeight:700,fontSize:11,letterSpacing:1.4,fill:c[6]?AT:FN},c[0]),
+        h("text",{key:"ti",x:bx+36,y:by+21,fontFamily:"Raela Grotesque",fontWeight:700,fontSize:12.5,letterSpacing:.7,fill:txt},c[1]),
         h("line",{key:"rl",x1:bx+13,y1:by+30,x2:bx+BW-13,y2:by+30,stroke:"rgba(242,236,201,.2)",strokeWidth:.75})
       ];
       c[2].forEach(function(ln,k){box.push(h("text",{key:"nt"+k,x:bx+13,y:by+50+k*17,fontFamily:"Raela Grotesque",fontSize:12.5,fill:"rgba(242,236,201,.82)"},ln));});
@@ -132,9 +133,17 @@ var HMM = (function(){
     return h("svg",{viewBox:vb.join(" "),role:"img","aria-label":kind+" machine, blow-out drawing",style:{width:"100%",height:"100%",overflow:"visible"}}, dotsOf(kind), els);
   }
 
-  function breathe(mount){setTimeout(function(){var svg=mount.querySelector('svg');if(svg&&window.hmmAnimateDots)window.hmmAnimateDots(svg,{motion:"breath"});},300);}
-  function renderIcon(mount,kind){hmmRender(mount,Icon(kind));breathe(mount);}
-  function renderBlowout(mount,kind){hmmRender(mount,Blowout(kind));breathe(mount);}
+  /* Every mount is remembered so a data-theme flip draws it again with the tokens
+     re-read. hmmRender replaces the mount's children, so the breathing controller
+     on the old <svg> is stopped first and a new one is attached to the new one;
+     otherwise the old loop would keep animating detached nodes. */
+  var MOUNTED=[];
+  function breathe(m){m.timer=setTimeout(function(){var svg=m.mount.querySelector('svg');if(svg&&window.hmmAnimateDots)m.ctl=window.hmmAnimateDots(svg,{motion:"breath"});},300);}
+  function draw(m){if(m.ctl){m.ctl.stop();m.ctl=null;}clearTimeout(m.timer);hmmRender(m.mount,m.fn(m.kind));breathe(m);}
+  function mountOne(mount,kind,fn){var m={mount:mount,kind:kind,fn:fn,ctl:null,timer:0};MOUNTED.push(m);draw(m);}
+  function renderIcon(mount,kind){mountOne(mount,kind,Icon);}
+  function renderBlowout(mount,kind){mountOne(mount,kind,Blowout);}
+  __onTheme(function(){MOUNTED.forEach(draw);});
 
-  return {renderIcon:renderIcon, renderBlowout:renderBlowout, accent:function(k){return MACH[k].accent;}};
+  return {renderIcon:renderIcon, renderBlowout:renderBlowout, accent:function(k){return accentOf(MACH[k]);}, accentText:function(k){return accentText(MACH[k]);}};
 })();
