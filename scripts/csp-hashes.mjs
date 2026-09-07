@@ -10,6 +10,13 @@
    for each, and with --check exits 1 unless every one of those hashes is already
    in the _headers script-src and 'unsafe-inline' is absent from it.
 
+   Since 2026-09-07 style-src-elem is 'self' too: the inline <style> blocks moved
+   to per-page stylesheets and radars.js no longer appends one. An inline <style>
+   that returns (in markup, or built by a script) is blocked the same silent way,
+   so --check also fails on any <style> element in the HTML and on any
+   createElement("style") in a script, unless style-src-elem carries
+   'unsafe-inline' again.
+
    Usage: node scripts/csp-hashes.mjs            list inline scripts and hashes
           node scripts/csp-hashes.mjs --check    exit 1 unless _headers covers them */
 import fs from 'node:fs';
@@ -34,7 +41,25 @@ for (const file of html) {
   }
 }
 
+/* Inline <style> elements, in markup or built by a script. style-src-elem is
+   'self' since 2026-09-07, so any of these is blocked the same silent way. */
+const styles = [];
+for (const file of html) {
+  const text = fs.readFileSync(file, 'utf8');
+  const re = /<style\b[^>]*>/gi;
+  let m;
+  while ((m = re.exec(text))) styles.push({ file, line: text.slice(0, m.index).split('\n').length });
+}
+const jsFiles = ['.', 'scripts', 'data'].flatMap(d => fs.readdirSync(d).filter(f => f.endsWith('.js')).map(f => d === '.' ? f : `${d}/${f}`)).sort();
+for (const file of jsFiles) {
+  const text = fs.readFileSync(file, 'utf8');
+  const re = /createElement\(\s*["']style["']\s*\)/g;
+  let m;
+  while ((m = re.exec(text))) styles.push({ file, line: text.slice(0, m.index).split('\n').length });
+}
+
 for (const f of found) console.log(`${f.file}:${f.line}  ${f.bytes} bytes  ${f.expr}`);
+for (const s of styles) console.log(`${s.file}:${s.line}  inline <style>`);
 if (!found.length) console.log(`no executable inline <script> in ${html.length} HTML files (${html.join(', ')})`);
 
 if (!process.argv.includes('--check')) process.exit(0);
@@ -47,6 +72,10 @@ const line = (ok, s) => { if (!ok) bad++; console.log(`${ok ? 'ok  ' : 'FAIL'}  
 line(!!scriptSrc, `_headers declares a script-src (${scriptSrc.trim() || 'missing'})`);
 line(!/'unsafe-inline'/.test(scriptSrc), `script-src carries no 'unsafe-inline'`);
 for (const f of found) line(scriptSrc.includes(f.expr), `${f.file}:${f.line} is hashed into script-src`);
-console.log(bad ? `\n${bad} check(s) failed: move the script to a file, or add its hash to script-src in _headers.`
-                : '\nevery <script> is external or hashed, and script-src is self-only.');
+const styleElem = (csp.match(/(?:^|;)\s*style-src-elem\s+([^;]*)/) || [])[1] || (csp.match(/(?:^|;)\s*style-src\s+([^;]*)/) || [])[1] || '';
+line(!!styleElem, `_headers declares a style-src-elem (${styleElem.trim() || 'missing'})`);
+line(!/'unsafe-inline'/.test(styleElem), `style-src-elem carries no 'unsafe-inline'`);
+for (const s of styles) line(/'unsafe-inline'/.test(styleElem), `${s.file}:${s.line} inline <style> would be blocked by style-src-elem`);
+console.log(bad ? `\n${bad} check(s) failed: move the script or style to a file, or add the script's hash to script-src in _headers.`
+                : '\nevery <script> is external or hashed, script-src is self-only, and no inline <style> remains.');
 process.exit(bad ? 1 : 0);

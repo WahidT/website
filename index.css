@@ -1,0 +1,533 @@
+/* hmm site - the index page stylesheet. This was the 37 KB <style> block in
+   index.html until 2026-09-07; it moved here so style-src-elem in _headers can be
+   'self' with no 'unsafe-inline'. Loaded after site.css, in the position the
+   inline block held, so the cascade is unchanged. The #radars rules at the end
+   were a <style> element radars.js appended at render, which the same directive
+   would block. */
+html{background:var(--hmm-evergreen);color-scheme:dark;}
+html{scroll-behavior:smooth;}
+#mandate,#power,#eat,#heal,#s5,#s6,#s7,#s9,#sfoot{scroll-margin-top:16px;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);}
+#dotfield{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;}
+/* ---------- global chrome ---------- */
+.site-logo{color:var(--hmm-pearl);display:block;}
+.site-logo svg{height:24px;width:auto;display:block;}
+.site-logo:hover{color:var(--hmm-accent);}
+.site-footer{position:relative;z-index:8;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:40px 30px;border-top:1px solid var(--hmm-border);}
+.convert .k{font-family:var(--hmm-font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--hmm-text-muted);margin-bottom:18px;}
+.convert-cta a.primary{background:var(--hmm-accent);border-color:var(--hmm-accent);}
+.convert-cta a.primary:hover{color:var(--hmm-pearl);opacity:.9;}
+.footer-nav{display:flex;gap:26px;align-items:center;}
+.footer-contact{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--hmm-text-muted);text-decoration:none;transition:var(--hmm-transition);}
+.footer-contact:hover{color:var(--hmm-accent);}
+.footer-tag{font-family:var(--hmm-font-display,'Kufam',sans-serif);font-size:15px;letter-spacing:.01em;color:var(--hmm-text-muted);}
+.footer-tag .hk-nec{color:var(--hmm-accent-text);}
+
+/* ---------- box tiers: appearance follows behaviour ----------
+   Every bordered box on this page belongs to exactly one tier, and nothing
+   wears a cue from a tier it is not in. That rule is the whole point: the
+   page previously used one look (bordered panel + corner brackets) for
+   things that navigate, things that filter, and things that just sit there.
+
+     u-nav      navigates somewhere        pointer, focus ring, action row
+     u-control  changes what is shown      pointer, focus ring, pressed state
+     u-panel    shows, and does not respond   no pointer, not focusable
+
+   Adding a box? Pick the tier by what it DOES, then apply that class. Do not
+   copy a neighbour's styling. That is how the inconsistency arose. Corner
+   brackets (.tk) are decoration and carry no meaning: they appear in every
+   tier and must never be the only thing telling a reader something is live. */
+.u-nav,.u-control{cursor:pointer;}
+.u-nav:focus-visible{outline:2px solid var(--accent,var(--hmm-accent));outline-offset:3px;}
+.u-control:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
+.u-panel{cursor:auto;}
+.u-panel a,.u-panel button{cursor:pointer;}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;position:relative;}
+.hero-logo{position:absolute;top:26px;left:30px;z-index:8;color:var(--hmm-pearl);display:block;transition:opacity .3s var(--hmm-ease),color .2s var(--hmm-ease);}
+.hero-logo svg{height:26px;width:auto;display:block;}
+.hero-logo:hover{color:var(--hmm-accent);}
+.hero-kicker{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.22em;font-size:12px;font-weight:400;margin:0;color:var(--hmm-text-muted);}
+.hero-kicker .hk-nec{color:var(--hmm-accent-text);}
+.hero-row{display:flex;gap:22px;width:min(1160px,94vw);height:360px;}
+/* ---- mobile (≤640px): stack the hero machines, wrap the timeline rows ---- */
+@media(max-width:640px){
+  /* The hero stacks taller than the viewport on a phone, and centring overflow
+     pushed the kicker off the top edge and under the logo. Flow from the top
+     instead, with enough headroom for the absolutely-positioned logo. */
+  .hero{min-height:auto;justify-content:flex-start;padding:88px 0 56px;gap:28px;}
+  .hero-row{flex-direction:column;height:auto;width:92vw;gap:16px;}
+  .hero-row .box{min-height:260px;}
+  .tl-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;padding:8px 10px;}
+  .tl-row .tl-name{flex:1 1 100%;order:3;}
+  .tl-row .tl-org{flex:1 1 100%;order:4;font-size:10px;color:var(--hmm-caption);}
+  .tl-row .tl-c{order:1;} .tl-row .tl-date{order:2;} .tl-row .tl-status{order:5;}
+}
+.box{position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;cursor:pointer;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);color:inherit;text-decoration:none;transition:flex .5s var(--hmm-ease),background .3s var(--hmm-ease),border-color .3s var(--hmm-ease),opacity .4s var(--hmm-ease);}
+.box:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+/* The one token that means "this navigates". Nothing static on the page carries it. */
+/* Pearl label, accent arrow: the accents are the card identity, but eat green and
+   heal purple measure 4.32:1 and 3.19:1 on this ground, below AA at 10.5px. */
+.box-go{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:var(--hmm-font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-pearl);white-space:nowrap;}
+.box-go-arrow{width:22px;height:8px;flex:0 0 auto;fill:none;stroke:var(--accent);stroke-width:1.4;transition:transform .3s var(--hmm-ease);}
+.box:hover .box-go-arrow,.box:focus-visible .box-go-arrow{transform:translateX(4px);}
+/* --accent is the identity colour and stays on dots, ticks, arrows and borders, where the
+   colour is the name. --accent-text is the -dark variant, used wherever the identity colour is
+   set as TEXT on the dark ground: the base hues measure 6.76 (Power), 4.49 (Eat) and 3.32 (Heal)
+   against #141414, and the -dark variants clear 4.5 at 8.53, 4.55 and 4.58. */
+.box--power{--accent:var(--hmm-nec-power);--accent-text:var(--hmm-nec-power-dark);}.box--eat{--accent:var(--hmm-nec-eat);--accent-text:var(--hmm-nec-eat-dark);}.box--heal{--accent:var(--hmm-nec-heal);--accent-text:var(--hmm-nec-heal-dark);}
+.box::before{content:"";position:absolute;left:12px;top:12px;width:9px;height:1px;background:var(--accent);z-index:2;}
+.box::after{content:"";position:absolute;left:12px;top:12px;width:1px;height:9px;background:var(--accent);z-index:2;}
+.box-stage{flex:1;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;}
+.machine{width:78%;height:70%;display:flex;align-items:center;justify-content:center;transition:transform .5s var(--hmm-ease);}
+.box-info{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 0 22px;text-align:center;transition:flex .5s var(--hmm-ease);}
+.box-label{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.18em;font-size:13px;color:var(--accent-text);}
+.commentary{max-width:34ch;margin-top:12px;font-family:var(--hmm-font-body);font-size:13px;line-height:1.5;color:var(--hmm-text-muted);overflow:hidden;transition:opacity .4s var(--hmm-ease),max-height .4s var(--hmm-ease);}
+.ledger{list-style:none;margin:0;padding:0;width:100%;margin-top:16px;overflow:hidden;transition:opacity .45s var(--hmm-ease),max-height .45s var(--hmm-ease);}
+.ledger li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--hmm-border);font-family:var(--hmm-font-body);font-size:12.5px;color:var(--hmm-pearl);}
+/* Coarse pointers get the copy revealed at all times, so the card must size to
+   it rather than squeeze the machine out of the stage. Width-scoped rules below
+   (<=640px) still override this for phones. */
+@media (hover:none),(pointer:coarse){
+  .hero-row{height:auto;}
+  .hero-row .box{min-height:340px;}
+  .hero-row .box-stage{flex:0 0 132px;}
+  .hero-row .machine{width:70%;height:100%;}
+  .hero-row .box-info{justify-content:flex-start;padding:0 18px 20px;}
+}
+/* Hover is an enhancement, not the only way in. Gated on a real pointer so a
+   touch device never inherits a sticky :hover, which used to leave whichever
+   card was tapped last bright and the other two dimmed to .55 permanently. */
+@media (hover:hover) and (pointer:fine){
+  .commentary{opacity:0;max-height:0;}
+  .ledger{opacity:0;max-height:0;margin-top:0;}
+  .box-go{opacity:0;max-height:0;margin-top:0;transition:opacity .45s var(--hmm-ease);}
+  .box:hover .box-go{opacity:1;max-height:40px;margin-top:16px;}
+  .hero-row:hover .box:not(:hover){flex:.62;opacity:.78;}
+  .box:hover{flex:2.5;flex-direction:row;background:rgba(242,236,201,.05);}
+  .box--power:hover{border-color:var(--hmm-nec-power);}.box--eat:hover{border-color:var(--hmm-nec-eat);}.box--heal:hover{border-color:var(--hmm-nec-heal);}
+  .box:hover .box-stage{flex:1.15;}.box:hover .machine{transform:scale(1.06);}
+  .box:hover .box-info{flex:1;align-items:flex-start;justify-content:center;text-align:left;padding:26px 30px 26px 6px;border-left:1px solid var(--hmm-border);}
+  .box:hover .commentary{opacity:1;max-height:180px;}
+  .box:hover .ledger{opacity:1;max-height:280px;margin-top:16px;}
+}
+
+/* ---------- section rail: fixed right-edge wayfinding ---------- */
+/* The page had one navigational gesture (the hero cards) reaching three of nine
+   destinations, with no way back up. This is the index and the breadcrumb: it
+   names every section, marks the one you are in, and is one tap from any of them. */
+.railnav{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:9;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:12px 14px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s var(--hmm-ease),visibility .35s var(--hmm-ease);}
+.railnav.is-on{opacity:1;visibility:visible;pointer-events:auto;}
+.rail-item{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-height:44px;padding:0 2px;text-decoration:none;color:var(--hmm-text-muted);font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;transition:color .25s var(--hmm-ease);}
+.rail-item:hover,.rail-item:focus-visible{color:var(--hmm-pearl);}
+.rail-item:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
+.rail-label,.rail-label-s{display:block;}
+.rail-label-s{display:none;}
+.rail-mark{width:7px;height:7px;flex:0 0 auto;border:1px solid var(--hmm-text-faint);background:transparent;transition:background .25s var(--hmm-ease),border-color .25s var(--hmm-ease),transform .25s var(--hmm-ease);}
+.rail-item:hover .rail-mark{border-color:var(--rail-accent,var(--hmm-accent));}
+.rail-item.is-active{color:var(--hmm-pearl);}
+.rail-item.is-active .rail-mark{background:var(--rail-accent,var(--hmm-accent));border-color:var(--rail-accent,var(--hmm-accent));transform:scale(1.28);}
+.rail-item[data-sec="power"]{--rail-accent:var(--hmm-nec-power);}
+.rail-item[data-sec="eat"]{--rail-accent:var(--hmm-nec-eat);}
+.rail-item[data-sec="heal"]{--rail-accent:var(--hmm-nec-heal);}
+.rail-top{margin-bottom:6px;border-bottom:1px solid var(--hmm-border);}
+.rail-top .rail-mark{border:0;display:flex;align-items:center;justify-content:center;width:9px;height:9px;}
+.rail-top svg{width:9px;height:9px;fill:none;stroke:currentColor;stroke-width:1.6;}
+/* Where a real pointer exists the rail rides collapsed to its markers, so it
+   never crowds the layout, and names itself on hover or keyboard focus. The
+   filled, scaled marker is the you-are-here signal in that state. */
+@media (hover:hover) and (pointer:fine){
+  .rail-label{max-width:0;opacity:0;overflow:hidden;transition:max-width .3s var(--hmm-ease),opacity .3s var(--hmm-ease);}
+  .railnav:hover .rail-label,.railnav:focus-within .rail-label{max-width:140px;opacity:1;}
+  .railnav:hover,.railnav:focus-within{background:linear-gradient(to left,var(--hmm-evergreen) 70%,rgba(20,20,20,0));}
+}
+@media (prefers-reduced-motion:reduce){.railnav,.rail-item,.rail-mark,.rail-label{transition:none;}}
+/* A coarse pointer cannot hover, so the rail can never ride collapsed there and
+   shows its labels permanently. That was gated on width, not on the pointer, so
+   tablets got the long labels - a 114px rail - against sections clearing 48px,
+   and up to 66px of every section ran underneath it. The compact form belongs to
+   the pointer, which is what decides whether a label can hide; the matching
+   section clearance is further down, after the padding shorthands it overrides. */
+@media (hover:none),(pointer:coarse){
+  .railnav{padding:10px 8px 10px 10px;gap:0;background:linear-gradient(to left,var(--hmm-evergreen) 62%,rgba(20,20,20,0));}
+  .rail-label{display:none;}
+  .rail-label-s{display:block;}
+}
+/* Phones have no hover to reveal anything, so the labels are permanent (a
+   marker with no name is a dot rather than navigation) and the sections give back
+   the width the rail occupies. Short forms keep it inside that allowance. */
+@media(max-width:640px){
+  .railnav{padding:10px 8px 10px 10px;gap:0;background:linear-gradient(to left,var(--hmm-evergreen) 62%,rgba(20,20,20,0));}
+  .rail-item{min-height:44px;font-size:9px;letter-spacing:.08em;gap:7px;}
+  .rail-label{display:none;}
+  .rail-label-s{display:block;}
+}
+
+/* ---------- necessity sections ---------- */
+.nec{min-height:100vh;display:flex;align-items:stretch;color:var(--hmm-pearl);font-family:var(--hmm-font-body);}
+.stage{flex:0.8;position:relative;display:flex;flex-direction:column;padding:40px 28px 28px 44px;border-right:1px solid var(--hmm-border);min-width:0;order:1;}
+.nec[data-flip="1"] .stage{order:2;border-right:none;border-left:1px solid var(--hmm-border);padding:40px 44px 28px 28px;}
+.stage-head{display:flex;gap:14px;align-items:baseline;margin-bottom:6px;}
+.stage-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:13px;font-weight:700;}
+.stage .machine-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;}
+.stage .machine-wrap svg{width:100%;height:100%;max-height:82vh;overflow:visible;}
+.machine-wrap svg .callout{transition:transform .28s var(--hmm-ease);cursor:zoom-in;}
+.machine-wrap svg .callout--L{transform-box:fill-box;transform-origin:100% 50%;}
+.machine-wrap svg .callout--R{transform-box:fill-box;transform-origin:0% 50%;}
+.machine-wrap svg .callout:hover,.machine-wrap svg .callout:focus-within{transform:scale(2.15);}
+.machine-wrap svg .callout:focus{outline:none;}
+.stage-foot{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.12em;color:var(--hmm-caption);}
+.nec[data-flip="1"] .stage-foot{text-align:right;}
+.panel{flex:1.42;display:flex;flex-direction:column;gap:22px;padding:56px 56px;justify-content:center;min-width:0;order:2;}
+.nec[data-flip="1"] .panel{order:1;}
+.card{border:1px solid var(--hmm-border);padding:26px 28px;position:relative;background:rgba(242,236,201,.02);}
+.card-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:var(--hmm-text-muted);margin-bottom:12px;}
+.card h2{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-lg);margin:0 0 10px;}
+.card p{margin:0;font-size:14px;line-height:1.6;color:var(--hmm-text-muted);}
+.card p b{color:var(--hmm-pearl);font-weight:600;}
+.schematic-wrap{margin:6px 0 14px;}
+.schematic-wrap svg{width:100%;max-width:528px;height:auto;overflow:visible;display:block;margin:0 auto;}
+.blk rect{transition:stroke .2s var(--hmm-ease),stroke-width .2s var(--hmm-ease);}
+.blk:focus{outline:none;}
+.blk rect{transition:stroke .18s var(--hmm-ease),stroke-width .18s var(--hmm-ease),fill .18s var(--hmm-ease);}
+.blk{cursor:pointer;}
+.blk:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
+.blk:hover rect,.blk:focus rect{stroke-width:2.6;}
+.blk--active rect{stroke-width:2.6;}
+@keyframes spIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.stage-panel>*{animation:spIn .72s var(--hmm-ease) both;}
+.stage-panel>*:nth-child(2){animation-delay:.08s;}
+.stage-panel>*:nth-child(3){animation-delay:.16s;}
+.stage-panel>*:nth-child(4){animation-delay:.24s;}
+.stage-panel{margin-top:12px;}
+.sp-name{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:12px;margin-bottom:10px;}
+.sp-facet{margin-bottom:9px;}
+.sp-label{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-text-muted);}
+.sp-facet .none{font-size:12px;color:var(--hmm-caption);font-style:italic;}
+.sp-def{font-size:12.5px;line-height:1.5;color:var(--hmm-text-muted);margin:0 0 13px;}
+.sp-facet p{font-size:12.5px;line-height:1.46;color:var(--hmm-pearl);margin:3px 0 0;}
+.stage-panel>*:nth-child(5){animation-delay:.32s;}
+/* per-necessity accent */
+.sec-power .stage-eyebrow,.sec-power .sp-name{color:var(--hmm-nec-power-dark);}
+.sec-eat   .stage-eyebrow,.sec-eat   .sp-name{color:var(--hmm-nec-eat-dark);}
+.sec-heal  .stage-eyebrow,.sec-heal  .sp-name{color:var(--hmm-nec-heal-dark);}
+/* ---------- lens intro + through-line ---------- */
+.through-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
+.through p b{color:var(--hmm-pearl);font-weight:600;}
+.through{padding:84px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
+.through p{font-size:18px;line-height:1.6;color:var(--hmm-text-muted);max-width:80ch;margin:14px 0 0;}
+#mandate{text-align:center;}
+#mandate p{margin:14px auto 0;}
+.sec-power .blk:hover rect,.sec-power .blk:focus rect{stroke:rgba(255,115,11,1);fill:rgba(255,115,11,.12);}
+.sec-eat   .blk:hover rect,.sec-eat   .blk:focus rect{stroke:rgba(79,138,91,1);fill:rgba(79,138,91,.12);}
+.sec-heal  .blk:hover rect,.sec-heal  .blk:focus rect{stroke:rgba(135,82,165,1);fill:rgba(135,82,165,.12);}
+.sec-power .blk--active rect{stroke:var(--hmm-nec-power)!important;}
+.sec-eat   .blk--active rect{stroke:var(--hmm-nec-eat)!important;}
+.sec-heal  .blk--active rect{stroke:var(--hmm-nec-heal)!important;}
+/* ---------- S5 AI impact ---------- */
+.ai{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:96px 48px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);}
+/* min(px,100%), never min(px,96vw): 96vw ignores the 48px padding of the section
+   it sits in, so every one of these blocks bled ~30px past its own content box on
+   both sides below 1208px and ran under the fixed rail on the right. */
+.ai>*{width:min(1160px,100%);}
+.ai-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
+.ai-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;line-height:1.06;}
+/* ---------- S5 rebuilt: flow, figures, reading key ---------- */
+.ai-flow{display:flex;flex-direction:column;gap:44px;margin:4px 0 44px;}
+.ai-flow--split{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center;}
+.ai-flow--split .ai-col-text{display:flex;flex-direction:column;justify-content:center;gap:30px;min-width:0;}
+.ai-flow--split .ai-fig{margin:0;display:flex;flex-direction:column;min-width:0;}
+.ai-flow--split .ai-fig--hero canvas{height:420px;flex:none;min-height:0;width:100%;}
+@media(max-width:860px){.ai-flow--split{grid-template-columns:1fr;gap:32px;}.ai-flow--split .ai-fig--hero canvas{flex:none;height:300px;}}
+.ai-step-hdr{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.ai-step-id{font-family:var(--hmm-font-mono);font-size:11px;letter-spacing:.12em;border:1px solid var(--hmm-accent);color:var(--hmm-accent-text);padding:2px 8px;flex:0 0 auto;}
+.ai-step-label{font-family:var(--hmm-font-display);font-weight:700;font-size:20px;line-height:1.1;}
+.ai-step p{font-size:14.5px;line-height:1.62;color:var(--hmm-text-muted);max-width:66ch;margin:0 0 11px;}
+.ai-fig{margin:0;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);position:relative;}
+.ai-fig canvas{display:block;width:100%;height:280px;}
+.ai-fig--hero canvas{height:320px;}
+.ai-fig figcaption{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:10px 14px;border-top:1px solid var(--hmm-border);}
+.fig-note{display:block;margin-top:5px;text-transform:none;letter-spacing:.01em;font-size:10px;line-height:1.5;color:var(--hmm-caption);}
+.ai-pull .k{display:block;font-family:var(--hmm-font-mono);font-weight:400;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:12px;}
+.src-split{display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:start;margin-top:14px;}
+.src-prose{min-width:0;}
+.src-q{font-family:var(--hmm-font-display);font-weight:700;font-size:25px;line-height:1.22;color:var(--hmm-pearl);margin:14px 0 16px;}
+.src-after{font-size:13.5px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
+.src-q{max-width:24ch;}
+.src-after{max-width:56ch;}
+.src-move-body p{max-width:62ch;}
+.src-moves{border-left:1px solid var(--hmm-border);}
+.src-move{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:20px 0;align-items:start;}
+.src-move+.src-move{border-top:1px solid rgba(242,236,201,.07);}
+.src-move-i{font-family:var(--hmm-font-mono);font-size:22px;color:var(--hmm-accent);line-height:1;padding-left:16px;}
+.src-move-body h3{font-family:var(--hmm-font-display);font-weight:700;font-size:16px;margin:0 0 7px;line-height:1.15;color:var(--hmm-pearl);}
+.src-move-body p{font-size:13.5px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
+.src-stream{position:relative;height:min(72vh,620px);overflow:hidden;border-top:1px solid var(--hmm-border);border-bottom:1px solid var(--hmm-border);
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(180deg,transparent,#000 10%,#000 90%,transparent);}
+.src-reccol{min-width:0;position:sticky;top:100px;align-self:start;}
+.src-reccol .src-after{margin-top:18px;}
+@media(max-width:860px){.src-split{grid-template-columns:1fr;}.src-reccol{position:static;top:0;}.src-stream{height:min(60vh,480px);}.src-reccol .src-after{margin-top:14px;}}
+/* ---------- S7 markets + S8 density ---------- */
+.mkt{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:96px 48px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);}
+.mkt>*{width:min(1180px,100%);}
+.mkt-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
+.mkt-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;line-height:1.06;}
+.mkt-lead{font-size:15px;line-height:1.6;color:var(--hmm-text-muted);max-width:82ch;margin:0 0 14px;}
+#radars{margin:6px 0 14px;width:100%;}
+/* ---------- S10 the record (infinite scroll) ---------- */
+.rec-title .hk-nec{color:var(--hmm-accent);}
+.rec-track{position:absolute;top:0;left:0;right:0;will-change:transform;}
+.rec-row{display:flex;flex-wrap:wrap;gap:5px 12px;align-items:baseline;padding:7px 8px;border-bottom:1px solid rgba(242,236,201,.06);}
+.rec-m{flex:0 0 24px;font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.06em;}
+.rec-m--AU{color:var(--hmm-mkt-au-dark);}.rec-m--JP{color:var(--hmm-mkt-jp-dark);}.rec-m--NZ{color:var(--hmm-mkt-nz-dark);}
+.rec-tag{flex:0 0 auto;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);}
+.rec-nec--Power{color:var(--hmm-nec-power-dark);}.rec-nec--Eat{color:var(--hmm-nec-eat-dark);}.rec-nec--Heal{color:var(--hmm-nec-heal-dark);}.rec-nec--DeepTech{color:var(--hmm-caption);}
+.rec-name{font-size:13.5px;color:var(--hmm-pearl);}
+.rec-name sup{color:var(--hmm-accent);font-size:9px;margin-left:1px;}
+.rec-meta{font-family:var(--hmm-font-mono);font-size:10.5px;color:var(--hmm-text-muted);letter-spacing:.02em;}
+.rec-what{font-size:12.5px;line-height:1.4;color:var(--hmm-text-muted);flex-basis:100%;padding-left:36px;}
+@media(prefers-reduced-motion:reduce){.rec-track{position:static;}}
+.ai-arm{position:relative;border:1px solid var(--hmm-border);padding:22px 26px 0;background:rgba(242,236,201,.02);cursor:pointer;transition:background .3s var(--hmm-ease);}
+.ai-arm:hover{background:rgba(242,236,201,.05);}
+.tk{position:absolute;width:9px;height:9px;pointer-events:none;}
+.tk--tl{left:6px;top:6px;border-top:1px solid;border-left:1px solid;}
+.tk--tr{right:6px;top:6px;border-top:1px solid;border-right:1px solid;}
+.tk--bl{left:6px;bottom:6px;border-bottom:1px solid;border-left:1px solid;}
+.tk--br{right:6px;bottom:6px;border-bottom:1px solid;border-right:1px solid;}
+.ai-arm--opp .tk{border-color:var(--hmm-thesis);}
+.ai-arm--threat .tk{border-color:var(--hmm-c08);}
+/* engineering-plate treatment on necessity cards */
+.sec-power .card{border-top:2px solid var(--hmm-nec-power);}
+.sec-eat .card{border-top:2px solid var(--hmm-nec-eat);}
+.sec-heal .card{border-top:2px solid var(--hmm-nec-heal);}
+.sec-power .card .tk{border-color:var(--hmm-nec-power);}
+.sec-eat .card .tk{border-color:var(--hmm-nec-eat);}
+.sec-heal .card .tk{border-color:var(--hmm-nec-heal);}
+.card-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.card-hdr .card-eyebrow{margin-bottom:0;}
+.card-id{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.12em;border:1px solid var(--hmm-border);padding:2px 7px;flex:0 0 auto;}
+.sec-power .card-id{color:var(--hmm-nec-power-dark);border-color:var(--hmm-nec-power);}
+.sec-eat .card-id{color:var(--hmm-nec-eat-dark);border-color:var(--hmm-nec-eat);}
+.sec-heal .card-id{color:var(--hmm-nec-heal-dark);border-color:var(--hmm-nec-heal);}
+.card-foot{display:flex;margin-top:16px;border-top:1px solid var(--hmm-border);}
+.card-foot span{flex:1;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;color:var(--hmm-caption);padding:8px 10px;border-right:1px solid var(--hmm-border);}
+.card-foot span:last-child{border-right:0;text-align:right;}
+.ai-arm p{margin:0;font-size:13.5px;line-height:1.6;color:var(--hmm-text-muted);}
+.ai-arm p b{color:var(--hmm-pearl);font-weight:600;}
+/* ---------- S6 regulation lens ---------- */
+.reg{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
+.reg-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
+.reg-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;}
+.reg-title em{font-style:italic;color:var(--hmm-accent);}
+.reg-plate{position:relative;flex:1;border:1px solid var(--hmm-border);border-top:2px solid var(--hmm-accent);padding:22px 26px 0;background:rgba(242,236,201,.02);}
+.reg-plate .tk{border-color:var(--hmm-accent);}
+.reg-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.reg-id{font-family:var(--hmm-font-mono);font-size:11px;letter-spacing:.12em;border:1px solid var(--hmm-accent);color:var(--hmm-accent-text);padding:2px 8px;flex:0 0 auto;}
+.reg-label{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--hmm-accent-text);}
+.reg-plate p{margin:0;font-size:13.5px;line-height:1.62;color:var(--hmm-text-muted);}
+.reg-plate--wide{padding-bottom:18px;}
+.reg-plate p b{color:var(--hmm-pearl);font-weight:600;}
+.reg-foot{display:flex;margin-top:16px;border-top:1px solid var(--hmm-border);}
+.reg-foot span{flex:1;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;color:var(--hmm-caption);padding:8px 10px;border-right:1px solid var(--hmm-border);}
+.reg-foot span:last-child{border-right:0;text-align:right;}
+.reg-split{display:flex;gap:40px;width:100%;align-items:flex-start;}
+.reg-left{flex:0 0 clamp(440px,40%,560px);display:flex;flex-direction:column;gap:16px;}
+.reg-glyph{margin:0;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);position:relative;}
+.reg-glyph canvas{display:block;width:100%;height:172px;}
+.reg-glyph figcaption{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:9px 14px;border-top:1px solid var(--hmm-border);}
+.reg-jobs{display:flex;flex-direction:row;gap:14px;align-items:stretch;}
+.reg-jobs .reg-plate{padding-bottom:16px;}
+.reg-left .reg-close{width:auto;margin-top:2px;}
+.reg-right{flex:1;min-width:0;margin-left:auto;}
+.reg-right .tl-body{width:100%;margin-left:auto;}
+.reg-tl-head{margin-bottom:14px;}
+.reg-tl-head .reg-label{color:var(--hmm-accent-text);}
+.reg-tl-head .tl-sub{margin:8px 0 12px;max-width:none;}
+.tl-filter-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 16px;}
+.tl-filter-label{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-text-muted);}
+.tl-filters{display:flex;flex-wrap:wrap;gap:6px;}
+/* Resting border sits at border-hover, not border: at .12 alpha these read as
+   labels rather than controls. The selected chip carries fill + border, and
+   keeps a pearl label. Accent-on-dark measured 3.58:1, below AA at this size. */
+.tl-filters button{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.1em;font-size:9.5px;background:rgba(242,236,201,.03);border:1px solid var(--hmm-border-hover);color:var(--hmm-text-muted);padding:5px 10px;cursor:pointer;transition:var(--hmm-transition);}
+.tl-filters button:hover{border-color:var(--hmm-accent);color:var(--hmm-pearl);background:rgba(242,236,201,.07);}
+.tl-filters button:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
+.tl-filters button.on{border-color:var(--hmm-accent);color:var(--hmm-pearl);background:rgba(196,69,57,.22);}
+.tl-hidden{display:none!important;}
+/* ---------- S7 regulatory timeline ---------- */
+.tl-sub{font-size:14px;line-height:1.6;color:var(--hmm-text-muted);max-width:66ch;margin:0 0 18px;}
+.tl-legend{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 28px;font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);}
+.tl-legend b{color:var(--hmm-text-muted);font-weight:400;}
+.tl-body{width:min(1140px,100%);position:relative;}
+.tl-spine{position:absolute;left:calc(-1 * (var(--spine-w) + 4px));top:0;pointer-events:none;z-index:0;--spine-w:14px;}
+.tl-year{display:flex;position:relative;transition:opacity .75s ease, transform .75s cubic-bezier(.2,.7,.2,1);}
+.tl-year.pre{opacity:0;transform:translateY(30px);}
+.tl-year.show{opacity:1;transform:none;}
+@media (prefers-reduced-motion: reduce){.tl-year.pre{opacity:1;transform:none;}}
+.tl-axis{flex:0 0 84px;position:relative;padding:12px 0 12px 20px;}
+.tl-node{position:absolute;left:-5px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--hmm-pearl);border:none;transform-origin:center;animation:tlPulse 3.4s ease-in-out infinite;}
+.tl-year:nth-child(2n) .tl-node{animation-delay:.6s;}
+.tl-year:nth-child(3n) .tl-node{animation-delay:1.2s;}
+.tl-standing .tl-node{background:var(--hmm-accent);}
+.tl-future .tl-node{background:none;border:1px dashed var(--hmm-text-faint);}
+@keyframes tlPulse{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.4);opacity:1;}}
+@media(prefers-reduced-motion:reduce){.tl-node{animation:none;opacity:.8;}}
+.tl-y{font-family:var(--hmm-font-mono);font-size:14px;color:var(--hmm-pearl);letter-spacing:.06em;}
+.tl-future .tl-y{color:var(--hmm-text-muted);}
+.tl-rows{flex:1;padding:8px 0;display:flex;flex-direction:column;gap:6px;justify-content:center;}
+.tl-empty{color:var(--hmm-caption);font-family:var(--hmm-font-mono);font-size:11px;padding:2px 0;}
+.tl-row{display:grid;grid-template-columns:46px 82px 1fr auto auto;align-items:center;gap:14px;border:1px solid var(--hmm-border);padding:9px 14px;background:rgba(242,236,201,.02);}
+.tl-future .tl-row{border-style:dashed;opacity:.82;}
+.tl-c{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.08em;text-align:center;border:1px solid var(--hmm-border);padding:2px 0;color:var(--hmm-text-muted);}
+.tl-date{font-family:var(--hmm-font-mono);font-size:11px;color:var(--hmm-text-muted);letter-spacing:.04em;}
+.tl-name{font-size:13.5px;color:var(--hmm-pearl);font-weight:600;}
+.tl-org{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.08em;color:var(--hmm-caption);text-transform:uppercase;}
+.tl-status{font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--hmm-border);color:var(--hmm-text-muted);white-space:nowrap;}
+.tl-st--transitional{color:var(--hmm-thesis);border-color:var(--hmm-thesis);}
+.tl-st--expected,.tl-st--proposed{color:var(--hmm-caption);border-color:var(--hmm-text-faint);border-style:dashed;}
+.tl-framework .tl-name{font-weight:400;color:var(--hmm-text-muted);}
+.tl-standing .tl-y{color:var(--hmm-text-muted);font-size:12px;}
+.tl-stand-label{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:8px;}
+.tl-stand-wrap{display:flex;flex-wrap:wrap;gap:6px;}
+.tl-stand-item{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--hmm-text-muted);border:1px solid var(--hmm-border);padding:4px 8px;}
+.tl-stand-item .tl-c{padding:1px 5px;font-size:9px;}
+.tl-c--global{border-style:dashed;color:var(--hmm-caption);}
+.tl-global .tl-name{color:var(--hmm-text-muted);}
+/* ===== mobile UX pass (UX/perf audit) ===== */
+/* The regulation split needs more room than it was asking for. .reg-left floors at
+   440px, so between 861 and 1040px the right column fell to 285-425px while a
+   .tl-row cannot render below ~420px: 46px + 82px columns, four 14px gaps, padding,
+   plus the org and status columns, which have no smaller form. The page scrolled
+   sideways by up to 171px. Measured to zero at 1041px, so the split stacks below
+   that and the timeline gets the full width. */
+/* Clearance for the compact rail above: it measures 76px on a coarse pointer, so
+   the 48px these sections carry left 28px of every one of them underneath it. The
+   640px block below keeps its own 66px, tuned to the 68px the rail is down there. */
+@media (hover:none),(pointer:coarse){
+  .through,.ai,.mkt,.reg,.nec{padding-right:78px;}
+  .site-footer{padding-right:78px;}
+}
+@media(max-width:1040px){
+  .reg-split{flex-direction:column;gap:24px;}
+  .reg-left{flex:auto;}
+  .reg-right{margin-left:0;}
+}
+@media(max-width:860px){
+  /* necessity sections: stack the machine over the panel (was side-by-side, unreadable sliver)
+     and clear the rail, which the stacked panel's own 20px padding does not. */
+  .nec{flex-direction:column;padding-right:78px;}
+  .nec .stage,.nec[data-flip="1"] .stage{flex:auto;order:1;border-right:none;border-left:none;border-bottom:1px solid var(--hmm-border);padding:34px 20px 20px;}
+  .nec .panel,.nec[data-flip="1"] .panel{flex:auto;order:2;padding:30px 20px 40px;gap:16px;}
+  .stage .machine-wrap{min-height:44vh;}
+  .stage .machine-wrap svg{max-height:56vh;}
+  .reg-jobs{flex-direction:column;}
+  /* touch targets >= 44px */
+  .tl-filters button,#radars .radar-chip{min-height:44px;padding:11px 14px;}
+  #radars .radar-sub{font-size:11px;}
+}
+@media(max-width:640px){
+  .through,.ai,.mkt,.reg,.nec{padding-left:20px;padding-right:66px;}
+  .site-footer{padding-right:66px;}
+  .hero-row{width:calc(100vw - 86px);}
+  .ai,.mkt{padding-top:64px;padding-bottom:64px;}
+  /* hero copy is revealed by default now (see the pointer-gated block above);
+     a narrow desktop window still gets it, at mobile type sizes */
+  .box .commentary,.box .ledger,.box .box-go{opacity:1;max-height:none;}
+  .box .commentary{margin-top:11px;font-size:15px;line-height:1.55;}
+  /* Power/Eat/Heal: shrink the machine graphic + tighten the list so the stacked boxes are compact */
+  .hero-row .box{min-height:auto;}
+  .hero-row .box-stage{flex:0 0 126px;}
+  .hero-row .machine{width:60%;height:100%;}
+  .hero-row .box-info{padding:14px 18px 18px 18px;}
+  .hero-row .ledger{margin-top:12px;}
+  .hero-row .ledger li{font-size:11.5px;padding:5px 0;}
+  .tl-axis{flex:0 0 54px;padding-left:8px;}
+  /* P0 overflow: force the timeline row to reflow. The desktop `.tl-row{display:grid}` sits later in
+     the sheet, and media queries add no specificity, so the earlier mobile rule lost. Re-assert here. */
+  .tl-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;padding:9px 12px;}
+  .tl-row .tl-name{flex:1 1 100%;order:3;}
+  .tl-row .tl-org{flex:1 1 100%;order:4;}
+  .tl-row .tl-c{order:1;} .tl-row .tl-date{order:2;} .tl-row .tl-status{order:5;}
+  .tl-body,.tl-year,.tl-rows,.reg-right,.reg-tl-head{max-width:100%;min-width:0;}
+  .tl-legend,.tl-filters,.tl-stand-wrap{max-width:100%;}
+  /* legibility: nothing that carries meaning drops below ~11px, core reading copy sits at 14-15px */
+  .tl-name{font-size:14px;}
+  .tl-date,.tl-org,.tl-c{font-size:11.5px;}
+  .tl-status,.rec-tag,.tl-stand-label,.tl-stand-item{font-size:11px;}
+  .rec-what{font-size:14px;} .rec-meta{font-size:12px;}
+  .card-eyebrow,.reg-label{font-size:11.5px;}
+  /* footer nav: real navigation (GP / Sources / Contact), give each link a 44px tap height */
+  .site-footer{padding:32px 20px;}
+  .footer-nav{gap:2px 22px;flex-wrap:wrap;}
+  .footer-contact{display:inline-flex;align-items:center;min-height:44px;}
+  .tl-filters button{font-size:11px;}
+  .fig-note,.tl-org,.tl-legend,.tl-legend b{font-size:11px;}
+}
+@media(hover:none){.machine-wrap svg .callout{transform:scale(1.3);}}
+/* ===== large screens (monitors / TV): cap content so lines stay readable and layout doesn't sprawl ===== */
+@media(min-width:1440px){
+  .nec{justify-content:center;}
+  .nec .stage,.nec[data-flip="1"] .stage{flex:0 1 640px;max-width:640px;}
+  .nec .panel,.nec[data-flip="1"] .panel{flex:0 1 740px;max-width:740px;}
+  .reg-eyebrow,.reg-title,.reg-split{max-width:1440px;width:100%;box-sizing:border-box;margin-left:auto;margin-right:auto;}
+  .through>*{max-width:1360px;margin-left:auto;margin-right:auto;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+
+/* ---------- radars: the three market hexagons (radars.js) ----------
+   Same treatment as the three necessity cards: hover expands the panel and
+   opens its prose beside the chart, siblings give up width and dim. Gated on
+   a real pointer for the same reason the hero is - :hover sticks on touch, so
+   a phone would keep whichever panel was tapped last expanded for good.
+   :focus-within carries it for the keyboard: the legend chips inside each
+   panel are focusable, so tabbing in opens that panel's prose.
+   Unlike the hero, the shrinking siblings hold labelled charts rather than a
+   drawing, so they get a 210px floor and the whole gesture is held back until
+   1100px - below that the prose simply sits under its chart, always readable,
+   which is what touch gets too. */
+#radars{font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-pearl);position:relative;}
+#radars .radar-wrap{display:flex;gap:22px;width:100%;max-width:100%;box-sizing:border-box;align-items:stretch;}
+#radars .radar-panel{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;padding:14px 12px 16px;border:1px solid var(--hmm-border,rgba(242,236,201,.12));box-sizing:border-box;
+  transition:flex .5s var(--hmm-ease),opacity .4s var(--hmm-ease),background .3s var(--hmm-ease),border-color .3s var(--hmm-ease);}
+#radars .radar-body{flex:1;display:flex;flex-direction:column;min-width:0;transition:gap .5s var(--hmm-ease);}
+#radars .radar-viz{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}
+#radars .radar-read{min-width:0;overflow:hidden;transition:opacity .45s var(--hmm-ease),max-height .45s var(--hmm-ease),padding .5s var(--hmm-ease);}
+#radars .radar-read p{margin:0;font-family:var(--hmm-font-body,inherit);font-size:13px;line-height:1.55;color:var(--hmm-text-muted,rgba(242,236,201,.72));}
+#radars .radar-corner{position:absolute;width:9px;height:9px;pointer-events:none;}
+#radars .radar-corner svg{display:block;overflow:visible;}
+#radars .rc-tl{top:5px;left:5px;} #radars .rc-tr{top:5px;right:5px;} #radars .rc-bl{bottom:5px;left:5px;} #radars .rc-br{bottom:5px;right:5px;}
+#radars .radar-title{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--hmm-pearl);margin:0;transition:color .3s var(--hmm-ease);}
+#radars .radar-sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));margin:3px 0 8px;}
+#radars svg.radar-svg{display:block;width:100%;height:auto;overflow:visible;}
+#radars .radar-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;margin-top:10px;padding:0;list-style:none;}
+#radars .radar-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(242,236,201,.03);border:1px solid var(--hmm-border-hover,rgba(242,236,201,.25));
+  padding:3px 8px;cursor:pointer;font:inherit;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-text-muted,rgba(242,236,201,.6));}
+#radars .radar-chip .swatch{width:9px;height:9px;flex:0 0 auto;border-radius:1px;}
+#radars .radar-chip:hover,#radars .radar-chip:focus-visible{color:var(--hmm-pearl);border-color:var(--hmm-text-faint,rgba(242,236,201,.35));}
+#radars .radar-chip:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
+#radars .radar-panel[data-focus] .series:not(.is-active){opacity:.12;}
+#radars .radar-panel[data-focus] .series.is-active .radar-fill{fill-opacity:.24;}
+#radars .radar-panel[data-focus] .series.is-active .radar-line{stroke-width:2.6;}
+#radars .radar-stage{position:relative;}
+#radars .radar-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;}
+#radars .axis-lbl{cursor:help;transition:fill .15s ease;}
+#radars .axis-lbl:hover,#radars .axis-lbl:focus{fill:var(--hmm-pearl);outline:none;}
+#radars .axis-lbl:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
+#radars .radar-tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s ease,transform .15s ease;
+  background:var(--hmm-surface-solid);border:1px solid var(--hmm-border,rgba(242,236,201,.18));border-top:2px solid var(--hmm-accent);padding:9px 12px;box-sizing:border-box;
+  font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);font-size:11px;line-height:1.5;color:var(--hmm-text-muted,rgba(242,236,201,.72));max-width:260px;}
+#radars .radar-tip.on{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){#radars .radar-tip{transition:none;}}
+@media (max-width:860px){#radars .radar-wrap{flex-direction:column;}}
+@media (hover:hover) and (pointer:fine) and (min-width:1100px){
+  #radars .radar-read{opacity:0;max-height:0;}
+  #radars .radar-wrap:hover .radar-panel:not(:hover),#radars .radar-wrap:focus-within .radar-panel:not(:focus-within){flex:.72;opacity:.78;min-width:210px;}
+  #radars .radar-panel:hover,#radars .radar-panel:focus-within{flex:2.2;background:rgba(242,236,201,.05);border-color:var(--c,var(--hmm-accent));}
+  #radars .radar-panel:hover .radar-title,#radars .radar-panel:focus-within .radar-title{color:var(--c,var(--hmm-pearl));}
+  #radars .radar-panel:hover .radar-body,#radars .radar-panel:focus-within .radar-body{flex-direction:row;align-items:center;gap:22px;}
+  #radars .radar-panel:hover .radar-viz,#radars .radar-panel:focus-within .radar-viz{flex:1.15;}
+  #radars .radar-panel:hover .radar-read,#radars .radar-panel:focus-within .radar-read{flex:1;opacity:1;max-height:420px;padding-left:22px;border-left:1px solid var(--hmm-border,rgba(242,236,201,.12));}
+}
+@media (prefers-reduced-motion:reduce){#radars .radar-panel,#radars .radar-body,#radars .radar-read{transition:none;}}

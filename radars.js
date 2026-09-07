@@ -6,7 +6,9 @@
    Renders into an existing #radars container on load; no-ops if it is absent.
    Dark by default (bg #141414) to match the live site; light via prefers-color-scheme
    and [data-theme="light"]. Honours prefers-reduced-motion (disables the dot pulse).
-   Tokens are read through __T from theme.js and re-read on __onTheme. */
+   Tokens are read through __T from theme.js and re-read on __onTheme. The stylesheet
+   lives in index.css (the #radars rules); it used to be a <style> element this script
+   appended, which style-src-elem 'self' in _headers would now block. */
 (function () {
   var SVGNS = "http://www.w3.org/2000/svg";
 
@@ -86,65 +88,6 @@
     return "middle";
   }
 
-
-  function css() {
-    return [
-      "#radars{font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-pearl);position:relative;}",
-      "#radars .radar-wrap{display:flex;gap:22px;width:100%;max-width:100%;box-sizing:border-box;align-items:stretch;}",
-      "#radars .radar-panel{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;padding:14px 12px 16px;border:1px solid var(--hmm-border,rgba(242,236,201,.12));box-sizing:border-box;",
-      "  transition:flex .5s var(--hmm-ease),opacity .4s var(--hmm-ease),background .3s var(--hmm-ease),border-color .3s var(--hmm-ease);}",
-      "#radars .radar-body{flex:1;display:flex;flex-direction:column;min-width:0;transition:gap .5s var(--hmm-ease);}",
-      "#radars .radar-viz{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}",
-      "#radars .radar-read{min-width:0;overflow:hidden;transition:opacity .45s var(--hmm-ease),max-height .45s var(--hmm-ease),padding .5s var(--hmm-ease);}",
-      "#radars .radar-read p{margin:0;font-family:var(--hmm-font-body,inherit);font-size:13px;line-height:1.55;color:var(--hmm-text-muted,rgba(242,236,201,.72));}",
-      "#radars .radar-corner{position:absolute;width:9px;height:9px;pointer-events:none;}",
-      "#radars .radar-corner svg{display:block;overflow:visible;}",
-      "#radars .rc-tl{top:5px;left:5px;} #radars .rc-tr{top:5px;right:5px;} #radars .rc-bl{bottom:5px;left:5px;} #radars .rc-br{bottom:5px;right:5px;}",
-      "#radars .radar-title{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--hmm-pearl);margin:0;transition:color .3s var(--hmm-ease);}",
-      "#radars .radar-sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));margin:3px 0 8px;}",
-      "#radars svg.radar-svg{display:block;width:100%;height:auto;overflow:visible;}",
-      "#radars .radar-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;margin-top:10px;padding:0;list-style:none;}",
-      "#radars .radar-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(242,236,201,.03);border:1px solid var(--hmm-border-hover,rgba(242,236,201,.25));",
-      "  padding:3px 8px;cursor:pointer;font:inherit;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-text-muted,rgba(242,236,201,.6));}",
-      "#radars .radar-chip .swatch{width:9px;height:9px;flex:0 0 auto;border-radius:1px;}",
-      "#radars .radar-chip:hover,#radars .radar-chip:focus-visible{color:var(--hmm-pearl);border-color:var(--hmm-text-faint,rgba(242,236,201,.35));}",
-      "#radars .radar-chip:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}",
-      "#radars .radar-panel[data-focus] .series:not(.is-active){opacity:.12;}",
-      "#radars .radar-panel[data-focus] .series.is-active .radar-fill{fill-opacity:.24;}",
-      "#radars .radar-panel[data-focus] .series.is-active .radar-line{stroke-width:2.6;}",
-      "#radars .radar-stage{position:relative;}",
-      "#radars .radar-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;}",
-      "#radars .axis-lbl{cursor:help;transition:fill .15s ease;}",
-      "#radars .axis-lbl:hover,#radars .axis-lbl:focus{fill:var(--hmm-pearl);outline:none;}",
-      "#radars .axis-lbl:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}",
-      "#radars .radar-tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s ease,transform .15s ease;",
-      "  background:var(--hmm-surface-solid);border:1px solid var(--hmm-border,rgba(242,236,201,.18));border-top:2px solid var(--hmm-accent);padding:9px 12px;box-sizing:border-box;",
-      "  font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);font-size:11px;line-height:1.5;color:var(--hmm-text-muted,rgba(242,236,201,.72));max-width:260px;}",
-      "#radars .radar-tip.on{opacity:1;transform:none;}",
-      "@media (prefers-reduced-motion:reduce){#radars .radar-tip{transition:none;}}",
-      "@media (max-width:860px){#radars .radar-wrap{flex-direction:column;}}",
-      /* Same treatment as the three necessity cards: hover expands the panel and
-         opens its prose beside the chart, siblings give up width and dim. Gated on
-         a real pointer for the same reason the hero is - :hover sticks on touch, so
-         a phone would keep whichever panel was tapped last expanded for good.
-         :focus-within carries it for the keyboard: the legend chips inside each
-         panel are focusable, so tabbing in opens that panel's prose.
-         Unlike the hero, the shrinking siblings hold labelled charts rather than a
-         drawing, so they get a 210px floor and the whole gesture is held back until
-         1100px - below that the prose simply sits under its chart, always readable,
-         which is what touch gets too. */
-      "@media (hover:hover) and (pointer:fine) and (min-width:1100px){",
-      "  #radars .radar-read{opacity:0;max-height:0;}",
-      "  #radars .radar-wrap:hover .radar-panel:not(:hover),#radars .radar-wrap:focus-within .radar-panel:not(:focus-within){flex:.72;opacity:.78;min-width:210px;}",
-      "  #radars .radar-panel:hover,#radars .radar-panel:focus-within{flex:2.2;background:rgba(242,236,201,.05);border-color:var(--c,var(--hmm-accent));}",
-      "  #radars .radar-panel:hover .radar-title,#radars .radar-panel:focus-within .radar-title{color:var(--c,var(--hmm-pearl));}",
-      "  #radars .radar-panel:hover .radar-body,#radars .radar-panel:focus-within .radar-body{flex-direction:row;align-items:center;gap:22px;}",
-      "  #radars .radar-panel:hover .radar-viz,#radars .radar-panel:focus-within .radar-viz{flex:1.15;}",
-      "  #radars .radar-panel:hover .radar-read,#radars .radar-panel:focus-within .radar-read{flex:1;opacity:1;max-height:420px;padding-left:22px;border-left:1px solid var(--hmm-border,rgba(242,236,201,.12));}",
-      "}",
-      "@media (prefers-reduced-motion:reduce){#radars .radar-panel,#radars .radar-body,#radars .radar-read{transition:none;}}"
-    ].join("\n");
-  }
 
   function cornerTick(pos) {
     // small mono corner tick in the accent, drawn as an L into the panel.
@@ -337,10 +280,6 @@
   function render() {
     var root = document.getElementById("radars");
     if (!root) return;
-
-    var style = document.createElement("style");
-    style.textContent = css();
-    root.appendChild(style);
 
     var wrap = document.createElement("div");
     wrap.className = "radar-wrap";
