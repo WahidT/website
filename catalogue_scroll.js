@@ -5,7 +5,7 @@
 (function(){
   function boot(){
     if(!window.CATALOGUE||!window.CATALOGUE.length) return;
-    if(!document.getElementById('s9stream')&&!document.getElementById('s10stream')) return;
+    if(!document.getElementById('s9stream')) return;
     var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
     var CATMAP={Hardware:'HW',Software:'SW',IP:'IP'};
@@ -51,8 +51,7 @@
       addEventListener('scroll',start,{passive:true});
       start();
     }
-    mount(document.getElementById('s9stream'), 0.5);   // the record beside the sourcing thesis (offset so the two do not mirror)
-    mount(document.getElementById('s10stream'), 0);    // the dedicated record section
+    mount(document.getElementById('s9stream'), 0.5);   // the record beside the sourcing thesis
   }
   if(document.readyState==='complete') boot(); else addEventListener('load',boot);
 })();

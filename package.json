@@ -10,6 +10,7 @@
     "check:tokens": "node scripts/check-tokens.mjs",
     "check:affordances": "node scripts/check-affordances.mjs",
     "check:deadcss": "node scripts/check-dead-css.mjs",
+    "check:deadjs": "node scripts/check-deadjs.mjs",
     "check:csp": "node scripts/csp-hashes.mjs --check"
   },
   "devDependencies": {

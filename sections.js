@@ -134,35 +134,6 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
   if(key){var g=m.mount.querySelector('.blk[data-key="'+key.replace(/"/g,'\\"')+'"]');if(g)g.classList.add('blk--active');}
 });});
 
-/* ---------- S5 bifurcation: animated triple-helix of dots, necessity colours ---------- */
-(function(){
-  var NS="http://www.w3.org/2000/svg";
-  function necFills(){return [__T("--hmm-nec-power", "#FF730B"),__T("--hmm-nec-eat", "#4F8A5B"),__T("--hmm-nec-heal", "#8752A5")];}
-  var NEC=necFills();
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var m=document.getElementById('aiSplit');
-  if(m){
-    var svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 200 320');svg.setAttribute('role','img');svg.setAttribute('aria-label','AI bifurcates into opportunity and friction across the three necessities');svg.style.width='100%';svg.style.height='100%';svg.style.overflow='visible';
-    var segs=[[[12,160],[92,160]],[[92,160],[186,56]],[[92,160],[186,264]]],dots=[];
-    segs.forEach(function(s){var a=s[0],b=s[1],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),N=Math.max(10,Math.round(len/3));
-      for(var i=0;i<=N;i++){var t=i/N;NEC.forEach(function(c,ci){var el=document.createElementNS(NS,'circle');el.setAttribute('fill',c);svg.appendChild(el);dots.push({el:el,a:a,dx:dx,dy:dy,t:t,ci:ci,q:Math.random()});});}});
-    m.appendChild(svg);
-    __onTheme(function(){NEC=necFills();dots.forEach(function(d){d.el.setAttribute('fill',NEC[d.ci]);});});
-    var amp=3.4,cycles=1.7,phase=0;
-    function render(){dots.forEach(function(d){var len=Math.hypot(d.dx,d.dy),ux=d.dx/len,uy=d.dy/len,px=-uy,py=ux,ang=d.t*cycles*6.2832+d.ci*2.094+phase,off=amp*Math.sin(ang),depth=(Math.sin(ang)+1)/2,x=d.a[0]+d.dx*d.t+px*off,y=d.a[1]+d.dy*d.t+py*off;
-      var big=d.q<.14,r=(big?1.9:(d.q<.5?1.3:.85))*(0.82+depth*0.36),op=(big?.9:.62)*(0.48+depth*0.52);
-      d.el.setAttribute('cx',x.toFixed(1));d.el.setAttribute('cy',y.toFixed(1));d.el.setAttribute('r',r.toFixed(2));d.el.setAttribute('opacity',op.toFixed(2));});}
-    render();
-    if(!reduce){var hvis=true,hrun=false;
-      function hloop(){if(!hvis){hrun=false;return;}hrun=true;phase+=0.006;render();requestAnimationFrame(hloop);}
-      if('IntersectionObserver' in window){var hio=new IntersectionObserver(function(es){es.forEach(function(e){hvis=e.isIntersecting;if(hvis&&!hrun)hloop();});},{threshold:0.01});hio.observe(m);}
-      hloop();
-    }
-  }
-})();
-/* arms clickable → the regulation lens (C3: the bifurcation makes regulation the decisive lens) */
-document.querySelectorAll('.ai-arm').forEach(function(a){a.setAttribute('title','Go to the regulation lens');a.addEventListener('click',function(){var t=document.getElementById('s6');if(t)t.scrollIntoView({behavior:'smooth'});});});
-
 /* ---------- S7 regulatory timeline ---------- */
 (function(){var body=document.getElementById('tlBody');if(!body||!window.REG_INSTRUMENTS)return;
   function e2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
