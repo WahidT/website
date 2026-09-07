@@ -1,7 +1,7 @@
 /* GENERATED FILE. DO NOT EDIT.
    Source: tokens/hmm.tokens.json (WahidT/hmm-design)
    Build:  python3 tokens/build_tokens.py
-   Version: 3.0   Tokens: 219   Source digest: 41a3b3fb2397c064
+   Version: 3.0   Tokens: 219   Source digest: 1d09e7ab54f45e57
    Guard 25 fails the build if this file drifts from the source.
 */
 
@@ -10,7 +10,7 @@
    Single source of truth for web, print, charts, and slides.
 
    v3.0 (2026-08-23) ports the GP-ratified 2026-08-09 decisions from the
-   live site bundle (hmm-wt/website `_ds_bundle.css`) into the workspace,
+   live site bundle (WahidT/website `_ds_bundle.css`) into the workspace,
    which had been left on v2.0 through the 2026-06-12 to 2026-08-19 memory
    gap. Two systems were live and contradictory until this port.
 
@@ -233,7 +233,7 @@
   --hmm-content-wide:    1200px;
 
   /* ---------- Live-site short aliases ---------- */
-  /* Declared by hmm-wt/website _ds_bundle.css and referenced by its rules. Carried here so this source is a superset of the live site and could generate that bundle without breaking a single selector. */
+  /* Declared by WahidT/website _ds_bundle.css and referenced by its rules. Carried here so this source is a superset of the live site and could generate that bundle without breaking a single selector. */
   --hmm-pearl:    #F2ECC9;   /* Short alias used by the live site bundle. Same value as --hmm-pearl-beige. */
   --hmm-tomato:   #C44539;   /* Short alias used by the live site bundle. Same value as --hmm-tomato-jam. */
   --hmm-mahogany: #250001;   /* Short alias used by the live site bundle. Same value as --hmm-rich-mahogany. */
