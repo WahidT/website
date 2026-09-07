@@ -105,7 +105,7 @@
   /* ---------- Content-role semantics (v1.1. strict) ---------- */
   /* Every claim, ruling, or first-person editorial line in an hmm deliverable MUST be rendered in its role colour, regardless of surface (web, slide, phone, PDF, paper). The role colour is paired with a structural cue (italic / left-rule / margin tag) so the signal survives monochrome print. Roles are ORTHOGONAL to call-out. A thesis that is also a call-out wears its thesis colour AND a Tomato call-out tag. Never both as body colour. */
   --hmm-thesis:         #B8863A;   /* Ochre. warm, claim-making, sits beside Pearl */
-  --hmm-thesis-ink:     #8A6426;   /* Darker ochre for body prose on Pearl */
+  --hmm-thesis-ink:     #8A6426;   /* Darker ochre for prose on Pearl. Measured 4.48:1 on Pearl, below the 4.5 AA floor for body prose; 4.90 on hmm-light-tint and 4.60 on paper, both clear it. Value held by design decision 2026-09-07 */
   --hmm-thesis-tint:    rgba(184, 134, 58, 0.10);   /* Background wash */
   --hmm-decision:       #250001;   /* Mahogany. authoritative, final */
   --hmm-decision-pearl: #F2ECC9;   /* Decision colour on dark surfaces = Pearl */
@@ -323,9 +323,6 @@
   --hmm-wash-light: rgba(37, 34, 27, 0.06);   /* the same on a light ground */
   --hmm-rule:       rgba(242, 236, 201, 0.18);   /* page and section rules, heavier than a border and lighter than its hover */
   --hmm-rule-light: rgba(37, 34, 27, 0.18);   /* the same on a light ground */
-
-  /* ---------- Print-surface variants (finding D-03) ---------- */
-  /* Carried in from the workspace lineage. A third print token came with them, a deep green, and is left behind: it outlived the 2026-08-09 green retirement and nothing references it. */
 
   /* ---------- Plate metrics (the numbers a drawing is held to) ---------- */
   --hmm-plate-frame:      800;   /* The viewBox width a plate is drawn in. Everything below is a ratio of it, so a plate at another width scales rather than re-rules. */
