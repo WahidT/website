@@ -1,18 +1,24 @@
 # Security baseline (2026-09-04). The site is static with no user input, no
-# third-party scripts and no fetches, so every source is 'self'. Inline style is
-# allowed because index.html carries 37 KB of inline CSS; moving that to a file
-# is what would let style-src drop 'unsafe-inline'. Script is self-only since
-# 2026-09-07, when the 27 KB of inline page script moved to sections.js; the
-# guard is `npm run check:csp`, which fails on any inline <script> that is not
-# hashed here. HSTS is set without includeSubDomains so no other host under the
-# domain is committed by this file.
+# third-party scripts and no fetches, so every source is 'self'. Script is
+# self-only since 2026-09-07, when the 27 KB of inline page script moved to
+# sections.js. Style elements are self-only from the same day, when the 37 KB
+# inline block in index.html and the four smaller ones moved to per-page
+# stylesheets and radars.js stopped appending a <style> of its own; the five
+# inline style="" attributes in bio, sources and for-llms stay (the scripts set
+# element.style through the CSSOM, which CSP never gates), so style-src-attr
+# keeps 'unsafe-inline' while style-src-elem is 'self'. The
+# bare style-src is the fallback for a browser that predates the -elem/-attr
+# split (Safari before 15.4) and is 'self' so that fallback is the strict one.
+# The guard is `npm run check:csp`, which fails on any inline <script> that is
+# not hashed here and on any inline <style> at all. HSTS is set without
+# includeSubDomains so no other host under the domain is committed by this file.
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
