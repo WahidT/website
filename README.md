@@ -29,6 +29,7 @@ All Playwright, all against a local server (`npm run serve`, then in another she
 - `npm run audit:mobile`. Layout across 320 to 1280px, touch and pointer: overflow, the rail, tap targets
 - `npm run check:affordances`. Every `cursor:pointer` responds to a click, and every click handler shows one
 - `npm run check:deadcss`. No rule without an element or a reference that can create one
+- `npm run check:deadjs`. No `getElementById` or `querySelector` literal in the root scripts that matches nothing on any rendered page
 - `npm run check:figures`. The enacted-record figures in the copy match `data/reg_instruments.js`
 
 Two more run without a browser:

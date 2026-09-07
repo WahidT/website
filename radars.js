@@ -321,9 +321,16 @@
       return true;
     }
     function sizeAll() { for (var i = 0; i < PANELS.length; i++) sizePanel(PANELS[i]); }
+    /* The loop runs only while the section is on screen and the document is visible.
+       It used to re-request itself every frame regardless and read getBoundingClientRect
+       sixty times a second for the whole visit, drawing nothing for most of them. Every
+       condition that can lift calls start(), which is a no-op while the loop is already
+       running; the rect check stays so the first frame after a lift is still bounded. */
+    var running = false, offscreen = false;
     function frame() {
+      if (offscreen || document.hidden) { running = false; return; }
       var rr = root.getBoundingClientRect(), vh = window.innerHeight || 800;
-      if (rr.bottom > -80 && rr.top < vh + 80) {          // draw only while in/near the viewport (reliable, no IntersectionObserver)
+      if (rr.bottom > -80 && rr.top < vh + 80) {
         var now = Date.now() / 1000;
         for (var pi = 0; pi < PANELS.length; pi++) {
           var p = PANELS[pi];
@@ -340,6 +347,7 @@
       }
       requestAnimationFrame(frame);
     }
+    function start() { if (running) return; running = true; requestAnimationFrame(frame); }
     sizeAll(); setTimeout(sizeAll, 300);
     var rrt = null; addEventListener("resize", function () { clearTimeout(rrt); rrt = setTimeout(sizeAll, 180); });
     // The panels now change width mid-animation as one expands, so the canvas has
@@ -353,7 +361,15 @@
       });
       for (var pi2 = 0; pi2 < PANELS.length; pi2++) ro.observe(PANELS[pi2].cv);
     }
-    requestAnimationFrame(frame);
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (es) {
+        for (var i = 0; i < es.length; i++) offscreen = !es[i].isIntersecting;
+        start();
+      }, { rootMargin: "80px 0px", threshold: 0 });
+      io.observe(root);
+    }
+    document.addEventListener("visibilitychange", start);
+    start();
 
     // axis-definition popups (hover or keyboard-focus an axis label)
     var tip = document.createElement("div");

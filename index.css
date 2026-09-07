@@ -289,15 +289,11 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .rec-meta{font-family:var(--hmm-font-mono);font-size:10.5px;color:var(--hmm-text-muted);letter-spacing:.02em;}
 .rec-what{font-size:12.5px;line-height:1.4;color:var(--hmm-text-muted);flex-basis:100%;padding-left:36px;}
 @media(prefers-reduced-motion:reduce){.rec-track{position:static;}}
-.ai-arm{position:relative;border:1px solid var(--hmm-border);padding:22px 26px 0;background:rgba(242,236,201,.02);cursor:pointer;transition:background .3s var(--hmm-ease);}
-.ai-arm:hover{background:rgba(242,236,201,.05);}
 .tk{position:absolute;width:9px;height:9px;pointer-events:none;}
 .tk--tl{left:6px;top:6px;border-top:1px solid;border-left:1px solid;}
 .tk--tr{right:6px;top:6px;border-top:1px solid;border-right:1px solid;}
 .tk--bl{left:6px;bottom:6px;border-bottom:1px solid;border-left:1px solid;}
 .tk--br{right:6px;bottom:6px;border-bottom:1px solid;border-right:1px solid;}
-.ai-arm--opp .tk{border-color:var(--hmm-thesis);}
-.ai-arm--threat .tk{border-color:var(--hmm-c08);}
 /* engineering-plate treatment on necessity cards */
 .sec-power .card{border-top:2px solid var(--hmm-nec-power);}
 .sec-eat .card{border-top:2px solid var(--hmm-nec-eat);}
@@ -314,8 +310,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .card-foot{display:flex;margin-top:16px;border-top:1px solid var(--hmm-border);}
 .card-foot span{flex:1;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;color:var(--hmm-caption);padding:8px 10px;border-right:1px solid var(--hmm-border);}
 .card-foot span:last-child{border-right:0;text-align:right;}
-.ai-arm p{margin:0;font-size:13.5px;line-height:1.6;color:var(--hmm-text-muted);}
-.ai-arm p b{color:var(--hmm-pearl);font-weight:600;}
 /* ---------- S6 regulation lens ---------- */
 .reg{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
 .reg-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
