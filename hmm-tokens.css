@@ -1,7 +1,7 @@
 /* GENERATED FILE. DO NOT EDIT.
    Source: tokens/hmm.tokens.json (WahidT/hmm-design)
    Build:  python3 tokens/build_tokens.py
-   Version: 3.0   Tokens: 210   Source digest: 6aac085d0678cab7
+   Version: 3.0   Tokens: 219   Source digest: 41a3b3fb2397c064
    Guard 25 fails the build if this file drifts from the source.
 */
 
@@ -51,14 +51,14 @@
   --hmm-pearl-beige:   #F2ECC9;   /* SCREEN canon. CMYK print approx = #FCECC9 */
   --hmm-tomato-jam:    #C44539;   /* SCREEN canon. CMYK print approx = #C44536 */
   --hmm-rich-mahogany: #250001;   /* CMYK 30/100/100/70. body text on light */
-  --hmm-light-tint:    #F7F5F0;   /* alt page / zebra row */
+  --hmm-light-tint:    #F7F5F0;   /* alt page / zebra row, and from GP ruling 2026-09-07 the memorandum's PRINTED page ground (ds-bundle/aliases.css --paper resolves here). hmm-paper (#F4EEDA) remains the screen surface token; the split is screen against print page. */
   --hmm-white:         #F7F5F0;   /* pure white RETIRED (ai-design-tells BAN): warm off-white only */
   --hmm-ink:           #25221B;   /* The ink composited to make every light-mode border and surface. At 0.04 over hmm-pearl-beige it lands exactly on hmm-surface-light-solid (#EAE4C2); at 0.08 exactly on hmm-surface-2-light-solid (#E2DCBB). Named 2026-08-26: it was load-bearing in 15 places and had no token, so every use read as an off-palette literal. */
 
   /* ---------- Surface palette rule (GP 2026-08-09) ---------- */
   /* Choose the ground by the surface's ROLE, not the format: DARK ground . RESERVED for COVER pages, SECTION DIVIDERS and CORE-EMPHASIS slides only. --hmm-field-dark #141414 near-black. GREEN IS RETIRED . no Evergreen ground. Pearl linework and type, Tomato accent. LIGHT ground . the DEFAULT for ALL regular content: reading pages, data exhibits, tables, most deck slides. Pearl #F2ECC9 / paper #F4EEDA background, ink type, one Tomato accent. Any format (necessity machine, engineering sheet, chart) renders on EITHER ground; the ground follows the surface's role. Light is the norm, dark the exception for high-impact moments. */
   --hmm-field-dark: #141414;   /* technical / system ground */
-  --hmm-paper:      #F4EEDA;   /* content reading-page ground */
+  --hmm-paper:      #F4EEDA;   /* SCREEN surface token. GP ruling 2026-09-07: the memorandum's printed page ground is hmm-light-tint (#F7F5F0), print-first, because a cream full-bleed flood on every printed page is what print rejects (ink coverage, banding); the warmth comes from the Pearl plates and the Necessity accents on the lighter ground. hmm-paper stays the on-screen reading ground: site panels, review specimens, the deck on a display. */
 
   /* ---------- Semantic colour mapping (dark-first product) ---------- */
   --hmm-bg:                 var(--hmm-field-dark);
@@ -288,6 +288,18 @@
   --hmm-nec-power-dark: #FF9732;   /* 8.53:1 on the dark ground. Lifted toward the flame rather than held at the base, because the base sits 19.1 from the accent there. Reads as darkorange. */
   --hmm-nec-eat-dark:   #508B5C;   /* 4.55:1 on the dark ground. Reads as seagreen. */
   --hmm-nec-heal-dark:  #9E69BE;   /* 4.58:1 on the dark ground. Reads as mediumpurple. */
+
+  /* ---------- Status and region signals (regulation map) ---------- */
+  /* Authored 2026-09-07 for Hmm-Ventures/regulation-map, which carried nine Material literals flagged 'no token: needs design ruling' in reg-map.js, reg-map.css and style.css. Every use is text or a stroke on the near-black ground, so each base clears 4.5:1 on hmm-field-dark and no -ink variant is declared: nothing in the map sets these on Pearl, and a token nothing reaches is a decision nobody applied (the 2026-09-05 retirement ruling). Seven of nine are aliases of the dark-ground identity set and the categorical chart palette, so the system stays one palette. Two hues the palette lacked, amber and blue, are new base values derived by the method the -dark variants were made with: the palette's own hue for that family held, lightness swept until 4.5:1 on #141414 clears, the nearest CSS colour name outside any identity's name family, dE00 at or above hmm-sep-cross (12) from every identity on the dark ground, hmm-sep-accent (20) from hmm-accent-dark and hmm-sep-within (20) from the other statuses, and among those the value nearest the incumbent literal so the map moves least. Measured with Scripts/contrast.py and design_guards._de00. */
+  --hmm-status-effective:    var(--hmm-nec-eat-dark);   /* Legislation in force. Was #81c784 (darkseagreen). Green already carries 'in force' in the map and the palette's only green is Eat, so the dark-ground Eat variant carries it: 4.55:1 on #141414, 18.3 dE00 from the literal it replaces. Consumer: Hmm-Ventures/regulation-map reg-map.js COLORS.enacted, reg-map.css .badge--enacted (text on the dark ground). 2026-09-07 */
+  --hmm-status-transitional: #FFD052;   /* Legislation in parliament. Was #ffd54f. NEW BASE VALUE, flagged: the palette had no amber. Derived from the Australia gold hue (hmm-mkt-au, hue 43 degrees, saturation held) lifted to lightness 66, where it names gold (5.9 dE00), sits 24.9 from hmm-mkt-au-dark and 19.6 from hmm-nec-power-dark, its nearest identity, 43.5 from hmm-accent-dark and 38.6 from hmm-status-effective, and lands 2.0 dE00 from the literal it replaces. 12.63:1 on #141414; 1.22 on Pearl, so it is never set as text on a light ground. Consumer: Hmm-Ventures/regulation-map reg-map.js COLORS.inParliament, reg-map.css .badge--in_parliament. 2026-09-07 */
+  --hmm-status-expected:     #8BB5F9;   /* Legislation expected. Was #90caf9. NEW BASE VALUE, flagged: the palette's only blue is Japan, and a status wearing a market's colour carries a claim the map does not make. Derived from the Japan hue (hmm-mkt-jp, hue 217 degrees) at saturation 0.90 and lightness 76, where it names cornflowerblue (9.2 dE00), 17.9 from hmm-mkt-jp-dark (steelblue, a different name family), 45.4 from hmm-accent-dark, 42.9 from the other statuses, 7.0 from the literal it replaces. 8.84:1 on #141414; 1.75 on Pearl, never text on a light ground. Consumer: Hmm-Ventures/regulation-map reg-map.js COLORS.expected, reg-map.css .badge--expected. 2026-09-07 */
+  --hmm-status-success:      var(--hmm-status-effective);   /* A form submission that went through. Was #6dbe8a, a second green two steps from the effective green in the same app, so it resolves to the same token: one green means 'done'. Consumer: Hmm-Ventures/regulation-map style.css .lp-feedback--success, inside section--dark. 2026-09-07 */
+  --hmm-region-01:           var(--hmm-status-transitional);   /* Radar series 2 of 7 (GCC in the map's order). Was #ffd54f, the same literal the transitional badge used, so it resolves to the same token. Consumer: Hmm-Ventures/regulation-map reg-map.js buildRadarChart regionColors[1]. 2026-09-07 */
+  --hmm-region-02:           var(--hmm-status-expected);   /* Radar series 3 of 7 (SE Asia). Was #90caf9, shared with the expected badge. Consumer: Hmm-Ventures/regulation-map reg-map.js regionColors[2]. 2026-09-07 */
+  --hmm-region-03:           var(--hmm-nec-eat-dark);   /* Radar series 4 of 7 (North America). Was #81c784, shared with the enacted badge. Consumer: Hmm-Ventures/regulation-map reg-map.js regionColors[3]. 2026-09-07 */
+  --hmm-region-04:           var(--hmm-nec-heal-dark);   /* Radar series 6 of 7 (South Asia). Was #ce93d8 (plum); the dark-ground Heal violet is 14.3 dE00 from it and clears 4.58:1. Consumer: Hmm-Ventures/regulation-map reg-map.js regionColors[5]. 2026-09-07 */
+  --hmm-region-05:           var(--hmm-c06);   /* Radar series 7 of 7 (LATAM). Was #ff8a65 (coral); the terracotta tint is the categorical palette's own warm mid-tone, 8.4 dE00 from it, 6.81:1 on #141414 and 19.9 from the tomato series beside it, which is the spacing the chart palette already sets between c01 and c06. Consumer: Hmm-Ventures/regulation-map reg-map.js regionColors[6]. 2026-09-07 */
 
   /* ---------- Flattened solids (for surfaces that cannot composite) ---------- */
   /* The semantic muted/faint/surface tokens are an alpha over an assumed ground, which is right for CSS and unusable anywhere the ground is not underneath: a canvas chart, an SVG placed on a different field, a CMYK plate. Each value here is its alpha token composited over the ground its name implies, so a consumer that cannot blend reaches for the solid instead of flattening it by hand. Derived, never authored: build_tokens.py recomputes them and guard 34 fails on drift. */
