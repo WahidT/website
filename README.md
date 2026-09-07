@@ -3,7 +3,12 @@
 The public site for **hmm ventures**. A single-scroll thesis page plus a GP bio and a sources page.
 
 Static HTML/CSS/JS. There is no build step: Netlify publishes the repository root as-is
-(see `netlify.toml`). Editing any file and pushing to `main` deploys.
+(see `netlify.toml`). Editing any file and pushing to `main` deploys. The Netlify build
+command runs the three non-browser checks first, so a failing check fails the deploy, and
+`.github/workflows/ci.yml` runs the full set on every push and pull request to `main`.
+
+All rights reserved. See `LICENSE`: no part of this site may be reused without written
+permission from hmm Ventures; the fonts in `fonts/` are under their own licences.
 
 ## Pages
 - `index.html`. The thesis (single scroll)

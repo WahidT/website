@@ -1,0 +1,55 @@
+# Site guards. The job name `site-guards` is the required status check on main.
+# Actions are pinned to full commit SHAs so a moved tag cannot change what runs.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  site-guards:
+    name: site-guards
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 20
+          cache: npm
+
+      # The postinstall fetches Chromium; the runner also needs its system libraries.
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      - run: npm audit --audit-level=high
+
+      - name: node --check on every JS and MJS
+        run: |
+          set -e
+          git ls-files '*.js' '*.mjs' | while read -r f; do node --check "$f"; done
+
+      - run: npm run check:csp
+      - run: npm run check:tokens
+      - run: node scripts/check-register-figures.mjs
+
+      # The remaining guards drive a browser against a local copy of the site.
+      - name: Start static server
+        run: |
+          python3 -m http.server 8791 >/dev/null 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8791/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          echo "server did not start" && exit 1
+
+      - run: npm run check:affordances
+      - run: npm run check:deadcss
+      - run: npm run check:deadjs
+      - run: npm run audit:mobile
