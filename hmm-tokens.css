@@ -1,7 +1,7 @@
 /* GENERATED FILE. DO NOT EDIT.
-   Source: hmm-ventures/Internal/Areas/Design/tokens/hmm.tokens.json
-   Build:  python3 hmm-ventures/Internal/Areas/Design/tokens/build_tokens.py
-   Tokens: 206   Source digest: 12f32ef15604f913
+   Source: tokens/hmm.tokens.json (WahidT/hmm-design)
+   Build:  python3 tokens/build_tokens.py
+   Version: 3.0   Tokens: 210   Source digest: 6aac085d0678cab7
    Guard 25 fails the build if this file drifts from the source.
 */
 
@@ -329,6 +329,10 @@
   --hmm-contrast-visible: 2.0;   /* Contrast an identity colour owes the paper to be perceivable. Not 3:1, which is WCAG's floor for a graphical object REQUIRED to understand content: a swatch beside its own label is not that. */
   --hmm-contrast-text:    4.5;   /* Contrast anything set as text owes its ground. The -ink variant carries it on paper and the -dark variant on the near-black. */
   --hmm-accent-max-share: 0.5;   /* The most of a plot's marks the accent may carry. An accent that covers most of a plate is not an accent, whatever the count. */
+  --hmm-margin-col:       88;   /* Marginalia gutter width, plate units. 20mm in print. ITVS section 3.2. Un-retired 2026-09-07: read by the IM plate builder hmm-ventures/Internal/Projects/Working_Docs/IM_2026-08-31/plates.py (margin notes, MC in every margin-note plate). The 2026-09-05 retirement rested on no consumer reaching it, and that file does. */
+  --hmm-margin-gap:       12;   /* Space between a drawing and its margin notes. Un-retired 2026-09-07: read by the IM plate builder hmm-ventures/Internal/Projects/Working_Docs/IM_2026-08-31/plates.py (margin notes, MG beside hmm-margin-col). The 2026-09-05 retirement rested on no consumer reaching it, and that file does. */
+  --hmm-z-mute:           0.30;   /* Exterior housing opacity in a cutaway, ITVS section 7. Un-retired 2026-09-07: read by the IM plate builder hmm-ventures/Internal/Projects/Working_Docs/IM_2026-08-31/plates.py (ZMUTE, zbox() layer 0). The 2026-09-05 retirement rested on no consumer reaching it, and that file does. */
+  --hmm-fail-mute:        0.50;   /* Failed state opacity in a boolean comparison, ITVS section 4. Un-retired 2026-09-07: read by the IM plate builder hmm-ventures/Internal/Projects/Working_Docs/IM_2026-08-31/plates.py (the failed state in the boolean comparison plates). The 2026-09-05 retirement rested on no consumer reaching it, and that file does. */
 }
 
 
@@ -401,13 +405,9 @@
 
 
 /* ---------- RETIRED. Declared, reached by nothing, withdrawn ---------- */
-/* GP ruling, 2026-09-05: retired unapplied. Nine ITVS plate metrics, declared 2026-09-02 and reached by no consumer in CSS, Python or JS. A token nothing can reach is a decision nobody applied. Two print-surface variants withdrawn in the same ruling: they name a print surface, and the printed rule weight is itself an open GP question, so if print is decided these are re-declared from this register with the decision attached rather than surviving as values nobody chose. */
-/*   --hmm-margin-col: 88;   Marginalia gutter width. ITVS section 3.2 was never implemented, so nothing has ever placed a margin note. */
-/*   --hmm-margin-gap: 12;   Space between a drawing and its margin notes. Retired with hmm-margin-col: there are no margin notes. */
+/* GP ruling, 2026-09-05: retired unapplied. Nine ITVS plate metrics, declared 2026-09-02 and reached by no consumer in CSS, Python or JS. A token nothing can reach is a decision nobody applied. Two print-surface variants withdrawn in the same ruling: they name a print surface, and the printed rule weight is itself an open GP question, so if print is decided these are re-declared from this register with the decision attached rather than surviving as values nobody chose. Four of the nine (hmm-margin-col, hmm-margin-gap, hmm-z-mute, hmm-fail-mute) returned to Plate metrics on 2026-09-07: the IM plate builder plates.py reads them, so the premise did not hold for those four. */
 /*   --hmm-iso-angle: 30deg;   The single isometric angle, ITVS section 2. No plate in either lineage draws isometric. */
 /*   --hmm-scale-fill: 0.90;   Component fill inside its bounding box. ITVS geometry, unimplemented. */
-/*   --hmm-z-mute: 0.30;   Exterior housing opacity in a cutaway, ITVS section 7. No cutaway plate exists in the live corpus. */
-/*   --hmm-fail-mute: 0.50;   Failed state opacity in a boolean comparison, ITVS section 4. Unimplemented. */
 /*   --hmm-human-h: 1.75;   Human reference height for scale calibration. No plate calibrates against a human figure. */
 /*   --hmm-vector-sweep: 30;   Maximum arrowhead sweep. Open heads are drawn, but no code reads this bound. */
 /*   --hmm-causality-dash: 2 3;   Dash pattern for a causality link. Dash is the evidence channel and a second dash meaning was never adopted. */
