@@ -13,7 +13,7 @@ function __T(n, fallback) {
    Necessity accent colours: power #FF730B, eat #4F8A5B, heal #8752A5. Requires scripts/hmm-svg.js (hmmH, hmmRender). */
 var HMM = (function(){
   var h = window.hmmH, PEARL=__T("--hmm-pearl-beige", "#F2ECC9");
-  function seededRnd(s){s=s||1;return function(){s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;};}
+  function seededRnd(s){s=s||1;return function(){s=(Math.imul(s,1103515245)+12345)&0x7fffffff;return s/0x7fffffff;};}
 
   /* ===================== transformer ===================== */
   var buildXfmr = (function(){
@@ -127,7 +127,7 @@ var HMM = (function(){
         h("line",{key:"rl",x1:bx+13,y1:by+30,x2:bx+BW-13,y2:by+30,stroke:"rgba(242,236,201,.2)",strokeWidth:.75})
       ];
       c[2].forEach(function(ln,k){box.push(h("text",{key:"nt"+k,x:bx+13,y:by+50+k*17,fontFamily:"Raela Grotesque",fontSize:12.5,fill:"rgba(242,236,201,.82)"},ln));});
-      els.push(h("g",{key:"c"+i,className:"callout callout--"+(left?"L":"R"),tabIndex:0},box));});
+      els.push(h("g",{key:"c"+i,className:"callout callout--"+(left?"L":"R"),tabIndex:0,role:"group","aria-label":c[1]+". "+c[2].join(" ")},box));});
     [[16,16,12,12],[spec.ch1,16,-12,12],[16,spec.chy,12,-12],[spec.ch1,spec.chy,-12,-12]].forEach(function(t,i){els.push(h("line",{key:"ca"+i,x1:t[0],y1:t[1],x2:t[0]+t[2],y2:t[1],stroke:A,strokeWidth:1}));els.push(h("line",{key:"cb"+i,x1:t[0],y1:t[1],x2:t[0],y2:t[1]+t[3],stroke:A,strokeWidth:1}));});
     return h("svg",{viewBox:vb.join(" "),role:"img","aria-label":kind+" machine, blow-out drawing",style:{width:"100%",height:"100%",overflow:"visible"}}, dotsOf(kind), els);
   }

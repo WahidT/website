@@ -1,7 +1,7 @@
 /* GENERATED FILE. DO NOT EDIT.
-   Source: Internal/Design/tokens/hmm.tokens.json
-   Build:  python3 Internal/Design/tokens/build_tokens.py
-   Tokens: 204   Source digest: 9cc0b1e1ecbba8fe
+   Source: hmm-ventures/Internal/Areas/Design/tokens/hmm.tokens.json
+   Build:  python3 hmm-ventures/Internal/Areas/Design/tokens/build_tokens.py
+   Tokens: 206   Source digest: 12f32ef15604f913
    Guard 25 fails the build if this file drifts from the source.
 */
 
@@ -29,13 +29,18 @@
    architecture. 75% machine, 25% hand. One accent.
    ============================================================= */
 
-/* ---------- Brand @font-face ----------
-   Declared in fonts/fonts.css, not here, since 2026-09-04. This file used to carry
-   five @font-face rules pointing at the desktop TTFs; fonts.css now serves the
-   same faces as subsetted WOFF2 with metric-matched fallbacks, and the TTFs are
-   gone from the repo. Two declarations of one family made the browser fetch both,
-   and the TTF set 404ed on every page. The token generator (build_tokens.py) must
-   stop emitting this block, or the next regeneration brings the 404s back. */
+/* ---------- Brand faces are NOT declared here ----------
+   Removed 2026-09-05. This block declared five @font-face rules against
+   `fonts/*.ttf` relative to the generated stylesheet, and it was emitted into
+   all four generated consumers, which do not share a font layout. On
+   hmm.ventures it produced a second declaration of every family and a 404 on
+   every TTF, because that surface serves subsetted WOFF2 under different names;
+   the production fix of 2026-09-04 removed the block and warned that the next
+   regeneration would bring the 404s back. It would have.
+   Each consumer declares its own faces beside its own font files:
+     ds-bundle/fonts/fonts.css, CIM/html/styles.css, the site's fonts/fonts.css.
+   The token file owns the FAMILY NAMES, in --hmm-font-display and
+   --hmm-font-body. It does not own where a given surface keeps its files. */
 
 :root {
 
@@ -48,6 +53,7 @@
   --hmm-rich-mahogany: #250001;   /* CMYK 30/100/100/70. body text on light */
   --hmm-light-tint:    #F7F5F0;   /* alt page / zebra row */
   --hmm-white:         #F7F5F0;   /* pure white RETIRED (ai-design-tells BAN): warm off-white only */
+  --hmm-ink:           #25221B;   /* The ink composited to make every light-mode border and surface. At 0.04 over hmm-pearl-beige it lands exactly on hmm-surface-light-solid (#EAE4C2); at 0.08 exactly on hmm-surface-2-light-solid (#E2DCBB). Named 2026-08-26: it was load-bearing in 15 places and had no token, so every use read as an off-palette literal. */
 
   /* ---------- Surface palette rule (GP 2026-08-09) ---------- */
   /* Choose the ground by the surface's ROLE, not the format: DARK ground . RESERVED for COVER pages, SECTION DIVIDERS and CORE-EMPHASIS slides only. --hmm-field-dark #141414 near-black. GREEN IS RETIRED . no Evergreen ground. Pearl linework and type, Tomato accent. LIGHT ground . the DEFAULT for ALL regular content: reading pages, data exhibits, tables, most deck slides. Pearl #F2ECC9 / paper #F4EEDA background, ink type, one Tomato accent. Any format (necessity machine, engineering sheet, chart) renders on EITHER ground; the ground follows the surface's role. Light is the norm, dark the exception for high-impact moments. */
@@ -86,14 +92,15 @@
   --hmm-nec-heal-ink:  #8752A5;   /* 4.78:1 on paper, so the base carries. */
 
   /* ---------- Chart palette (C01–C08, categorical) ---------- */
-  --hmm-c01: #C44539;   /* Tomato Jam. primary series (screen canon) */
-  --hmm-c02: #3F3A34;   /* Graphite (was Dark Teal; green retired) */
-  --hmm-c03: #F2ECC9;   /* Pearl Beige (screen canon) */
-  --hmm-c04: #8B5A3C;   /* Clay (mid-warm) */
-  --hmm-c05: #8A7A60;   /* Warm taupe (was Sage-teal; green retired) */
-  --hmm-c06: #D48C6A;   /* Terracotta tint */
-  --hmm-c07: #6E6A64;   /* Warm grey (was Muted teal; green retired) */
-  --hmm-c08: #A83B2E;   /* Deep tomato */
+  --hmm-c01:     #C44539;   /* Tomato Jam. primary series (screen canon) */
+  --hmm-c02:     #3F3A34;   /* Graphite (was Dark Teal; green retired) */
+  --hmm-c03:     #F2ECC9;   /* Pearl Beige (screen canon) */
+  --hmm-c04:     #8B5A3C;   /* Clay (mid-warm) */
+  --hmm-c05:     #8A7A60;   /* Warm taupe (was Sage-teal; green retired) */
+  --hmm-c06:     #D48C6A;   /* Terracotta tint */
+  --hmm-c07:     #6E6A64;   /* Warm grey (was Muted teal; green retired) */
+  --hmm-c08:     #A83B2E;   /* Deep tomato */
+  --hmm-c08-ink: rgba(37, 0, 1, 0.45);   /* the eighth series as a translucent ink. Carried in from the workspace lineage, where hmm-ventures/Internal/Projects/CIM/html/styles.css uses it */
 
   /* ---------- Content-role semantics (v1.1. strict) ---------- */
   /* Every claim, ruling, or first-person editorial line in an hmm deliverable MUST be rendered in its role colour, regardless of surface (web, slide, phone, PDF, paper). The role colour is paired with a structural cue (italic / left-rule / margin tag) so the signal survives monochrome print. Roles are ORTHOGONAL to call-out. A thesis that is also a call-out wears its thesis colour AND a Tomato call-out tag. Never both as body colour. */
@@ -244,7 +251,7 @@
   --hmm-ramp-ink:     #1A1A1A;   /* ink on a ramp swatch */
 
   /* ---------- Specimen page chrome ---------- */
-  /* The design-review specimen pages (Internal/Design/Reviews). Not a deliverable surface, but live output, so its values are declared rather than loose. */
+  /* The design-review specimen pages (hmm-ventures/Internal/Areas/Design/Reviews). Not a deliverable surface, but live output, so its values are declared rather than loose. */
   --hmm-specimen-ground:      #EDEAE2;   /* review page ground, light */
   --hmm-specimen-ground-dark: #181715;   /* review page ground, dark */
   --hmm-specimen-card-dark:   #201E1B;   /* review card on the dark ground */
@@ -305,8 +312,10 @@
   --hmm-rule:       rgba(242, 236, 201, 0.18);   /* page and section rules, heavier than a border and lighter than its hover */
   --hmm-rule-light: rgba(37, 34, 27, 0.18);   /* the same on a light ground */
 
+  /* ---------- Print-surface variants (finding D-03) ---------- */
+  /* Carried in from the workspace lineage. A third print token came with them, a deep green, and is left behind: it outlived the 2026-08-09 green retirement and nothing references it. */
+
   /* ---------- Plate metrics (the numbers a drawing is held to) ---------- */
-  /* Every one of these was discovered by a plate failing and then lived in whichever module noticed. design_guards.py held the type floor, which made the checker its own source. They are declared here so a drawing, a checker and a document all read the same number. */
   --hmm-plate-frame:      800;   /* The viewBox width a plate is drawn in. Everything below is a ratio of it, so a plate at another width scales rather than re-rules. */
   --hmm-plate-print-mm:   180;   /* What that frame prints across: a 210mm page less 16mm inner and 14mm outer margins, with the rail under the figure rather than beside it. At eight of twelve columns it was 118.7mm and a 7-unit label printed at 2.9pt. */
   --hmm-plate-type-floor: 10;   /* The smallest type a plate may set. 10 units across 180mm is 6.4pt, which is the size the memorandum already sets its own page footer at. A floor matched to a decision the document has made is easier to hold than one chosen for it. */
@@ -389,3 +398,18 @@
   --hmm-rule:             var(--hmm-rule-light);
   --hmm-accent-text:      var(--hmm-accent-ink);
 }
+
+
+/* ---------- RETIRED. Declared, reached by nothing, withdrawn ---------- */
+/* GP ruling, 2026-09-05: retired unapplied. Nine ITVS plate metrics, declared 2026-09-02 and reached by no consumer in CSS, Python or JS. A token nothing can reach is a decision nobody applied. Two print-surface variants withdrawn in the same ruling: they name a print surface, and the printed rule weight is itself an open GP question, so if print is decided these are re-declared from this register with the decision attached rather than surviving as values nobody chose. */
+/*   --hmm-margin-col: 88;   Marginalia gutter width. ITVS section 3.2 was never implemented, so nothing has ever placed a margin note. */
+/*   --hmm-margin-gap: 12;   Space between a drawing and its margin notes. Retired with hmm-margin-col: there are no margin notes. */
+/*   --hmm-iso-angle: 30deg;   The single isometric angle, ITVS section 2. No plate in either lineage draws isometric. */
+/*   --hmm-scale-fill: 0.90;   Component fill inside its bounding box. ITVS geometry, unimplemented. */
+/*   --hmm-z-mute: 0.30;   Exterior housing opacity in a cutaway, ITVS section 7. No cutaway plate exists in the live corpus. */
+/*   --hmm-fail-mute: 0.50;   Failed state opacity in a boolean comparison, ITVS section 4. Unimplemented. */
+/*   --hmm-human-h: 1.75;   Human reference height for scale calibration. No plate calibrates against a human figure. */
+/*   --hmm-vector-sweep: 30;   Maximum arrowhead sweep. Open heads are drawn, but no code reads this bound. */
+/*   --hmm-causality-dash: 2 3;   Dash pattern for a causality link. Dash is the evidence channel and a second dash meaning was never adopted. */
+/*   --hmm-mahogany-print: #5C140E;   Mahogany as it prints. Reached by nothing once ds-bundle/aliases.css was corrected off it on 2026-09-05, where it had been standing in for the body ink. */
+/*   --hmm-neutral-print: #2A2A2A;   Neutral as it prints. Reached by nothing. Its value appears once as a literal body background in the memorandum stylesheet, which is a screen surround and not a print use. */

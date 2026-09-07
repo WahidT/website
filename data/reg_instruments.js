@@ -71,4 +71,9 @@ var REG_INSTRUMENTS = [
   {c:"NZ",name:"Medical Products regime (TP Act replacement)",body:"Medsafe",date:"~2030",yr:2030,type:"enforceable",status:"expected"},
   {c:"AU",name:"AusUDID full labelling milestone",body:"TGA",date:"2030",yr:2030,type:"enforceable",status:"expected"}
 ];
-if (typeof window !== "undefined") window.REG_INSTRUMENTS = REG_INSTRUMENTS;
+/* IN FORCE, the one definition. In-market (not global), enforceable, and either effective or
+   transitional. Written once here because the page's lead sentence and the figure guard each
+   carried their own copy, and the guard's copy counted "status !== expected", which agrees today
+   only because no other status exists; the next status added to this register would split them. */
+var REG_IN_FORCE = function (r) { return !r.global && r.type === "enforceable" && (r.status === "effective" || r.status === "transitional"); };
+if (typeof window !== "undefined") { window.REG_INSTRUMENTS = REG_INSTRUMENTS; window.REG_IN_FORCE = REG_IN_FORCE; }

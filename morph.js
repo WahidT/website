@@ -83,11 +83,20 @@
   function cl01(x){return x<0?0:x>1?1:x;}
   function setOp(list,v){for(var i=0;i<list.length;i++)list[i].style.opacity=(v>=0.999?'':v.toFixed(3));}
 
+  /* One frame per scroll event at most, and a self-sustaining loop only while a flight is in
+     progress. The loop used to re-request itself unconditionally, so the page ran a full
+     getBoundingClientRect sweep sixty times a second while nothing moved: above the first
+     centre, below the last, and through every dwell. Now a scroll (or resize, or a rebuild)
+     schedules one frame; that frame re-requests only when a pair is mid-flight, because the
+     breath and the SMOOTH lag are the only things that change between scroll events. Hidden
+     documents draw nothing; visibilitychange schedules the first frame back. */
+  var queued=false;
+  function schedule(){if(queued||document.hidden)return;queued=true;requestAnimationFrame(function(){queued=false;frame();});}
   var t0=0;
   function frame(){
     t0+=0.011;
     ctx.clearRect(0,0,W,H);
-    if(NODES.length<2){requestAnimationFrame(frame);return;}
+    if(NODES.length<2)return;
     var vc=innerHeight/2, rects=[], mids=[];
     for(var i=0;i<NODES.length;i++){var r=NODES[i].ref.getBoundingClientRect();rects.push(r);mids.push(r.top+r.height/2);}
     // everyone visible by default; the active pair overrides below
@@ -95,7 +104,7 @@
 
     var pair=-1;
     for(var i=0;i<NODES.length-1;i++){if(vc>=mids[i]&&vc<mids[i+1]){pair=i;break;}}
-    if(pair<0){requestAnimationFrame(frame);return;}      // above the first / below the last centre (keep prime so nothing snaps on return)
+    if(pair<0)return;                                     // above the first / below the last centre (keep prime so nothing snaps on return)
 
     var raw, sy=window.pageYOffset||document.documentElement.scrollTop||0;
     if(pair===NODES.length-2){
@@ -110,7 +119,7 @@
     var A=NODES[pair], B=NODES[pair+1], ar=rects[pair], br=rects[pair+1], toSpine=!!B.spine;
     setOp(A.hide, 1-ss(0,0.12,t));                                      // A crossfades out as the flock lifts
     setOp(B.hide, ss(0.88,1,t));                                        // B crossfades in as it lands
-    if(t<=0.001||t>=0.999){requestAnimationFrame(frame);return;}  // full dwell: real diagram only (prime kept, no snap next flight)
+    if(t<=0.001||t>=0.999)return;                                 // full dwell: real diagram only (prime kept, no snap next flight)
 
     var acol=A.col, bcol=B.col, pearlMix=1-Math.sin(Math.PI*t), baseA=cl01((t/0.06)), baseB=cl01((1-t)/0.06);
     var fade=Math.min(baseA,baseB)*0.95;                               // dots ramp fast and stay lit across the flight
@@ -134,10 +143,13 @@
       ctx.fillStyle='rgba('+cr+','+cg+','+cb+','+op.toFixed(3)+')';ctx.fill();
     }
     primed=true;
-    requestAnimationFrame(frame);
+    schedule();                                                        // mid-flight: keep the breath and the lag moving
   }
 
-  function boot(){build();setTimeout(build,900);requestAnimationFrame(frame);}  // re-sample once late-rendering charts (radars, density) are laid out
-  var rt=null; addEventListener('resize',function(){resize();clearTimeout(rt);rt=setTimeout(build,180);});
+  function rebuild(){build();schedule();}
+  function boot(){rebuild();setTimeout(rebuild,900);}  // re-sample once late-rendering charts (radars, density) are laid out
+  var rt=null; addEventListener('resize',function(){resize();clearTimeout(rt);rt=setTimeout(rebuild,180);});
+  addEventListener('scroll',schedule,{passive:true});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)schedule();});
   if(document.readyState==='complete')boot(); else addEventListener('load',boot);
 })();

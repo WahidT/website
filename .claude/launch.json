@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "hmm-site",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 4321
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8791"],
+      "port": 8791
     }
   ]
 }

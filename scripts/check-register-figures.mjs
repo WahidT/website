@@ -7,7 +7,9 @@
    separately calls "four more scheduled". That definition is the whole point of
    this check, so it is written down here rather than left to be re-derived:
 
-     IN FORCE   = in-market (not global), type "enforceable", status NOT "expected"
+     IN FORCE   = REG_IN_FORCE in data/reg_instruments.js: in-market (not global), type
+                  "enforceable", status "effective" or "transitional". The page's S7 block
+                  uses the same function, so the two cannot disagree.
      SCHEDULED  = in-market, year 2027-2030
 
    Usage: node scripts/check-register-figures.mjs        (exit 1 on mismatch) */
@@ -18,8 +20,9 @@ const WORDS = { one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, 
 globalThis.window = {};
 new Function(fs.readFileSync('data/reg_instruments.js', 'utf8'))();
 const R = globalThis.REG_INSTRUMENTS || globalThis.window.REG_INSTRUMENTS;
+const IN_FORCE = globalThis.REG_IN_FORCE || globalThis.window.REG_IN_FORCE;
 
-const inForce = R.filter(r => !r.global && r.type === 'enforceable' && r.status !== 'expected');
+const inForce = R.filter(IN_FORCE);
 const byCountry = c => inForce.filter(r => r.c === c).length;
 const actual = {
   total: inForce.length,

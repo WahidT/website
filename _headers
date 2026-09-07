@@ -1,16 +1,18 @@
 # Security baseline (2026-09-04). The site is static with no user input, no
-# third-party scripts and no fetches, so every source is 'self'. Inline script
-# and style are allowed because index.html carries 27 KB of inline JS and 37 KB
-# of inline CSS; moving those to files is what would let 'unsafe-inline' go.
-# HSTS is set without includeSubDomains so no other host under the domain is
-# committed by this file.
+# third-party scripts and no fetches, so every source is 'self'. Inline style is
+# allowed because index.html carries 37 KB of inline CSS; moving that to a file
+# is what would let style-src drop 'unsafe-inline'. Script is self-only since
+# 2026-09-07, when the 27 KB of inline page script moved to sections.js; the
+# guard is `npm run check:csp`, which fails on any inline <script> that is not
+# hashed here. HSTS is set without includeSubDomains so no other host under the
+# domain is committed by this file.
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable

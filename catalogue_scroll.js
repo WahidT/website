@@ -33,11 +33,23 @@
       track.innerHTML=reduce?html:(html+html);   // duplicate for a seamless loop
       root.appendChild(track);
       if(reduce) return;
-      var half=track.scrollHeight/2, y=-(phase||0)*half, paused=false, offscreen=false, speed=0.5;
+      var half=track.scrollHeight/2, y=-(phase||0)*half, paused=false, offscreen=false, speed=0.5, running=false;
+      /* The loop runs only while the stream is on screen, unhovered and the document is visible.
+         It used to re-request itself every frame regardless, so two idle streams cost a frame
+         each for the whole visit. Every condition that can lift calls start(), which is a
+         no-op while the loop is already running. */
+      function loop(){
+        if(paused||offscreen||document.hidden){running=false;return;}
+        y-=speed; if(-y>=half) y+=half; track.style.transform='translateY('+y.toFixed(2)+'px)';
+        requestAnimationFrame(loop);
+      }
+      function start(){if(running)return;running=true;requestAnimationFrame(loop);}
       root.addEventListener('mouseenter',function(){paused=true;});
-      root.addEventListener('mouseleave',function(){paused=false;});
-      if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){offscreen=!e.isIntersecting;});},{threshold:0});io.observe(root);}
-      (function loop(){ if(!paused&&!offscreen){ y-=speed; if(-y>=half) y+=half; track.style.transform='translateY('+y.toFixed(2)+'px)'; } requestAnimationFrame(loop); })();
+      root.addEventListener('mouseleave',function(){paused=false;start();});
+      if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){offscreen=!e.isIntersecting;});start();},{threshold:0});io.observe(root);}
+      document.addEventListener('visibilitychange',start);
+      addEventListener('scroll',start,{passive:true});
+      start();
     }
     mount(document.getElementById('s9stream'), 0.5);   // the record beside the sourcing thesis (offset so the two do not mirror)
     mount(document.getElementById('s10stream'), 0);    // the dedicated record section

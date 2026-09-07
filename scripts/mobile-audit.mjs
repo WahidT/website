@@ -17,7 +17,8 @@
 import { chromium } from 'playwright';
 
 const BASE = (process.argv[2] || 'http://127.0.0.1:8791').replace(/\/$/, '');
-const EXECUTABLE = process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium';
+/* Playwright resolves its own Chromium (installed by the postinstall script); CHROMIUM_PATH overrides it. */
+const EXECUTABLE = process.env.CHROMIUM_PATH || undefined;
 /* [label, viewport, touch] */
 const PROFILES = [
   ['narrow',        { width: 320, height: 640 },  true],
