@@ -1,0 +1,21 @@
+/* Review harness for the three instrument machines (implant, anode, energiser).
+   Not linked from the site and marked noindex: this page exists so the drawings can be
+   read at full size in both forms and both themes before the GP rules on placement.
+   It reuses index.css for .nec / .stage / .machine-wrap, which is what gives the
+   callouts their magnify-on-focus behaviour, and adds only the side column the
+   cropped icon sits in. Delete this file and instruments.html together. */
+.ins-head{padding:56px 56px 0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);}
+.ins-head h1{font-family:var(--hmm-font-display);font-size:var(--hmm-text-lg);margin:0 0 8px;}
+.ins-head p{max-width:78ch;font-size:14px;line-height:1.6;color:var(--hmm-text-muted);margin:0 0 18px;}
+.ins-side{flex:1;display:flex;flex-direction:column;gap:18px;padding:56px;justify-content:center;min-width:0;order:2;}
+.ins-card{border:1px solid var(--hmm-border);padding:22px 24px;background:rgba(242,236,201,.02);}
+.ins-card h2{font-family:var(--hmm-font-display);font-size:var(--hmm-text-lg);margin:0 0 8px;color:var(--hmm-pearl);}
+.ins-card p{margin:0 0 14px;font-family:var(--hmm-font-body);font-size:14px;line-height:1.6;color:var(--hmm-text-muted);}
+.ins-icon{height:320px;display:flex;align-items:center;justify-content:center;}
+.ins-icon svg{width:100%;height:100%;overflow:visible;}
+.ins-cap{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.12em;color:var(--hmm-caption);}
+@media(max-width:900px){
+  .nec.ins-row{flex-direction:column;}
+  .ins-side{order:2;padding:24px 20px;}
+  .ins-head{padding:32px 20px 0;}
+}
