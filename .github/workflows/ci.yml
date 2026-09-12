@@ -38,6 +38,7 @@ jobs:
       - run: npm run check:csp
       - run: npm run check:tokens
       - run: node scripts/check-register-figures.mjs
+      - run: npm run check:machines
 
       # The remaining guards drive a browser against a local copy of the site.
       - name: Start static server
