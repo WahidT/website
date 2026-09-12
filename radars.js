@@ -25,6 +25,11 @@
 
   // dots render on <canvas> using the DWG-NEC machine-flock physics; PANELS collects them per panel.
   var PANELS = [];
+  /* How many panels the pointer is inside. lockHeights() must not measure a panel while it is
+     expanded, and reading `:hover` through querySelector would be a selector that can never
+     match in a headless probe, which check:deadjs correctly rejects. A counter also behaves on
+     touch, where the hover state does not exist at all. */
+  var HOVERING = 0;
   function hexA(h, a) { var n = parseInt(h.slice(1), 16); return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")"; }
 
   // Scores 0 to 10, order: AI, Hardware, Regulation, Startup, Exit, Trade.
@@ -237,6 +242,9 @@
     panel.setAttribute("data-market", market.name);
     panel.style.setProperty("--c", countryAccent(market.name));
 
+    panel.addEventListener("pointerenter", function () { HOVERING++; });
+    panel.addEventListener("pointerleave", function () { HOVERING = HOVERING > 0 ? HOVERING - 1 : 0; });
+
     var spec = SPEC[market.name];
     if (spec) panel.setAttribute("data-lead", spec.lead);
 
@@ -425,6 +433,24 @@
       return true;
     }
     function sizeAll() { for (var i = 0; i < PANELS.length; i++) sizePanel(PANELS[i]); }
+
+    /* Hover must never shrink a panel. Expanding turns the body into a row and the drawing
+       gives up width, so without this the panel loses height, the bottom edge retracts past
+       the pointer, hover drops, and the state oscillates. Capping the stage removes most of
+       the movement; this removes the rest by locking each panel to the height it settles at
+       with nothing hovered, so the expansion can only ever add. Measured only when no panel
+       is hovered, because a hovered panel would lock in the expanded height instead. */
+    function lockHeights() {
+      if (HOVERING) return;
+      for (var i = 0; i < PANELS.length; i++) PANELS[i].panel.style.minHeight = "";
+      var tallest = 0, h;
+      for (var j = 0; j < PANELS.length; j++) {
+        h = PANELS[j].panel.getBoundingClientRect().height;
+        if (h > tallest) tallest = h;
+      }
+      if (!tallest) return;
+      for (var k = 0; k < PANELS.length; k++) PANELS[k].panel.style.minHeight = Math.ceil(tallest) + "px";
+    }
     /* The loop runs only while the section is on screen and the document is visible.
        It used to re-request itself every frame regardless and read getBoundingClientRect
        sixty times a second for the whole visit, drawing nothing for most of them. Every
@@ -452,8 +478,10 @@
       requestAnimationFrame(frame);
     }
     function start() { if (running) return; running = true; requestAnimationFrame(frame); }
-    sizeAll(); setTimeout(sizeAll, 300);
-    var rrt = null; addEventListener("resize", function () { clearTimeout(rrt); rrt = setTimeout(sizeAll, 180); });
+    sizeAll(); lockHeights();
+    setTimeout(function () { sizeAll(); lockHeights(); }, 300);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(lockHeights);
+    var rrt = null; addEventListener("resize", function () { clearTimeout(rrt); rrt = setTimeout(function () { sizeAll(); lockHeights(); }, 180); });
     // The panels now change width mid-animation as one expands, so the canvas has
     // to re-measure on every frame of that transition, not just on window resize.
     // Home positions move with it and the dots ease across, which is the effect.
