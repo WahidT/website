@@ -501,6 +501,20 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 #radars .radar-chip .swatch{width:9px;height:9px;flex:0 0 auto;border-radius:1px;}
 #radars .radar-chip:hover,#radars .radar-chip:focus-visible{color:var(--hmm-pearl);border-color:var(--hmm-text-faint,rgba(242,236,201,.35));}
 #radars .radar-chip:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
+/* the lead necessity: marked in text on the chip, never in colour alone */
+#radars .radar-chip--lead{border-color:var(--c,var(--hmm-accent));}
+#radars .radar-chip .chip-lead{font-size:8px;letter-spacing:.18em;color:var(--c,var(--hmm-accent));}
+/* specialisation matrix: two rows off one catalogue, three necessities, lead in the panel accent */
+#radars .radar-spec{width:100%;margin-top:10px;border-collapse:collapse;font-size:9px;letter-spacing:.1em;}
+#radars .radar-spec caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
+#radars .radar-spec th,#radars .radar-spec td{padding:3px 4px;text-align:right;font-weight:400;color:var(--hmm-text-muted,rgba(242,236,201,.6));border-top:1px solid var(--hmm-border,rgba(242,236,201,.12));}
+#radars .radar-spec thead th{text-transform:uppercase;border-top:0;}
+#radars .radar-spec tbody th{text-align:left;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));letter-spacing:.12em;}
+#radars .radar-spec .is-lead{color:var(--c,var(--hmm-accent));}
+#radars .radar-spec thead .is-lead{border-bottom:1px solid var(--c,var(--hmm-accent));}
+/* the two captions under the three panels */
+#radars .radar-notes{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 22px;}
+#radars .radar-notes p{flex:1 1 280px;margin:0;font-family:var(--hmm-font-body,inherit);font-size:11px;line-height:1.6;color:var(--hmm-caption,rgba(242,236,201,.72));}
 #radars .radar-panel[data-focus] .series:not(.is-active){opacity:.12;}
 #radars .radar-panel[data-focus] .series.is-active .radar-fill{fill-opacity:.24;}
 #radars .radar-panel[data-focus] .series.is-active .radar-line{stroke-width:2.6;}

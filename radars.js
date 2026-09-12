@@ -46,11 +46,48 @@
     }
   ];
 
+  // Specialisation index, from the memorandum's market derivation. Each market's share of a
+  // necessity divided by the share its overall size predicts, which removes market size from the
+  // comparison. 1.00 sits exactly where size predicts; 1.15 marks specialisation.
+  //
+  // Both rows count items in one file, Internal/Resources/Research_Library/Reports/
+  // AU_NZ_JP_innovation_exit_catalogue_2026-08-10.md, assembled in a single August 2026 research
+  // pass under one necessity classification. The innovation row counts 79 named innovations and
+  // patents and separates the markets at p = 0.012 against a random allocation of the same items.
+  // The exit row counts 115 companies from that same catalogue and reads p = 0.19, so it carries
+  // the same three leads without separating the markets on its own. The rows are therefore two cuts
+  // of one pass, which is why the lead is taken on the innovation row alone and the exit row is
+  // printed as a reading of the older market rather than as corroboration.
+  //
+  // Reviewed 2026-09-12, three fixes. The earlier wording called the two rows independent bases
+  // that agree. The exit row also counted table ROWS, and the catalogue puts up to eight companies
+  // in one row, so the unit undercounted unevenly by market; and it included three listings from
+  // 1994 and 1995 that the row's own 2000-to-2026 label excludes. Fixing the window alone would
+  // have moved Japan to Heal on a 1.2% margin, which is why the unit was fixed with it.
+  var SPEC = {
+    "AUSTRALIA":   { lead: "Heal",  inn: { Power: 0.66, Eat: 0.66, Heal: 1.66 }, exi: { Power: 0.98, Eat: 0.79, Heal: 1.12 } },
+    "NEW ZEALAND": { lead: "Eat",   inn: { Power: 1.14, Eat: 1.53, Heal: 0.50 }, exi: { Power: 0.81, Eat: 1.77, Heal: 0.67 } },
+    "JAPAN":       { lead: "Power", inn: { Power: 1.32, Eat: 0.74, Heal: 0.73 }, exi: { Power: 1.16, Eat: 0.90, Heal: 0.98 } }
+  };
+  var SPEC_BASES = [["inn", "INNOVATION / IP"], ["exi", "EXITS 2000-26"]];
+
   var CAPTION =
     "Scored 0 to 10 relative to each market's own ceiling. Read down a panel's own axes, " +
     "not across markets: a score is not an absolute quantity that carries between markets. " +
     "Two axes are measured from hmm's in-mandate pipeline (startup depth, exit route); " +
     "four are assessed from market structure (AI, hardware, regulation, trade).";
+
+  var SPEC_CAPTION =
+    "The specialisation index divides each market's share of a necessity by the share its overall " +
+    "size predicts, which removes market size from the comparison. An index of 1.00 sits where size " +
+    "predicts and 1.15 marks specialisation. On innovation and intellectual property each market " +
+    "leads exactly one necessity and the three leads are different: Australia Heal at 1.66, Japan " +
+    "Power at 1.32, New Zealand Eat at 1.53. That base is a catalogue of 79 named innovations and " +
+    "patents, and its separation holds at p = 0.012 against a random allocation of the same items. " +
+    "The exit row counts 115 companies from the same catalogue and reads p = 0.19, so it carries the " +
+    "same three leads without separating the markets on its own. Exits lag innovation by a decade " +
+    "or more, so the exit row reads the market of the 2000s. The fund invests against the " +
+    "innovation base.";
 
   // ---- geometry ----
   var VB_W = 320, VB_H = 300;   // per-panel viewBox
@@ -200,6 +237,9 @@
     panel.setAttribute("data-market", market.name);
     panel.style.setProperty("--c", countryAccent(market.name));
 
+    var spec = SPEC[market.name];
+    if (spec) panel.setAttribute("data-lead", spec.lead);
+
     var title = document.createElement("h3");
     title.className = "radar-title";
     title.textContent = market.name;
@@ -244,6 +284,16 @@
       sw.style.background = HUES[name];
       chip.appendChild(sw);
       chip.appendChild(document.createTextNode(name));
+      // The lead is marked in text as well as in weight, so identity never rests on colour or
+      // on a visual cue alone. The label is read out, which is why it is a span and not a glyph.
+      if (spec && spec.lead === name) {
+        chip.classList.add("radar-chip--lead");
+        var ld = document.createElement("span");
+        ld.className = "chip-lead";
+        ld.textContent = "LEAD";
+        chip.appendChild(ld);
+        chip.setAttribute("aria-label", "Highlight " + name + " on " + market.name + ". " + name + " is this market's lead necessity.");
+      }
       li.appendChild(chip);
       legend.appendChild(li);
 
@@ -266,6 +316,48 @@
     });
     viz.appendChild(legend);
 
+    // The specialisation matrix for this market: the innovation row the lead is taken on, then the
+    // exit row from the same catalogue, the three necessities in the same order as the legend. A
+    // real table, because it is tabular and a screen reader should read the basis and the
+    // necessity together.
+    if (spec) {
+      var tbl = document.createElement("table");
+      tbl.className = "radar-spec";
+      var cap = document.createElement("caption");
+      cap.textContent = "Specialisation index, " + market.name.toLowerCase();
+      tbl.appendChild(cap);
+      var thead = document.createElement("thead");
+      var hr = document.createElement("tr");
+      var corner = document.createElement("td");
+      hr.appendChild(corner);
+      SERIES.forEach(function (n) {
+        var th = document.createElement("th");
+        th.scope = "col";
+        th.textContent = n;
+        if (spec.lead === n) th.className = "is-lead";
+        hr.appendChild(th);
+      });
+      thead.appendChild(hr);
+      tbl.appendChild(thead);
+      var tb = document.createElement("tbody");
+      SPEC_BASES.forEach(function (b) {
+        var tr = document.createElement("tr");
+        var rh = document.createElement("th");
+        rh.scope = "row";
+        rh.textContent = b[1];
+        tr.appendChild(rh);
+        SERIES.forEach(function (n) {
+          var td = document.createElement("td");
+          td.textContent = spec[b[0]][n].toFixed(2);
+          if (spec.lead === n) td.className = "is-lead";
+          tr.appendChild(td);
+        });
+        tb.appendChild(tr);
+      });
+      tbl.appendChild(tb);
+      viz.appendChild(tbl);
+    }
+
     // the prose the modal used to hold, now read in place
     var read = document.createElement("div");
     read.className = "radar-read";
@@ -285,6 +377,18 @@
     wrap.className = "radar-wrap";
     MARKETS.forEach(function (m) { wrap.appendChild(buildPanel(m)); });
     root.appendChild(wrap);
+
+    // Both captions mount here. CAPTION was written when the panels were built and was never
+    // added to the document, so the scoring rule it states has been invisible since; the
+    // specialisation note is new and sits beside it because a reader needs both to read a panel.
+    var notes = document.createElement("div");
+    notes.className = "radar-notes";
+    [CAPTION, SPEC_CAPTION].forEach(function (t) {
+      var pnode = document.createElement("p");
+      pnode.textContent = t;
+      notes.appendChild(pnode);
+    });
+    root.appendChild(notes);
 
     // The re-render path. Refresh HUES in place and re-point every dot, series
     // path, swatch and panel accent; the frame loop below reads d.hue each
