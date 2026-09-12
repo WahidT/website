@@ -3,11 +3,12 @@
 # The full prior Astro site (19 routes) is preserved and recoverable:
 #   branch: astro-legacy   tag: astro-site-2026-06-16
 
-# The build command runs the three non-browser guards so a failing check fails the
+# The build command runs the four non-browser guards so a failing check fails the
 # deploy. --ignore-scripts skips the Playwright Chromium postinstall, which these
-# checks do not need. GitHub Actions (.github/workflows/ci.yml) runs the full set.
+# checks do not need: check:machines is static too, evaluating machines.js against a
+# recording stub of hmmH. GitHub Actions (.github/workflows/ci.yml) runs the full set.
 [build]
-  command = "npm ci --ignore-scripts && npm run check:csp && npm run check:tokens && node scripts/check-register-figures.mjs"
+  command = "npm ci --ignore-scripts && npm run check:csp && npm run check:tokens && node scripts/check-register-figures.mjs && npm run check:machines"
   publish = "."
 
 # Caching and content-type rules also live in the /_headers file.
