@@ -7,6 +7,7 @@
     "serve": "python3 -m http.server 8791",
     "audit:mobile": "node scripts/mobile-audit.mjs",
     "check:figures": "node scripts/check-register-figures.mjs",
+    "canon:figures": "node scripts/canon-figures.mjs",
     "check:tokens": "node scripts/check-tokens.mjs",
     "check:affordances": "node scripts/check-affordances.mjs",
     "check:deadcss": "node scripts/check-dead-css.mjs",

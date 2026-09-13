@@ -64,4 +64,59 @@ for (const k of Object.keys(actual)) {
 }
 console.log(bad ? `\n${bad} figure(s) in the enacted-record sentence disagree with the register.`
                 : '\nall six figures in the enacted-record sentence match the register.');
-process.exit(bad ? 1 : 0);
+
+/* ---------------------------------------------------------------------------
+   The tier-liquidity sentence on for-llms.html, against canon.
+
+   Same defect, a second surface. The page states a register size, two tier rates,
+   an odds ratio and a p-value, and those belong to the engine, not to this
+   repository: they move whenever canon is recompiled on a new plate. Nothing here
+   noticed the 2026-09-13 re-strike, so the page went on printing the figures from
+   before it.
+
+   canon.json is not in this tree and the Netlify build cannot reach it, so the
+   build compares the page against data/canon_tier_liquidity.json, the canon entry
+   copied verbatim by scripts/canon-figures.mjs --write. Where the estate's canon
+   file IS reachable, which is every local run and every run on the GP's machine,
+   the snapshot is checked against it too, so a recompile fails here rather than
+   waiting to be spotted on the live site. Both sides are parsed; neither is
+   restated. --------------------------------------------------------------- */
+const { parseTierLiquidity, readLiveCanon, readSnapshot, SNAPSHOT } = await import('./canon-figures.mjs');
+
+let tierBad = 0;
+const snap = readSnapshot();
+const live = readLiveCanon();
+
+console.log('');
+if (live) {
+  if (live.tier_liquidity !== snap.tier_liquidity) {
+    console.error(`FAIL  ${SNAPSHOT} is behind ${live.path}. Run: node scripts/canon-figures.mjs --write`);
+    tierBad++;
+  } else {
+    console.log(`ok    ${SNAPSHOT} matches canon compiled ${live.compiled}`);
+  }
+} else {
+  console.log(`note  canon.json not reachable here; checking the page against ${SNAPSHOT} (compiled ${snap.compiled}).`);
+}
+
+const canonFigs = parseTierLiquidity(snap.tier_liquidity);
+const llms = fs.readFileSync('for-llms.html', 'utf8');
+const t = llms.match(/Across ([\d,]+) companies in Australia, Japan and New Zealand, companies whose product requires a hard regulatory approval exit at ([\d.]+)% against ([\d.]+)% for companies facing no regulatory gate, an odds ratio of ([\d.]+) at p = ([\d.e+-]+)\. The effect sits at one tier only: companies selling into a buyer under a compliance obligation exit at ([\d.]+)%/);
+if (!t) {
+  console.error('FAIL: the tier-liquidity sentence was not found in for-llms.html.');
+  console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
+  process.exit(1);
+}
+const pageFigs = {
+  registerCount: t[1], hardApprovalPct: t[2], noGatePct: t[3],
+  oddsRatio: t[4], yatesP: t[5], buyerObligationPct: t[6],
+};
+for (const k of Object.keys(pageFigs)) {
+  const ok = pageFigs[k] === canonFigs[k];
+  if (!ok) tierBad++;
+  console.log(`${ok ? 'ok  ' : 'FAIL'}  ${k.padEnd(20)} page says ${String(pageFigs[k]).padStart(9)}   canon says ${String(canonFigs[k]).padStart(9)}`);
+}
+console.log(tierBad ? `\n${tierBad} problem(s) in the tier-liquidity sentence against canon.`
+                    : '\nall five figures in the tier-liquidity sentence match canon.');
+
+process.exit(bad || tierBad ? 1 : 0);

@@ -1,0 +1,6 @@
+{
+  "_note": "Copied verbatim from canon current.tier_liquidity by scripts/canon-figures.mjs --write. Never hand-edit. The site figures are parsed out of this string, not restated.",
+  "_public": "This file sits in the published root and is fetchable by anyone. It carries the register measurement the site already prints and nothing else. No fund term, position count, geographic split or engine identifier goes in here: the public wall of 2026-07-25 applies to this file exactly as it applies to a page.",
+  "compiled": "2026-09-13",
+  "tier_liquidity": "Hard approval 17.73% (n=2369, 420 events) · Buyer obligation 5.82% (n=670, 39 events) · No gate 6.08% (n=9625, 585 events) · blended 8.24% on 12,664 companies. Odds ratio 3.33, Yates chi-square p = 9.39e-75, Fisher exact p = 2.2e-63. ⚠ Tier 2 sits BELOW unregulated and that is the finding, not a defect"
+}
