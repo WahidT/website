@@ -2,7 +2,7 @@
 
    The sentence states six figures. They are correct today, but nothing stopped
    them drifting from data/reg_instruments.js, and a review of this site did in
-   fact mis-read them once — by counting every `enforceable` row regardless of
+   fact mis-read them once, by counting every `enforceable` row regardless of
    status, which sweeps in the four `expected` instruments the same sentence
    separately calls "four more scheduled". That definition is the whole point of
    this check, so it is written down here rather than left to be re-derived:
@@ -10,6 +10,13 @@
      IN FORCE   = REG_IN_FORCE in data/reg_instruments.js: in-market (not global), type
                   "enforceable", status "effective" or "transitional". The page's S7 block
                   uses the same function, so the two cannot disagree.
+     SINCE 2020 = in force, with op (the operative year of the obligation) 2020 or later.
+                  Counted on op and never on yr: yr is a timeline position, and a count taken
+                  on it shipped fourteen against the fifteen the sourced instrument tables
+                  produce, on one row (Japan's feed-in premium: 2012 parent statute on the
+                  axis, operative from 2022). Every in-force row must carry op, as a year or
+                  as null, so a row added without it fails here instead of dropping out of
+                  the count silently.
      SCHEDULED  = in-market, year 2027-2030
 
    Usage: node scripts/check-register-figures.mjs        (exit 1 on mismatch) */
@@ -23,16 +30,22 @@ const R = globalThis.REG_INSTRUMENTS || globalThis.window.REG_INSTRUMENTS;
 const IN_FORCE = globalThis.REG_IN_FORCE || globalThis.window.REG_IN_FORCE;
 
 const inForce = R.filter(IN_FORCE);
+const missingOp = inForce.filter(r => !('op' in r) || !(r.op === null || Number.isInteger(r.op)));
+if (missingOp.length) {
+  console.error('FAIL: in-force rows without an operative year (op, a year or null):');
+  for (const r of missingOp) console.error(`  ${r.c}  ${r.name}`);
+  process.exit(1);
+}
 const byCountry = c => inForce.filter(r => r.c === c).length;
 const actual = {
   total: inForce.length,
   AU: byCountry('AU'), JP: byCountry('JP'), NZ: byCountry('NZ'),
-  since2020: inForce.filter(r => r.yr >= 2020).length,
+  since2020: inForce.filter(r => r.op !== null && r.op >= 2020).length,
   scheduled: R.filter(r => !r.global && r.yr >= 2027 && r.yr <= 2030).length,
 };
 
 const html = fs.readFileSync('index.html', 'utf8');
-const m = html.match(/hmm maps (\d+) enforceable instruments in force across the three markets: (\d+) in Australia, (\d+) in Japan, (\d+) in New Zealand, (\d+) of them since 2020, with (\w+) more scheduled between 2027 and 2030/);
+const m = html.match(/hmm maps (\d+) enforceable instruments in force across the three markets: (\d+) in Australia, (\d+) in Japan, (\d+) in New Zealand, (\d+) of them operative since 2020, with (\w+) more scheduled between 2027 and 2030/);
 if (!m) {
   console.error('FAIL: the enacted-record sentence was not found in index.html.');
   console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
