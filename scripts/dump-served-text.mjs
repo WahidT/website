@@ -43,15 +43,57 @@ const EXTRACT = `(() => {
      nothing about the writing. They stay in the FULL text, so a banned word in a title is
      still caught by the lexical sweeps. A heading that IS a sentence is kept. */
   const isSentence = t => /[.!?]$/.test(t) && /\\b(is|are|was|were|has|have|does|do|can|will|runs|sits|reads|carries|marks|makes|takes|leads|holds|comes|moves|earns|predicts|applies|enters|reaches)\\b/i.test(t);
+
+  /* ⚠ A HEIGHT-CAPPED, OVERFLOW-HIDDEN REGION IS NOT A WALL OF TEXT, AND FLATTENING ONE
+     REPORTS LAYOUT AS CONTENT. Found on 2026-09-14 by a persona simulation: ten of eleven
+     simulated readers said their attention died in the section 09 record, and the reason was
+     this dump. On the page, .src-stream is height:min(72vh,620px) with overflow:hidden and a
+     gradient mask, so it is one capped panel beside the sourcing prose that scrolls itself.
+     In the dump it became 2,060 of 2,689 lines, 77% of the text, because innerText walks
+     straight through an overflow-hidden box. A reader never sees that, so a measurement taken
+     on it is a measurement of the wrong artefact, which is this estate's recurring failure
+     shape in its other direction: earlier the same day this same file was written because the
+     gates were reading static HTML and missing two thirds of the page.
+
+     So a capped region is replaced by ONE marker line naming what sits behind the cap. The
+     marker keeps the region visible to the lexical sweeps (a banned term inside it is still a
+     banned term on a public page) while stopping it from dominating the structural reading. */
+  function cappedRegions() {
+    const out = [];
+    document.querySelectorAll('*').forEach(el => {
+      const cs = getComputedStyle(el);
+      if (cs.overflowY !== 'hidden' && cs.overflow !== 'hidden') return;
+      const h = el.clientHeight, sh = el.scrollHeight;
+      if (!h || sh < h * 1.6) return;                 // not meaningfully capped
+      const words = (el.innerText || '').trim().split(/\\s+/).filter(Boolean).length;
+      if (words < 120) return;                        // small clipped label, not a region
+      out.push({ el, words, h, sh });
+    });
+    return out;
+  }
+  const capped = cappedRegions();
+  const inCapped = el => capped.some(c => c.el !== el && c.el.contains(el));
+
   const parts = [];
   document.querySelectorAll('p,h1,h2,h3,h4,li,figcaption,blockquote').forEach(el => {
     if (el.closest(skip)) return;
+    if (inCapped(el)) return;
     const t = (el.innerText || '').trim();
     if (!t) return;
     if (/^H[1-4]$/.test(el.tagName) && !isSentence(t)) return;
     parts.push(t);
   });
-  return { full: document.body.innerText || '', prose: parts.join('\\n\\n') };
+
+  /* The full text keeps every word, because a lexical sweep must still see inside a capped
+     region, and marks the boundary so a later reader of the dump knows the shape. */
+  let full = document.body.innerText || '';
+  const notes = capped.map(function (c) {
+    return '[capped region: ' + c.words + ' words behind a ' + c.h +
+      'px cap that scrolls itself, ' + Math.round(c.sh / c.h) + 'x its own height]';
+  });
+  if (notes.length) full = full + '\\n\\n' + notes.join('\\n');
+
+  return { full, prose: parts.join('\\n\\n'), capped: capped.map(c => ({ words: c.words, h: c.h, sh: c.sh })) };
 })()`;
 
 function serve(root, port) {
@@ -87,14 +129,15 @@ for (const p of PAGES) {
   await page.goto(url, { waitUntil: 'networkidle' });
   // the charts and the stream mount on load, then settle
   await page.waitForTimeout(1200);
-  const { full, prose } = await page.evaluate(EXTRACT);
+  const { full, prose, capped } = await page.evaluate(EXTRACT);
   const stem = p.replace(/\.html$/, '');
   fs.writeFileSync(path.join(OUT, stem + '.txt'), full + '\n');
   fs.writeFileSync(path.join(OUT, 'prose', stem + '.txt'), prose + '\n');
   const fw = full.trim().split(/\s+/).filter(Boolean).length;
   const pw = prose.trim().split(/\s+/).filter(Boolean).length;
   const stat = fs.statSync(p).size;
-  console.log(`${p.padEnd(18)} rendered ${String(fw).padStart(5)} words   prose ${String(pw).padStart(5)}   (${Math.round(stat / 1024)} KB source)`);
+  const capNote = (capped && capped.length) ? `   [${capped.length} capped region(s), ${capped.reduce((a, c) => a + c.words, 0)} words behind a cap]` : "";
+  console.log(`${p.padEnd(18)} rendered ${String(fw).padStart(5)} words   prose ${String(pw).padStart(5)}   (${Math.round(stat / 1024)} KB source)${capNote}`);
   if (errors.length) { bad++; console.error(`  page errors: ${errors.join(' | ')}`); }
 }
 
