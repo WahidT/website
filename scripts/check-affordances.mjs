@@ -7,8 +7,8 @@
    motion engine set it on the whole machine diagram for a decorative ripple.
    Both were invisible in review because a pointer cursor looks like intent.
 
-   The audit reports only elements that DECLARE cursor:pointer — where the
-   parent's computed cursor differs — because cursor inherits, so a naive sweep
+   The audit reports only elements that DECLARE cursor:pointer, where the
+   parent's computed cursor differs, because cursor inherits, so a naive sweep
    reports every descendant of a genuine link and buries the real finding.
 
    Cursors other than pointer are allowed on interactive elements when they name

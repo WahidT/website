@@ -1,4 +1,4 @@
-# hmm.ventures — single-scroll thesis site (static, no build step).
+# hmm.ventures, the single-scroll thesis site. Static, no build step.
 # This replaced the prior Astro site on 2026-08-11.
 # The full prior Astro site (19 routes) is preserved and recoverable:
 #   branch: astro-legacy   tag: astro-site-2026-06-16

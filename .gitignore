@@ -1,4 +1,4 @@
-# Netlify CLI / build system state — generated, machine-specific, never commit.
+# Netlify CLI and build-system state: generated, machine-specific, never commit.
 # These are recreated on every `netlify` invocation and deploy. A stale committed
 # copy of .netlify/plugins (the extension-managed build plugin cache) or of the
 # resolved .netlify/netlify.toml can conflict with config/extension resolution.
@@ -51,7 +51,7 @@ pnpm-debug.log*
 test-results/
 playwright-report/
 
-# Mobile audit output — keep findings.md, drop screenshots/json
+# Mobile audit output: keep findings.md, drop screenshots and json
 _mobile-audit/**
 !_mobile-audit/**/findings.md
 !_mobile-audit/**/reports.json

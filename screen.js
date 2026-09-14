@@ -86,10 +86,18 @@
            quantity in filter 5 (the net factors, the exit ceilings, the necessity weight),
            because they are multiples and an allocation and the public wall of 2026-07-25
            keeps those off this surface. */
-        "1.09 companies above USD 1B and 0.16 above USD 10B, per USD 1B of venture invested since 2000 · Side Stage Ventures with Dealroom, June 2026 edition"
+        "Australia returns 0.16 companies above USD 10B per USD 1B of venture invested since 2000, first of the hubs compared, and 1.09 above USD 1B, third · Side Stage Ventures with Dealroom, June 2026 edition"
       ] },
-    { n: "3", name: "Inspection reliance", reads: "one factory inspection the scheme accepts",
-      cuts: ["CN", "IN"], notes: ["three of the 57 PIC/S participating authorities, the 57th Jordan from 1 January 2026"] },
+    /* GP ruling 2026-09-14: name both schemes and keep the cut. Four simulated readers
+       objected that PIC/S is a pharmaceutical GMP scheme while this register is mostly not
+       medicines, and they were right. The reliance instrument differs by what the product is,
+       so the filter names the scheme per lane, all three from the memorandum's section 5.
+       ⚠ MDSAP cannot simply replace PIC/S here: New Zealand is not an MDSAP participant, so
+       a cut run on MDSAP alone would remove New Zealand from the fund's own three. */
+    { n: "3", name: "Inspection reliance", reads: "one inspection the network accepts, on whichever scheme covers the product",
+      cuts: ["CN", "IN"], notes: [
+        "medicines travel on PIC/S, where all three are among the 57 participating authorities, the 57th Jordan from 1 January 2026; devices travel on MDSAP, where one audit serves Australia and Japan and New Zealand sits outside it; electrical equipment travels on the IECEE CB scheme, recognised in 54 member countries"
+      ] },
     { n: "4", name: "Regulation that is moving", reads: "a new condition, dated",
       cuts: [], held: "removes nothing · confirms the three", notes: [regLine] },
     { n: "5", name: "The arbitrage, netted", reads: "entry against the exit it reaches, on United States scale",
