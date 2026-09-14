@@ -398,7 +398,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    the 48px these sections carry left 28px of every one of them underneath it. The
    640px block below keeps its own 66px, tuned to the 68px the rail is down there. */
 @media (hover:none),(pointer:coarse){
-  .through,.ai,.mkt,.reg,.nec{padding-right:78px;}
+  .through,.ai,.mkt,.reg,.nec,.scr,.close{padding-right:78px;}
   .site-footer{padding-right:78px;}
 }
 @media(max-width:1040px){
@@ -419,7 +419,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .tl-filters button{min-height:44px;padding:11px 14px;}
 }
 @media(max-width:640px){
-  .through,.ai,.mkt,.reg,.nec{padding-left:20px;padding-right:66px;}
+  .through,.ai,.mkt,.reg,.nec,.scr,.close{padding-left:20px;padding-right:66px;}
   .site-footer{padding-right:66px;}
   .hero-row{width:calc(100vw - 86px);}
   .ai,.mkt{padding-top:64px;padding-bottom:64px;}
@@ -550,8 +550,11 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .mkt-notes{grid-template-columns:1fr;gap:22px;}
 }
 @media (max-width:720px){
-  .scr{padding:72px 22px;}
-  .close{padding:84px 22px 96px;}
+  /* Left and block padding only. The right padding is the rail clearance and it is
+     set in the rail blocks above by class name, so a shorthand here would silently
+     take it back. That is how these two sections ended up under the rail. */
+  .scr{padding-top:72px;padding-bottom:72px;padding-left:22px;}
+  .close{padding-top:84px;padding-bottom:96px;padding-left:22px;}
   .through-lead{font-size:19px!important;}
 }
 
