@@ -58,3 +58,8 @@ _mobile-audit/**
 
 # Core Web Vitals audit output (timestamped runs)
 _cwv-audit/**
+
+# Rendered served text, written by scripts/dump-served-text.mjs for the prose gate and the
+# lexical sweeps. Generated on demand and never committed: it is a measurement target, and a
+# committed copy would be the stale one the next session reads.
+.served-text/

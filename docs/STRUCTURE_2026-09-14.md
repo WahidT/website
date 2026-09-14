@@ -10,6 +10,44 @@ Website merges stay with the general partner, because a merge deploys (R-MERGE, 
 
 ---
 
+## 0. The opener, set by the general partner on 2026-09-14
+
+**The general partner gave the opening prose directly during this build, and it is carried
+verbatim.** A direct instruction outranks a recorded ruling, so it is the text on the page, and
+what it moves is written here rather than left to drift.
+
+> What if the necessities we take most for granted are the ones changing fastest? Energy, food and
+> care reach us through systems designed for another technological era.
+>
+> Now their physical foundations are being rebuilt. In the power plant, the paddock and the clinic,
+> founders are applying advances in intelligence, biology and engineering within markets governed by
+> rules that predate those capabilities. Technology enters these markets by earning permission,
+> because they are systems society cannot afford to fail.
+>
+> We lead seed rounds for founders rebuilding how populations are powered, fed and healed.
+
+**It supersedes the R-D24 and R-D25 form in two places.** Both were live rulings of 2026-09-14 and
+both are recorded so the estate keeps the reasoning rather than only the outcome.
+
+| Where | R-D24 / R-D25 | The general partner's text | What moved |
+|---|---|---|---|
+| The concrete noun in the triple | "Energy, food and **medicine**" | "Energy, food and **care**" | R-D25 chose "medicine" on parallelism, three mass nouns of one grade. R-D25's other half is untouched: the system is named **Heal** everywhere a system is named, and it is, on every page |
+| The entry condition | "Working gets a technology to the door of these markets. Permission gets it through, because they are systems society cannot afford to fail." | "Technology enters these markets by earning permission, because they are systems society cannot afford to fail." | R-D24 replaced a two-sentence reframe with a forward sequence. This is the single forward sentence, which settles OR-4a in the other direction: one sentence, no denial, and the cross-sentence reframe does not arise |
+
+**It clears all eight rules of `LANGUAGE.md` 7.3**, checked one at a time: the question re-ranks a
+belief the reader already holds rather than introducing a doubt; no regulator appears as an actor;
+the three places run one per system in the system's order; the fund arrives last, once, as the
+subject of one sentence carrying the construction; no figure, market name or adjective of scale
+appears; every sentence takes a verb; the rhythm is the mechanism's length; and the chain runs its
+six links. It also clears both R-D26 patterns at build.
+
+⚠ **What is owed.** `14_NARRATIVE_INTRO_2026-09-14.md` and `LANGUAGE.md` 7.3 still carry the
+R-D24 and R-D25 form as the standard for the deck's first sheet. This branch changes the site
+only. If the general partner wants one text across both surfaces, the intro file and 7.3 move to
+this wording, and that is a ruling in `hmm-prose`, never a site edit.
+
+---
+
 ## 1. The question this file has to put back to the general partner
 
 **The opening item reads "GoodFit", and that word has two readings.** The build takes the first and
@@ -53,6 +91,14 @@ homepage lead costs the ruled opener its position, because the two cannot both b
 Section 3's register block keeps the enacted-record timeline it already carries, re-struck under
 R-D29. Section 6 keeps the specialisation matrix, which is owned; what leaves it is named in part 4
 below.
+
+**One section is not on the general partner's list, and this is where it went.** The live site's
+sourcing block, three moves headed "How we find them", sits between the markets and the close. The
+list names seven homepage items and the sourcing block is none of them, so it was placed rather
+than assumed: the close asks for a research conversation, and a research conversation is what
+mapping a market before a round exists produces, so the block is the premise of the ask that
+follows it. Moving it earlier would separate the two. **If the general partner wants it out, the
+close still stands on its own.**
 
 ### The bio page, `bio.html`, item 8
 
