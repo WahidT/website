@@ -63,3 +63,10 @@ _cwv-audit/**
 # lexical sweeps. Generated on demand and never committed: it is a measurement target, and a
 # committed copy would be the stale one the next session reads.
 .served-text/
+
+# Figure captures and the scratch probes that produce them, written by
+# scripts/capture-visuals.mjs. Generated on demand from the live page and never committed:
+# a committed PNG of a drawing is a second copy of that drawing, and it is the copy that
+# goes stale the moment the renderer changes.
+.visuals/
+.tmp/
