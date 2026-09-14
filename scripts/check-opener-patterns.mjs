@@ -62,6 +62,9 @@ const ACTOR_WORDS = 'ready|unready|prepared|unprepared|slow|slower|sluggish|behi
 const LINK = "is|are|was|were|isn't|aren't|wasn't|weren't|seems?|remains?|stays?|gets?|looks?|feels?|proves?|appears?|becomes?|been|being";
 const REG = "regulators?|regulatory bodies|regulating bodies|regulatory authorit(?:y|ies)";
 const PARTICIPLE = 'lagging|falling behind|catching up|struggling|scrambling|playing catch';
+/* Actor words that can only be a judgement, never a preposition or a neutral adverb.
+   These are safe to match without a negator in front of them. */
+const UNAMBIGUOUS = 'unready|unprepared|sluggish|laggard|asleep|failing|overwhelmed|outpaced|outrun';
 
 const PATTERNS = [
   {
@@ -71,8 +74,15 @@ const PATTERNS = [
       `(?:${REG})\\b[^.;]{0,40}?\\b(?:${LINK})\\b[^.;]{0,24}?\\b(?:${ACTOR_WORDS})\\b`
       // or a participle sitting directly on it
       + `|(?:${REG})\\b(?:\\s+\\w+){0,2}\\s+(?:${PARTICIPLE})\\b`
-      // or the judgement first, with its own copula, and the regulator as the subject after
-      + `|\\b(?:${ACTOR_WORDS})\\b[^.;]{0,24}?\\b(?:${LINK})\\b[^.;]{0,24}?\\b(?:${REG})\\b`
+      /* or the judgement first, with its own copula, and the regulator as the subject after.
+         ⚠ NARROWED 2026-09-14, on a second false positive of exactly the kind that narrowed
+         the first alternative. This fired on "the real-world performance behind it stay where
+         they were built, because a regulator grants an entry", where "behind" is again a
+         preposition and "were" belongs to a different clause entirely. So this direction now
+         requires the judgement to be explicitly negated or to use an adjective that cannot be
+         a preposition. The fronted-participial alternative below carries the rest. */
+      + `|\\b(?:not|never|un)\\s*(?:${ACTOR_WORDS})\\b[^.;]{0,24}?\\b(?:${LINK})\\b[^.;]{0,24}?\\b(?:${REG})\\b`
+      + `|\\b(?:${UNAMBIGUOUS})\\b[^.;]{0,24}?\\b(?:${LINK})\\b[^.;]{0,24}?\\b(?:${REG})\\b`
       /* or the judgement fronted as a participial phrase with no copula at all, which is the
          form that escaped the first break test: "Not ready for any of this, the regulator
          writes the rule late." The comma is what marks the fronting, and requiring it keeps

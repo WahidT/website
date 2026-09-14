@@ -118,8 +118,31 @@ for (const k of Object.keys(pageFigs)) {
   if (!ok) tierBad++;
   console.log(`${ok ? 'ok  ' : 'FAIL'}  ${k.padEnd(20)} page says ${String(pageFigs[k]).padStart(9)}   canon says ${String(canonFigs[k]).padStart(9)}`);
 }
-console.log(tierBad ? `\n${tierBad} problem(s) in the tier-liquidity sentence against canon.`
-                    : '\nall five figures in the tier-liquidity sentence match canon.');
+/* THE SECOND COPY, on the homepage, added 2026-09-14 with plate 06.D.
+   The tier finding now prints on a human page as well as on the machine page, and two copies
+   of one canon figure drift the moment one is edited alone, with the stale copy being the one
+   that loads first. So both are parsed against the same snapshot, and either disagreeing
+   fails the deploy. Neither is restated here. */
+const home = fs.readFileSync('index.html', 'utf8');
+const h = home.match(/Companies whose product cannot be sold without an approval reach a liquidity event at ([\d.]+)%, against ([\d.]+)% where no approval gates the sale, measured on ([\d,]+) companies across the three markets at an odds ratio of ([\d.]+)\. The tier between them, where a buyer sits under a compliance obligation, reaches ([\d.]+)%/);
+if (!h) {
+  console.error('FAIL: plate 06.D\'s measured sentence was not found in index.html.');
+  console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
+  process.exit(1);
+}
+const homeFigs = {
+  hardApprovalPct: h[1], noGatePct: h[2], registerCount: h[3],
+  oddsRatio: h[4], buyerObligationPct: h[5],
+};
+console.log('');
+for (const k of Object.keys(homeFigs)) {
+  const ok = homeFigs[k] === canonFigs[k];
+  if (!ok) tierBad++;
+  console.log(`${ok ? 'ok  ' : 'FAIL'}  06.D ${k.padEnd(19)} page says ${String(homeFigs[k]).padStart(9)}   canon says ${String(canonFigs[k]).padStart(9)}`);
+}
+
+console.log(tierBad ? `\n${tierBad} problem(s) in the tier-liquidity sentences against canon.`
+                    : '\nboth tier-liquidity sentences, on the homepage and the machine page, match canon.');
 
 /* ---------------------------------------------------------------------------
    The per-market strength snapshot, against its two owners.
