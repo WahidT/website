@@ -229,7 +229,7 @@
     var t = document.createElement("table");
     t.className = "bars-spec";
     var cap = document.createElement("caption");
-    cap.textContent = "Specialisation index: a market's share of a necessity, divided by the share its own size predicts. An index of 1.0 sits where size predicts. The count the cell rests on is printed beside it, because the innovation base is 79 items across nine cells and one cell holds four, which does not carry a second decimal. The lead is taken on the innovation row, which separates the markets at p = 0.012; the exit row reads p = 0.19 on 115 companies and counts the same catalogue again.";
+    cap.textContent = "Specialisation index: a market's share of a necessity, divided by the share its own size predicts. An index of 1.0 sits where size predicts. It reads to one decimal, because the innovation row rests on 79 items across nine cells and a second decimal would claim a precision that base cannot carry. The lead is taken on the innovation row, which separates the markets at p = 0.012; the exit row reads p = 0.19 on 115 companies and counts the same catalogue again.";
     t.appendChild(cap);
     var thead = document.createElement("thead"), hr = document.createElement("tr");
     hr.appendChild(document.createElement("td"));
@@ -253,15 +253,13 @@
         var mh = document.createElement("th");
         mh.scope = "row"; mh.textContent = MKT[c].name; tr.appendChild(mh);
         NEC.forEach(function (n) {
+          /* GP ruling 2026-09-14: the per-cell base does not print. It is still carried in
+             data/necessity_matrix.js and check-register-figures.mjs still recomputes every
+             index from it at build, so the figure stays derived rather than typed; what
+             changed is the display, not the arithmetic. The base reaches a reader who wants
+             it through the accessible name below. */
           var cell = mk.cells[n], td = document.createElement("td");
-          td.appendChild(document.createTextNode(cell.idx.toFixed(1)));
-          /* The separator is a real character in the DOM, never a ::before. A pseudo-element
-             is absent from textContent, from a copied selection and from an accessible name,
-             so a cell styled apart still extracted as "0.79" where it means 0.7 on 9 items. */
-          var b = document.createElement("span");
-          b.className = "spec-n"; b.textContent = "\u00A0n" + cell.n;
-          td.appendChild(b);
-          /* Screen readers get the base named rather than read as a second number. */
+          td.textContent = cell.idx.toFixed(1);
           td.setAttribute("aria-label", cell.idx.toFixed(1) + ", on " + cell.n + " of " + base.total + " items");
           if (M.leads[c] === n && key === M.lead_basis) td.className = "is-lead";
           tr.appendChild(td);

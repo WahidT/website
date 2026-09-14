@@ -41,35 +41,6 @@
   var BY_CODE = {};
   SLOTS.forEach(function (s) { BY_CODE[s.code] = s; });
 
-  /* Filter 4's figure. Counted here, never typed: in-force is REG_IN_FORCE, defined once in
-     data/reg_instruments.js, and the operative-date test is r.op >= 2020, which is the rule
-     count_reg_dates.py applies in the estate. */
-  function regLine() {
-    /* GRAFT, 2026-09-14. This read the register directly and re-implemented the in-force
-       predicate inline (r.global, r.type, the country list, r.op >= 2020). That is a second
-       arithmetic for a figure that already has one owner, and it drifts the moment the
-       predicate moves. It now reads the counted block in data/market_strength.js, which
-       scripts/market-strength.mjs writes from that same predicate and which
-       scripts/check-register-figures.mjs re-checks against both the register and canon on
-       every build. One arithmetic, three surfaces.
-
-       The fallback is a correct sentence carrying no figure, never a blank and never a
-       number this file invented, because a silent fallback to a different string is the
-       drift that survives review. */
-    var MS = (typeof window !== "undefined" && window.MARKET_STRENGTH) || null;
-    var BARE = "instruments dated on the day the obligation commences · the register in section 06";
-    if (!MS || !MS.register) return BARE;
-    var reg = MS.register, since = 0, total = reg.total;
-    var codes = ["AU", "JP", "NZ"];
-    for (var i = 0; i < codes.length; i++) {
-      var row = reg[codes[i]];
-      if (!row || typeof row.since2020 !== "number") return BARE;
-      since += row.since2020;
-    }
-    if (!since || typeof total !== "number" || !total) return BARE;
-    return since + " of " + total + " instruments in force are operative since 2020 · the register in section 06";
-  }
-
   var STEPS = [
     { n: "",  name: "The starting set", reads: "a research base that reaches a regulated physical product",
       cuts: [], notes: ["markets outside the mandate were never screened"] },
@@ -98,10 +69,6 @@
       cuts: ["CN", "IN"], notes: [
         "medicines travel on PIC/S, where all three are among the 57 participating authorities, the 57th Jordan from 1 January 2026; devices travel on MDSAP, where one audit serves Australia and Japan and New Zealand sits outside it; electrical equipment travels on the IECEE CB scheme, recognised in 54 member countries"
       ] },
-    { n: "4", name: "Regulation that is moving", reads: "a new condition, dated",
-      cuts: [], held: "removes nothing · confirms the three", notes: [regLine] },
-    { n: "5", name: "The arbitrage, netted", reads: "entry against the exit it reaches, on United States scale",
-      cuts: [], held: "removes nothing · prices what the three carry", notes: [] }
   ];
 
   function hue(slot) { return slot.token ? __T(slot.token[0], slot.token[1]) : ""; }
@@ -121,7 +88,7 @@
     var root = document.getElementById("screen");
     if (!root) return;
     root.setAttribute("role", "figure");
-    root.setAttribute("aria-label", "Five filters run on ten markets. Bar width is the number of markets still standing.");
+    root.setAttribute("aria-label", "Three filters run on ten markets, leaving three. Bar width is the number of markets still standing.");
 
     /* The axis names the ten columns once. Every row below reads against it, which is why
        no row carries a market name of its own and why the figure needs no legend. */
@@ -190,8 +157,6 @@
 
       root.appendChild(row);
     });
-
-    root.appendChild(el("p", "sc-cap", "Bar width is the markets still standing. Names sit in the gap the bar gave up."));
 
     __onTheme(function () {
       Array.prototype.forEach.call(root.querySelectorAll("[data-mkt]"), function (n) {

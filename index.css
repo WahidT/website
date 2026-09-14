@@ -398,7 +398,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    the 48px these sections carry left 28px of every one of them underneath it. The
    640px block below keeps its own 66px, tuned to the 68px the rail is down there. */
 @media (hover:none),(pointer:coarse){
-  .through,.ai,.mkt,.reg,.nec,.scr,.close{padding-right:78px;}
+  .through,.ai,.mkt,.reg,.nec,.scr{padding-right:78px;}
   .site-footer{padding-right:78px;}
 }
 @media(max-width:1040px){
@@ -419,7 +419,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .tl-filters button{min-height:44px;padding:11px 14px;}
 }
 @media(max-width:640px){
-  .through,.ai,.mkt,.reg,.nec,.scr,.close{padding-left:20px;padding-right:66px;}
+  .through,.ai,.mkt,.reg,.nec,.scr{padding-left:20px;padding-right:66px;}
   .site-footer{padding-right:66px;}
   .hero-row{width:calc(100vw - 86px);}
   .ai,.mkt{padding-top:64px;padding-bottom:64px;}
@@ -519,7 +519,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .scr-lead p:first-child{color:var(--hmm-pearl);}
 
 /* The table scrolls inside its own box. The page body never scrolls sideways. */
-.scr-after{font-size:14px;line-height:1.65;color:var(--hmm-text-muted);max-width:80ch;margin:0;}
 
 /* ---------- S7 the three market paragraphs above the charts ---------- */
 .mkt-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin:0 0 26px;}
@@ -527,14 +526,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .mkt-note p{font-size:13.5px;line-height:1.62;color:var(--hmm-text-muted);margin:0;}
 
 /* ---------- S10 the close: the one thing asked ---------- */
-.close{display:flex;flex-direction:column;align-items:center;padding:112px 48px 128px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);text-align:center;}
-.close>*{width:min(760px,100%);}
-.close-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
-.close-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:12px 0 20px;line-height:1.1;}
-.close-body p{font-size:16px;line-height:1.68;color:var(--hmm-text-muted);margin:0 auto 14px;max-width:62ch;}
-.close-cta{margin-top:30px!important;}
-.close-mail{font-family:var(--hmm-font-mono);font-size:18px;letter-spacing:.04em;color:var(--hmm-accent-text);text-decoration:none;border-bottom:1px solid var(--hmm-accent);padding-bottom:3px;transition:color .25s var(--hmm-ease),border-color .25s var(--hmm-ease);}
-.close-mail:hover,.close-mail:focus-visible{color:var(--hmm-pearl);border-color:var(--hmm-pearl);}
 
 /* ---------- the measured strip under each market chart ----------
    Three rows, three owners, generated into data/market_strength.js. The value and its
@@ -554,7 +545,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
      set in the rail blocks above by class name, so a shorthand here would silently
      take it back. That is how these two sections ended up under the rail. */
   .scr{padding-top:72px;padding-bottom:72px;padding-left:22px;}
-  .close{padding-top:84px;padding-bottom:96px;padding-left:22px;}
   .through-lead{font-size:19px!important;}
 }
 
@@ -621,7 +611,11 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 #screen .sc-axis{padding:0 0 9px;border-bottom:1px solid var(--hmm-border);}
 #screen .sc-axhead{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:10px;color:var(--hmm-caption);align-self:end;}
 #screen .sc-axhead--r{text-align:right;}
-#screen .sc-axlbl{grid-row:1;display:flex;align-items:flex-end;min-height:2.6em;font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.07em;font-size:9.5px;line-height:1.3;color:var(--hmm-caption);}
+/* padding-right is what keeps two labels apart. Each label sits in its own grid column
+   but the text overflows the column, so NORTH AMERICA and EUROPE were touching and read
+   as one label. The gap is inside the label rather than between the columns, because the
+   columns are the bar track and moving them would move the bars. */
+#screen .sc-axlbl{grid-row:1;display:flex;align-items:flex-end;min-height:2.6em;padding-right:9px;font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.07em;font-size:9.5px;line-height:1.3;color:var(--hmm-caption);}
 #screen .sc-axlbl.is-mkt{color:var(--c);}
 
 #screen .sc-row{padding:13px 0 14px;border-bottom:1px solid var(--hmm-border);}
