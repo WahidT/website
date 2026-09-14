@@ -19,7 +19,11 @@
     {id:'heal', col:[62,121,166]},
     {id:'s5',   col:[196,69,57]},
     {id:'s6',   col:[196,69,57], spine:true},    // dots transition in, then load straight top-to-bottom
-    {id:'s7',   col:[242,236,201], geom:'#radars', sample:'.radar-line,.vtx,.radar-dot', hide:'.series'},   // fill the radar data, keep the grid
+    /* 2026-09-14: the radar panels became nine dotted bars, so the selectors this row
+       sampled no longer exist. It now samples the bar dots themselves, which are the
+       drawing, and hides nothing: the bars ARE the data, and the group labels and the
+       slot outlines are the grid this morph keeps. */
+    {id:'s7',   col:[242,236,201], geom:'#radars', sample:'.bd', hide:''},   // fill the bar dots, keep the labels and slots
     {id:'s9',   col:[242,236,201]},              // sourcing figures (settles on whatever dot-field is present)
     {id:'sfoot',col:[242,236,201], geom:'.site-footer', sample:'.site-logo svg path', hide:'.site-logo'}   // the flock gathers into the wordmark at the very bottom
   ];

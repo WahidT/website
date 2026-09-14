@@ -249,7 +249,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .ai-fig canvas{display:block;width:100%;height:280px;}
 .ai-fig--hero canvas{height:320px;}
 .ai-fig figcaption{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:10px 14px;border-top:1px solid var(--hmm-border);}
-.fig-note{display:block;margin-top:5px;text-transform:none;letter-spacing:.01em;font-size:10px;line-height:1.5;color:var(--hmm-caption);}
 .ai-pull .k{display:block;font-family:var(--hmm-font-mono);font-weight:400;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:12px;}
 .src-split{display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:start;margin-top:14px;}
 .src-prose{min-width:0;}
@@ -275,7 +274,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .mkt-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
 .mkt-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;line-height:1.06;}
 .mkt-lead{font-size:15px;line-height:1.6;color:var(--hmm-text-muted);max-width:82ch;margin:0 0 14px;}
-#radars{margin:6px 0 14px;width:100%;}
 /* ---------- S10 the record (infinite scroll) ---------- */
 .rec-title .hk-nec{color:var(--hmm-accent);}
 .rec-track{position:absolute;top:0;left:0;right:0;will-change:transform;}
@@ -418,8 +416,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .stage .machine-wrap svg{max-height:56vh;}
   .reg-jobs{flex-direction:column;}
   /* touch targets >= 44px */
-  .tl-filters button,#radars .radar-chip{min-height:44px;padding:11px 14px;}
-  #radars .radar-sub{font-size:11px;}
+  .tl-filters button{min-height:44px;padding:11px 14px;}
 }
 @media(max-width:640px){
   .through,.ai,.mkt,.reg,.nec{padding-left:20px;padding-right:66px;}
@@ -457,7 +454,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .footer-nav{gap:2px 22px;flex-wrap:wrap;}
   .footer-contact{display:inline-flex;align-items:center;min-height:44px;}
   .tl-filters button{font-size:11px;}
-  .fig-note,.tl-org,.tl-legend,.tl-legend b{font-size:11px;}
+  .tl-org,.tl-legend,.tl-legend b{font-size:11px;}
 }
 @media(hover:none){.machine-wrap svg .callout{transform:scale(1.3);}}
 /* ===== large screens (monitors / TV): cap content so lines stay readable and layout doesn't sprawl ===== */
@@ -481,70 +478,21 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    drawing, so they get a 210px floor and the whole gesture is held back until
    1100px - below that the prose simply sits under its chart, always readable,
    which is what touch gets too. */
-#radars{font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-pearl);position:relative;}
-#radars .radar-wrap{display:flex;gap:22px;width:100%;max-width:100%;box-sizing:border-box;align-items:stretch;}
-#radars .radar-panel{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;padding:14px 12px 16px;border:1px solid var(--hmm-border,rgba(242,236,201,.12));box-sizing:border-box;
   transition:flex .5s var(--hmm-ease),opacity .4s var(--hmm-ease),background .3s var(--hmm-ease),border-color .3s var(--hmm-ease);}
-#radars .radar-body{flex:1;display:flex;flex-direction:column;min-width:0;transition:gap .5s var(--hmm-ease);}
-#radars .radar-viz{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}
-#radars .radar-read{min-width:0;overflow:hidden;transition:opacity .45s var(--hmm-ease),max-height .45s var(--hmm-ease),padding .5s var(--hmm-ease);}
-#radars .radar-read p{margin:0;font-family:var(--hmm-font-body,inherit);font-size:13px;line-height:1.55;color:var(--hmm-text-muted,rgba(242,236,201,.72));}
-#radars .radar-corner{position:absolute;width:9px;height:9px;pointer-events:none;}
-#radars .radar-corner svg{display:block;overflow:visible;}
-#radars .rc-tl{top:5px;left:5px;} #radars .rc-tr{top:5px;right:5px;} #radars .rc-bl{bottom:5px;left:5px;} #radars .rc-br{bottom:5px;right:5px;}
-#radars .radar-title{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--hmm-pearl);margin:0;transition:color .3s var(--hmm-ease);}
-#radars .radar-sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));margin:3px 0 8px;}
-#radars svg.radar-svg{display:block;width:100%;height:auto;overflow:visible;}
-#radars .radar-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;margin-top:10px;padding:0;list-style:none;}
-#radars .radar-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(242,236,201,.03);border:1px solid var(--hmm-border-hover,rgba(242,236,201,.25));
   padding:3px 8px;cursor:pointer;font:inherit;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-text-muted,rgba(242,236,201,.6));}
-#radars .radar-chip .swatch{width:9px;height:9px;flex:0 0 auto;border-radius:1px;}
-#radars .radar-chip:hover,#radars .radar-chip:focus-visible{color:var(--hmm-pearl);border-color:var(--hmm-text-faint,rgba(242,236,201,.35));}
-#radars .radar-chip:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
 /* the lead necessity: marked in text on the chip, never in colour alone */
-#radars .radar-chip--lead{border-color:var(--c,var(--hmm-accent));}
-#radars .radar-chip .chip-lead{font-size:8px;letter-spacing:.18em;color:var(--c,var(--hmm-accent));}
 /* specialisation matrix: two rows off one catalogue, three necessities, lead in the panel accent */
-#radars .radar-spec{width:100%;margin-top:10px;border-collapse:collapse;font-size:9px;letter-spacing:.1em;}
-#radars .radar-spec caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
-#radars .radar-spec th,#radars .radar-spec td{padding:3px 4px;text-align:right;font-weight:400;color:var(--hmm-text-muted,rgba(242,236,201,.6));border-top:1px solid var(--hmm-border,rgba(242,236,201,.12));}
-#radars .radar-spec thead th{text-transform:uppercase;border-top:0;}
-#radars .radar-spec tbody th{text-align:left;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));letter-spacing:.12em;}
-#radars .radar-spec .is-lead{color:var(--c,var(--hmm-accent));}
-#radars .radar-spec thead .is-lead{border-bottom:1px solid var(--c,var(--hmm-accent));}
 /* the two captions under the three panels */
-#radars .radar-notes{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 22px;}
-#radars .radar-notes p{flex:1 1 280px;margin:0;font-family:var(--hmm-font-body,inherit);font-size:11px;line-height:1.6;color:var(--hmm-caption,rgba(242,236,201,.72));}
-#radars .radar-panel[data-focus] .series:not(.is-active){opacity:.12;}
-#radars .radar-panel[data-focus] .series.is-active .radar-fill{fill-opacity:.24;}
-#radars .radar-panel[data-focus] .series.is-active .radar-vtx{stroke:var(--hmm-pearl);stroke-width:1.2;}
 /* The drawing is capped rather than fluid. Width:100% with height:auto made it scale
    without limit, so at 2560px the resting panel stood 923px tall, and the hover expansion
    then took width off it and made the panel SHORTER, which put a dead strip along the
    bottom edge: hovering there collapsed the panel out from under the pointer and the
    state oscillated. The canvas overlays the stage at 100%, so capping the stage keeps
    the dots registered against the labels. */
-#radars .radar-stage{position:relative;width:100%;max-width:340px;margin:0 auto;}
-#radars .radar-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;}
-#radars .axis-lbl{cursor:help;transition:fill .15s ease;}
-#radars .axis-lbl:hover,#radars .axis-lbl:focus{fill:var(--hmm-pearl);outline:none;}
-#radars .axis-lbl:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
-#radars .radar-tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s ease,transform .15s ease;
   background:var(--hmm-surface-solid);border:1px solid var(--hmm-border,rgba(242,236,201,.18));border-top:2px solid var(--hmm-accent);padding:9px 12px;box-sizing:border-box;
   font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);font-size:11px;line-height:1.5;color:var(--hmm-text-muted,rgba(242,236,201,.72));max-width:260px;}
-#radars .radar-tip.on{opacity:1;transform:none;}
-@media (prefers-reduced-motion:reduce){#radars .radar-tip{transition:none;}}
-@media (max-width:860px){#radars .radar-wrap{flex-direction:column;}}
 @media (hover:hover) and (pointer:fine) and (min-width:1100px){
-  #radars .radar-read{opacity:0;max-height:0;}
-  #radars .radar-wrap:hover .radar-panel:not(:hover),#radars .radar-wrap:focus-within .radar-panel:not(:focus-within){flex:.72;opacity:.78;min-width:210px;}
-  #radars .radar-panel:hover,#radars .radar-panel:focus-within{flex:2.2;background:rgba(242,236,201,.05);border-color:var(--c,var(--hmm-accent));}
-  #radars .radar-panel:hover .radar-title,#radars .radar-panel:focus-within .radar-title{color:var(--c,var(--hmm-pearl));}
-  #radars .radar-panel:hover .radar-body,#radars .radar-panel:focus-within .radar-body{flex-direction:row;align-items:center;gap:22px;}
-  #radars .radar-panel:hover .radar-viz,#radars .radar-panel:focus-within .radar-viz{flex:1.15;}
-  #radars .radar-panel:hover .radar-read,#radars .radar-panel:focus-within .radar-read{flex:1;opacity:1;max-height:420px;padding-left:22px;border-left:1px solid var(--hmm-border,rgba(242,236,201,.12));}
 }
-@media (prefers-reduced-motion:reduce){#radars .radar-panel,#radars .radar-body,#radars .radar-read{transition:none;}}
 
 /* ---------- S1b the fit: the ruled opener reads a size up from body prose ----------
    The opener is the first thing on the page after the hero and it is read in seconds,
@@ -571,14 +519,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .scr-lead p:first-child{color:var(--hmm-pearl);}
 
 /* The table scrolls inside its own box. The page body never scrolls sideways. */
-.scr-tablewrap{overflow-x:auto;margin:0 0 26px;}
-.scr-table{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.6;min-width:720px;}
-.scr-table caption{text-align:left;font-size:13px;line-height:1.6;color:var(--hmm-caption);padding:0 0 14px;max-width:78ch;}
-.scr-table th,.scr-table td{text-align:left;vertical-align:top;padding:12px 18px 12px 0;border-top:1px solid var(--hmm-border);}
-.scr-table thead th{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--hmm-caption);border-top:none;padding-bottom:8px;}
-.scr-table tbody th{font-family:var(--hmm-font-mono);letter-spacing:.04em;font-size:12px;color:var(--hmm-pearl);white-space:nowrap;padding-right:26px;}
-.scr-table td{color:var(--hmm-text-muted);}
-.scr-table td:first-of-type{max-width:52ch;}
 .scr-after{font-size:14px;line-height:1.65;color:var(--hmm-text-muted);max-width:80ch;margin:0;}
 
 /* ---------- S7 the three market paragraphs above the charts ---------- */
@@ -601,21 +541,9 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    denominator both print, because a bar without a visible denominator is a bar a reader
    cannot check. --c is the market accent, set on the panel by radars.js from the market
    tokens, so no colour is written here. */
-#radars .radar-meas{display:flex;flex-direction:column;gap:7px;margin:12px 0 4px;padding-top:12px;border-top:1px solid var(--hmm-border,rgba(242,236,201,.12));}
-#radars .meas-row{display:grid;grid-template-columns:1fr 1.15fr auto auto;align-items:center;gap:8px;font-size:10px;letter-spacing:.06em;}
-#radars .meas-lbl{text-transform:uppercase;letter-spacing:.13em;color:var(--hmm-caption);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-#radars .meas-track{position:relative;height:5px;background:var(--hmm-surface-2,rgba(242,236,201,.08));overflow:hidden;}
-#radars .meas-bar{position:absolute;left:0;top:0;bottom:0;background:var(--c,var(--hmm-accent));transition:width .6s var(--hmm-ease);}
-#radars .meas-val{font-variant-numeric:tabular-nums;color:var(--hmm-pearl);letter-spacing:.02em;}
-#radars .meas-den{font-variant-numeric:tabular-nums;color:var(--hmm-caption);letter-spacing:.02em;white-space:nowrap;}
 
 /* The index rings and the printed vertex value. The two labelled rings are the reading,
    so they take the solid stroke and the dashed ones stay quiet. */
-#radars .ring-lbl,#radars .axis-val{font-family:var(--hmm-font-mono,inherit);font-variant-numeric:tabular-nums;}
-#radars .axis-val{letter-spacing:.03em;}
-#radars .radar-vtx{transition:r .3s var(--hmm-ease),fill-opacity .3s var(--hmm-ease);}
-#radars .series.is-active .radar-vtx{r:4.2;fill-opacity:1;}
-#radars .radar-exi{pointer-events:none;}
 
 @media (max-width:1080px){
   .scr-lead{grid-template-columns:1fr;gap:14px;}
@@ -625,6 +553,117 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .scr{padding:72px 22px;}
   .close{padding:84px 22px 96px;}
   .through-lead{font-size:19px!important;}
-  #radars .meas-row{grid-template-columns:1fr auto auto;}
-  #radars .meas-track{display:none;}
 }
+
+/* ---------- S7 market strength: nine dotted bars, one scale per group ----------
+   Replaces the three radar panels. The dots are SVG circles on the site's one physics
+   engine (window.hmmAnimateDots), so opacity is set here by class rather than as an
+   attribute in radars.js: a bare decimal in that file can collide with a retired
+   multiple in the estate's canon guard. */
+#radars{font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-text);position:relative;width:100%;margin:6px 0 14px;}
+#radars[data-state="no-data"]{display:none;}
+#radars .mkt-bars{margin:0;padding:0;}
+#radars .bars-stage{width:100%;}
+#radars .bars-svg{display:block;width:100%;height:auto;overflow:visible;touch-action:manipulation;}
+#radars .bars-axis{font-family:var(--hmm-font-mono,inherit);text-transform:uppercase;}
+#radars .bars-den,#radars .bars-mkt,#radars .bars-val{font-family:var(--hmm-font-mono,inherit);font-variant-numeric:tabular-nums;}
+#radars .bars-val{font-weight:600;}
+#radars .bd{opacity:.66;}
+#radars .bd--big{opacity:.95;}
+#radars .bars-cap-mark{opacity:.9;}
+#radars .bars-cap{margin:14px 0 0;font-family:var(--hmm-font-body,inherit);font-size:13px;line-height:1.55;color:var(--hmm-caption);max-width:86ch;}
+#radars .bars-tablewrap{overflow-x:auto;margin:26px 0 0;}
+#radars .bars-read,#radars .bars-spec{width:100%;border-collapse:collapse;font-size:12px;min-width:420px;}
+#radars .bars-read caption,#radars .bars-spec caption{text-align:left;font-size:12px;line-height:1.55;color:var(--hmm-caption);padding:0 0 10px;max-width:86ch;}
+#radars .bars-read th,#radars .bars-read td,#radars .bars-spec th,#radars .bars-spec td{text-align:right;padding:7px 10px;border-top:1px solid var(--hmm-border);font-variant-numeric:tabular-nums;font-weight:400;}
+#radars .bars-read thead th,#radars .bars-spec thead th{text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:var(--hmm-caption);border-top:none;}
+#radars .bars-read tbody th,#radars .bars-spec tbody th{text-align:left;text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:var(--hmm-text-muted);}
+#radars .bars-spec .spec-basis{vertical-align:top;color:var(--hmm-accent-text);letter-spacing:.12em;}
+#radars .bars-spec .spec-lead{text-align:left;color:var(--hmm-accent-text);text-transform:uppercase;letter-spacing:.1em;font-size:10px;}
+#radars .bars-spec .is-lead{color:var(--hmm-text);font-weight:600;}
+@media (max-width:720px){
+  #radars .bars-svg{min-width:560px;}
+  #radars .bars-stage{overflow-x:auto;}
+  #radars .bars-read,#radars .bars-spec{font-size:11px;min-width:400px;}
+  #radars .bars-read caption,#radars .bars-spec caption{max-width:88vw;}
+}
+
+/* ---------- S8 the screen: ten markets in, three out ----------
+   The five-row filter table became one shrinking bar. Ten fixed columns, one row per
+   filter, bar width being the count of markets still standing, and the removed names
+   sitting in the columns the bar gave up. Ink roles read --hmm-text rather than
+   --hmm-pearl, because pearl does not rebind on a light ground. */
+/* ---- S8 THE SCREEN: the attrition bar ------------------------------------------------
+   Ten fixed columns, one per market in the starting set, held identical on every row, so
+   a cell that leaves takes its column's width with it and bar width is the count of
+   markets still standing. The count and its denominator both print, because a bar without
+   a visible denominator is a bar a reader cannot check.
+
+   ONE VISUAL LANGUAGE. A rectangle, a label and a figure line. No legend: the axis names
+   the ten columns once and the three survivors carry the market tokens the panels in
+   section 08 use, so the colour is the legend.
+
+   NO COLOUR IS WRITTEN HERE. --c is the market accent, set on the cell and the axis label
+   by screen.js from the market tokens. --o is the standing weight, raised to 1 on a
+   market cell, and it is a token alpha rather than a second grey.
+
+   Below 720px the axis hides and the column gap closes, so the ten discrete slots become
+   one continuous segmented bar: same DOM, same encoding, one value read as pure length. */
+#screen{margin:0 0 4px;}
+#screen .sc-grid{display:grid;grid-template-columns:236px minmax(0,1fr) 58px;column-gap:18px;align-items:start;}
+
+#screen .sc-axis{padding:0 0 9px;border-bottom:1px solid var(--hmm-border);}
+#screen .sc-axhead{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:10px;color:var(--hmm-caption);align-self:end;}
+#screen .sc-axhead--r{text-align:right;}
+#screen .sc-axlbl{grid-row:1;display:flex;align-items:flex-end;min-height:2.6em;font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.07em;font-size:9.5px;line-height:1.3;color:var(--hmm-caption);}
+#screen .sc-axlbl.is-mkt{color:var(--c);}
+
+#screen .sc-row{padding:13px 0 14px;border-bottom:1px solid var(--hmm-border);}
+#screen .sc-lbl{display:flex;gap:9px;font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.03em;}   /* text colour inherits from the section, so the label follows whatever ground it is drawn on */
+#screen .sc-num{min-width:7px;color:var(--hmm-accent-text);}
+
+#screen .sc-reads{margin:5px 0 0;font-size:11.5px;line-height:1.5;color:var(--hmm-text-muted);max-width:30ch;}
+
+#screen .sc-mid{min-height:42px;}
+#screen .sc-track{display:grid;grid-template-columns:repeat(10,1fr);column-gap:3px;}
+#screen .sc-cell{--o:.48;grid-row:1;height:18px;background:var(--hmm-text-muted);opacity:var(--o);transform-origin:left center;transition:opacity .5s var(--hmm-ease),transform .5s var(--hmm-ease);transition-delay:calc(var(--r,0) * 110ms);}
+#screen .sc-cell.is-mkt{--o:1;background:var(--c);}
+#screen .sc-cell.is-out{opacity:0;transform:scaleX(0);}
+#screen.is-arm .sc-cell.is-out{opacity:var(--o);transform:none;}
+
+#screen .sc-gap{grid-row:1;grid-column:var(--from,1) / -1;align-self:center;padding-left:7px;font-family:var(--hmm-font-mono);font-size:10.5px;line-height:1.35;letter-spacing:.02em;color:var(--hmm-caption);transition:opacity .45s var(--hmm-ease);transition-delay:calc(var(--r,0) * 110ms + 520ms);}
+#screen.is-arm .sc-gap,#screen.is-arm .sc-count{opacity:0;}
+
+#screen .sc-ev{margin:8px 0 0;font-size:10.5px;line-height:1.55;letter-spacing:.02em;color:var(--hmm-caption);max-width:92ch;}
+#screen .sc-count{text-align:right;transition:opacity .45s var(--hmm-ease);transition-delay:calc(var(--r,0) * 110ms + 520ms);font-family:var(--hmm-font-mono);font-variant-numeric:tabular-nums;font-size:12px;letter-spacing:.02em;}
+
+#screen .sc-d{color:var(--hmm-caption);}
+#screen .sc-cap{margin:12px 0 0;font-size:11px;line-height:1.55;color:var(--hmm-caption);}
+
+@media (prefers-reduced-motion:reduce){
+  #screen .sc-cell,#screen .sc-gap,#screen .sc-count{transition:none;}
+}
+@media (max-width:1080px){
+  #screen .sc-grid{grid-template-columns:196px minmax(0,1fr) 54px;column-gap:14px;}
+  #screen .sc-axlbl{font-size:8.5px;letter-spacing:.04em;}
+}
+@media (max-width:720px){
+  #screen .sc-axis{display:none;}
+  #screen .sc-grid{grid-template-columns:1fr auto;column-gap:14px;}
+  #screen .sc-head{grid-column:1;grid-row:1;}
+  #screen .sc-count{grid-column:2;grid-row:1;}
+  #screen .sc-mid{grid-column:1 / -1;grid-row:2;margin-top:11px;}
+  #screen .sc-reads{max-width:46ch;}
+  #screen .sc-track{column-gap:0;}
+  #screen .sc-cell{height:14px;}
+  #screen .sc-gap{grid-column:1 / -1;grid-row:2;padding-left:0;margin-top:8px;}
+}
+
+/* The footnote reads from the figure's own left edge. The section centres every child
+   narrower than its column, so the paragraph rides inside a full-column block instead of
+   being centred on its own 80ch measure. */
+#s8 .scr-foot{margin:14px 0 0;}
+
+/* The lead is one paragraph now, so the two-column lead grid collapses to one. */
+.scr-lead--one{grid-template-columns:1fr;}
+.scr-lead--one p{max-width:76ch;}
