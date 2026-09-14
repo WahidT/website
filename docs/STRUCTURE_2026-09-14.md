@@ -48,6 +48,57 @@ this wording, and that is a ruling in `hmm-prose`, never a site edit.
 
 ---
 
+## 0b. The second round of GP feedback, 2026-09-14
+
+Five instructions, each answered, and two of them changed the structure above.
+
+| # | Instruction | What changed |
+|---|---|---|
+| A | "07 The screen ... needs to be visualised" | The four lead paragraphs and the five-row filter table became one shrinking bar: ten fixed market columns, one row per filter, bar width being the count still standing. Standing reads 10, 8, 5, 3, 3, 3 and the live cells equal the printed count on every row. **The section went 710 words of prose to 71** |
+| B | "We have way too much prose" | **index.html static prose 2,370 to 1,317 words, a 44% cut**, on 38 merged edits from three independent passes, every one verified byte-exact before it was applied. Rendered prose 2,639 to 1,622. Prose runs 153 words per screen at worst |
+| C | "the strength chart should be the things being assessed not three necessities per corner" | Nine bars: instruments in force, instruments operative since 2020, listing share of winner exits. Three markets to a group, one scale and one printed denominator per group. **The form is arithmetic rather than taste**: two quantities are counts and the third is a percentage, so a radar would compute an area across a count and a share, and that area means nothing. The five stacked visual languages per panel are gone |
+| D | "Rewrite and be punchier" | The sourcing question is 9 words from 17: "How do we reach these founders before a round exists?" |
+| E | "You elaborated too much use my simpler prose" | The fit is the GP's three paragraphs alone, 95 words from 179. The two paragraphs after the opener were mine and are cut; the permission mechanism they carried is section 06's whole subject |
+
+### One dot system, one physics engine, one interactivity
+
+`radars.js` ran its own canvas flock with its own frame loop, sizing and hover handling, so the
+market charts were **the one dotted surface on the site that did not breathe with the rest** and
+did not answer a click the way the machines do. The dots are now SVG circles handed to
+`window.hmmAnimateDots`, the same engine `machines.js` drives the hero blow-outs and the necessity
+schematics with. Confirmed moving on that engine in the browser: a sampled dot's position, radius
+and opacity all change once the figure enters view. The file went 688 lines to 298 and its CSS
+22.6KB to 2.8KB. `morph.js` samples the bar dots now, because the selectors it sampled are gone.
+
+### How the two drawings were chosen
+
+A design panel ran three approaches per drawing, scored on legibility, one visual language,
+datum-in-geometry, house compliance and prose economy. The elimination bar won the screen against
+a thread-and-plate sieve. **A two-axis field lost on its own terms and was ruled out separately**,
+because it would have needed invented positions for six of the ten markets, and only four of the
+ten have an owned output-per-dollar figure. Two grafts from the losers were taken: the register
+figure reads the counted block in `data/market_strength.js` rather than re-deriving the in-force
+predicate inline, which is one arithmetic across three surfaces, and ink roles read `--hmm-text`
+rather than `--hmm-pearl`, which does not rebind on a light ground.
+
+**The specialisation index is still consciously kept**, now as one table below the chart rather than
+three tables inside three panels. It is a different quantity on a different denominator, so putting
+it on the chart's axes would reinstate what C removed.
+
+### Two faults of my own, both caught by the checks
+
+**I deleted the radar CSS as a byte range and took the section 06 register timeline and the
+regulation split layout with it.** Restored from git, then redone by selector after enumerating the
+set, which is what the plan-first gate asks for and what I skipped. Enumerating surfaced two shared
+rules where only the radar half was dead, and one of them gave the timeline filter buttons their
+44px touch target. Splitting rather than sweeping kept it.
+
+**The chart's group labels were left focusable with nothing to offer**, which `check:affordances`
+failed correctly. The read-out table carries every figure and denominator as text, so the focus
+handling was vestigial and went.
+
+---
+
 ## 1. The question this file has to put back to the general partner
 
 **The opening item reads "GoodFit", and that word has two readings.** The build takes the first and
