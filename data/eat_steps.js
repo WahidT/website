@@ -83,14 +83,25 @@ var EAT_STEPS = {
         tense: "deployed",
         detail: "Autonomous planters (RL, vision, spatial) on the plant side; individual-animal identification and stocking analytics (computer vision, RFID time-series) on the animal side. Deployed."
       },
-/* The traceability clause was cut on 2026-09-14. This field renders on the page under
-   "Regulation · the gate", so it states what a company must clear to operate that stage,
-   and traceability is banned on every surface (GP 2026-07-26) with no positional
-   qualifier. The emissions and effluent limits elsewhere in these files are a different
-   class and stay: those are operating standards and a price instrument, and the rule on
-   them is that they never LEAD the regulation clock, which they do not. The three items
-   left here are all right-to-operate, which is what the clock is led with. */
-      reg: "Autonomous-machinery safety, seed-treatment restrictions (EU neonicotinoid ban), stocking-density welfare limits."
+/* Two clauses were cut on 2026-09-14, on two different tests, and the field now carries
+   both. This renders on the page under "Regulation · the gate", so an entry has to be a
+   gate, meaning a right-to-operate obligation a company must clear before that stage runs,
+   AND it has to be permitted on an hmm surface.
+
+   The traceability clause failed the second test: traceability is banned on every surface
+   (GP 2026-07-26) with no positional qualifier. The emissions and effluent limits
+   elsewhere in these files are a different class and stay, being operating standards and a
+   price instrument, and the rule on them is that they never LEAD the regulation clock,
+   which they do not.
+
+   "Autonomous-machinery safety" failed the first. It names a subject rather than an
+   obligation, which the two clauses beside it do not, and a commissioned scan of the
+   estate and of primary sources found no enforceable in-force instrument in Australia or
+   New Zealand gating an autonomous agricultural machine before it may be sold or operated:
+   2026-09-14_field_autonomy_instrument_scan.md in the research library. The counted
+   register agrees, holding eleven Eat instruments in force and none of them on a machine.
+   The two left are obligations a grower meets or does not plant. */
+      reg: "Seed-treatment restrictions (EU neonicotinoid ban), stocking-density welfare limits."
     },
     {
       id: "04",

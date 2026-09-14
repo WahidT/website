@@ -584,6 +584,9 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 #radars .bars-spec .spec-basis{vertical-align:top;color:var(--hmm-accent-text);letter-spacing:.12em;}
 #radars .bars-spec .spec-lead{text-align:left;color:var(--hmm-accent-text);text-transform:uppercase;letter-spacing:.1em;font-size:10px;}
 #radars .bars-spec .is-lead{color:var(--hmm-text);font-weight:600;}
+/* The base each index rests on, set small and muted so it reads as an annotation on the
+   figure rather than a second figure. It is the reason the index prints to one decimal. */
+#radars .bars-spec .spec-n{display:inline-block;margin-left:6px;min-width:2ch;font-size:10px;color:var(--hmm-text-faint);}
 @media (max-width:720px){
   #radars .bars-svg{min-width:560px;}
   #radars .bars-stage{overflow-x:auto;}

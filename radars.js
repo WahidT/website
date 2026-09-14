@@ -213,18 +213,23 @@
      window alone would have moved Japan to Heal on a 1.2% margin, which is why the unit was
      fixed with it. */
   var NEC = ["Power", "Eat", "Heal"];
-  var SPEC = {
-    AU: { lead: "Heal",  inn: { Power: 0.66, Eat: 0.66, Heal: 1.66 }, exi: { Power: 0.98, Eat: 0.79, Heal: 1.12 } },
-    JP: { lead: "Power", inn: { Power: 1.32, Eat: 0.74, Heal: 0.73 }, exi: { Power: 1.16, Eat: 0.90, Heal: 0.98 } },
-    NZ: { lead: "Eat",   inn: { Power: 1.14, Eat: 1.53, Heal: 0.50 }, exi: { Power: 0.81, Eat: 1.77, Heal: 0.67 } }
-  };
-  var SPEC_BASES = [["inn", "INNOVATION / IP"], ["exi", "EXITS 2000-26"]];
+
+  /* The eighteen ratios used to be typed here. They now arrive in data/necessity_matrix.js,
+     which scripts/necessity-matrix.mjs derives from the counts in the report above, and
+     check-register-figures.mjs recomputes every one of them from those counts at build.
+     Where the snapshot is absent the table does not render, because a specialisation index
+     with no base behind it is the thing this change removed. */
+  function matrix() {
+    return (typeof window !== "undefined" && window.NECESSITY_MATRIX) || null;
+  }
 
   function specTable() {
+    var M = matrix();
+    if (!M) return null;
     var t = document.createElement("table");
     t.className = "bars-spec";
     var cap = document.createElement("caption");
-    cap.textContent = "Specialisation index: a market's share of a necessity, divided by the share its size predicts. An index of 1.00 sits where size predicts and 1.15 marks specialisation. The lead is taken on the innovation row, which separates the markets at p = 0.012 on 79 innovations; the exit row counts 115 companies from the same catalogue and reads p = 0.19.";
+    cap.textContent = "Specialisation index: a market's share of a necessity, divided by the share its own size predicts. An index of 1.0 sits where size predicts. The count the cell rests on is printed beside it, because the innovation base is 79 items across nine cells and one cell holds four, which does not carry a second decimal. The lead is taken on the innovation row, which separates the markets at p = 0.012; the exit row reads p = 0.19 on 115 companies and counts the same catalogue again.";
     t.appendChild(cap);
     var thead = document.createElement("thead"), hr = document.createElement("tr");
     hr.appendChild(document.createElement("td"));
@@ -235,24 +240,34 @@
     var lh = document.createElement("th"); lh.scope = "col"; lh.textContent = "Leads"; hr.appendChild(lh);
     thead.appendChild(hr); t.appendChild(thead);
     var tb = document.createElement("tbody");
-    SPEC_BASES.forEach(function (b) {
+    ["inn", "exi"].forEach(function (key) {
+      var base = M.bases[key];
+      if (!base) return;
       CODES.forEach(function (c, ci) {
-        var sp = SPEC[c], tr = document.createElement("tr");
+        var mk = base.markets[c], tr = document.createElement("tr");
         if (ci === 0) {
           var bh = document.createElement("th");
           bh.scope = "rowgroup"; bh.rowSpan = CODES.length; bh.className = "spec-basis";
-          bh.textContent = b[1]; tr.appendChild(bh);
+          bh.textContent = base.label; tr.appendChild(bh);
         }
         var mh = document.createElement("th");
         mh.scope = "row"; mh.textContent = MKT[c].name; tr.appendChild(mh);
         NEC.forEach(function (n) {
-          var td = document.createElement("td");
-          td.textContent = sp[b[0]][n].toFixed(2);
-          if (sp.lead === n) td.className = "is-lead";
+          var cell = mk.cells[n], td = document.createElement("td");
+          td.appendChild(document.createTextNode(cell.idx.toFixed(1)));
+          /* The separator is a real character in the DOM, never a ::before. A pseudo-element
+             is absent from textContent, from a copied selection and from an accessible name,
+             so a cell styled apart still extracted as "0.79" where it means 0.7 on 9 items. */
+          var b = document.createElement("span");
+          b.className = "spec-n"; b.textContent = "\u00A0n" + cell.n;
+          td.appendChild(b);
+          /* Screen readers get the base named rather than read as a second number. */
+          td.setAttribute("aria-label", cell.idx.toFixed(1) + ", on " + cell.n + " of " + base.total + " items");
+          if (M.leads[c] === n && key === M.lead_basis) td.className = "is-lead";
           tr.appendChild(td);
         });
         var ld = document.createElement("td");
-        ld.className = "spec-lead"; ld.textContent = sp.lead; tr.appendChild(ld);
+        ld.className = "spec-lead"; ld.textContent = M.leads[c]; tr.appendChild(ld);
         tb.appendChild(tr);
       });
     });
@@ -284,6 +299,7 @@
        and cannot fit a 360px viewport, and the page body must never scroll sideways, which
        is the same wrapper pattern sources.html uses for its wide tables. */
     [readout(G), specTable()].forEach(function (t) {
+      if (!t) return;   /* specTable returns null where the snapshot has not loaded */
       var wrap = document.createElement("div");
       wrap.className = "bars-tablewrap";
       wrap.appendChild(t);

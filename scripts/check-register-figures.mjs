@@ -201,4 +201,67 @@ console.log(msBad ? `\n${msBad} problem(s) in the market-strength snapshot again
                   : '\nthe market-strength snapshot matches the register and canon.');
 
 
-process.exit(bad || tierBad || msBad ? 1 : 0);
+/* ---------------------------------------------------------------------------
+   The specialisation matrix, recomputed from its own counts.
+
+   The table under the market charts used to hold eighteen finished ratios and
+   nothing else, so nothing in this repository could tell a correct cell from a
+   mistyped one. data/necessity_matrix.js now carries the counts each ratio is
+   derived from, which makes the derivation checkable here with no access to the
+   estate: every index is recomputed from the counts beside it, and every printed
+   row total is checked against its own cells.
+
+   This does NOT check the counts against the workspace report, because the report
+   is not present at deploy. Refreshing them is one command, named in the failure.
+   --------------------------------------------------------------------------- */
+let nmBad = 0;
+console.log('');
+if (!fs.existsSync('data/necessity_matrix.js')) {
+  console.error('FAIL  data/necessity_matrix.js is missing. Run: node scripts/necessity-matrix.mjs --write');
+  nmBad++;
+} else {
+  const NMMOD = await import('./necessity-matrix.mjs');
+  const nmCtx = {};
+  new Function('window', fs.readFileSync('data/necessity_matrix.js', 'utf8') + '\nwindow.__ = NECESSITY_MATRIX;')(nmCtx);
+  const nm = nmCtx.__;
+  for (const key of Object.keys(nm.bases)) {
+    const base = nm.bases[key];
+    /* Rebuild the plain count table the formula takes, keyed by full market name. */
+    const counts = {};
+    for (const m of NMMOD.MARKETS) {
+      const mk = base.markets[NMMOD.CODES[m]];
+      counts[m] = Object.fromEntries(NMMOD.NEC.map(n => [n, mk.cells[n].n]));
+      const sum = NMMOD.NEC.reduce((a, n) => a + counts[m][n], 0);
+      const ok = sum === mk.total;
+      if (!ok) nmBad++;
+      console.log(`${ok ? 'ok  ' : 'FAIL'}  matrix ${key} ${NMMOD.CODES[m]} base       cells ${String(sum).padStart(3)}   stated ${String(mk.total).padStart(3)}`);
+    }
+    const grand = NMMOD.MARKETS.reduce((a, m) => a + NMMOD.NEC.reduce((b, n) => b + counts[m][n], 0), 0);
+    const gok = grand === base.total;
+    if (!gok) nmBad++;
+    console.log(`${gok ? 'ok  ' : 'FAIL'}  matrix ${key} grand total    cells ${String(grand).padStart(3)}   stated ${String(base.total).padStart(3)}`);
+    for (const m of NMMOD.MARKETS) {
+      for (const n of NMMOD.NEC) {
+        const want = Number(NMMOD.index(counts, m, n).toFixed(4));
+        const got = base.markets[NMMOD.CODES[m]].cells[n].idx;
+        const ok = Math.abs(want - got) < 5e-4;
+        if (!ok) nmBad++;
+        if (!ok) console.log(`FAIL  matrix ${key} ${NMMOD.CODES[m]} ${n.padEnd(6)} snapshot ${got.toFixed(4)}   derived ${want.toFixed(4)}`);
+      }
+    }
+  }
+  if (!nmBad) console.log(`ok    every index in data/necessity_matrix.js derives from the counts beside it`);
+  /* The lead the table marks must be the strongest cell on the basis it claims to use. */
+  const lb = nm.bases[nm.lead_basis];
+  for (const code of Object.keys(nm.leads)) {
+    const cells = lb.markets[code].cells;
+    const top = NMMOD.NEC.reduce((a, n) => (cells[n].idx > cells[a].idx ? n : a), NMMOD.NEC[0]);
+    const ok = top === nm.leads[code];
+    if (!ok) nmBad++;
+    console.log(`${ok ? 'ok  ' : 'FAIL'}  matrix lead ${code}          marked ${nm.leads[code].padEnd(6)} strongest on ${nm.lead_basis} ${top}`);
+  }
+}
+console.log(nmBad ? `\n${nmBad} problem(s) in the specialisation matrix. Run: node scripts/necessity-matrix.mjs --write`
+                  : '\nevery specialisation index derives from its own base, and each lead is the strongest cell on the innovation row.');
+
+process.exit(bad || tierBad || msBad || nmBad ? 1 : 0);

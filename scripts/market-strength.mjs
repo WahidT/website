@@ -21,9 +21,14 @@
                             by listing, conditional on a company being a winner, and it
                             is never plated as an unconditional listing probability.
 
-   The specialisation index is not in here. It is a fixed research output with its own
-   p-values, held in radars.js beside the correction it took on 2026-09-12, and a
-   snapshot would add a copy without adding an owner.
+   The specialisation index is not in here, and since 2026-09-14 it is not typed either.
+   This header used to reason it out of the snapshot layer altogether: a snapshot would
+   add a copy without adding an owner. That held while the table carried eighteen
+   finished ratios and nothing else. It stopped holding once the COUNTS travelled with
+   them, because the counts are the owner and the ratio is then derived rather than
+   carried. It has its own generator and its own snapshot,
+   scripts/necessity-matrix.mjs and data/necessity_matrix.js, and
+   check-register-figures.mjs recomputes every cell from the base beside it.
 
    Usage:
      node scripts/market-strength.mjs            print what the charts will draw
