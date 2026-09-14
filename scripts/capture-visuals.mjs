@@ -98,6 +98,15 @@ for (const [route, figures] of byPage) {
          way on the first pass. */
       await el.evaluate(n => n.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
       await page.waitForTimeout(f.settle || 1600);
+      /* Some figures only exist once a reader acts. The schematic stage read-out is
+         zero-height until one of the numbered blocks is clicked, so a still of the resting
+         page cannot show it at all. `click` names what to press first. */
+      if (f.click) {
+        await page.locator(f.click).first().click();
+        await page.waitForTimeout(f.afterClick || 900);
+        await el.evaluate(n => n.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
+        await page.waitForTimeout(500);
+      }
       const box = await el.boundingBox();
       if (!box || box.width < 8 || box.height < 8) { console.log(`EMPTY ${f.selector.padEnd(34)} ${f.name}`); continue; }
       /* Padded clip rather than an element shot, so a drawing that overflows its own box
