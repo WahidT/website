@@ -4,7 +4,7 @@
    inline block held, so the cascade is unchanged. The #radars rules at the end
    were a <style> element radars.js appended at render, which the same directive
    would block. */
-html{background:var(--hmm-evergreen);color-scheme:dark;}
+html{background:var(--hmm-field-dark);color-scheme:dark;}
 html{scroll-behavior:smooth;}
 #mandate,#power,#eat,#heal,#s5,#s6,#s7,#s9,#sfoot{scroll-margin-top:16px;}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
@@ -141,7 +141,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 @media (hover:hover) and (pointer:fine){
   .rail-label{max-width:0;opacity:0;overflow:hidden;transition:max-width .3s var(--hmm-ease),opacity .3s var(--hmm-ease);}
   .railnav:hover .rail-label,.railnav:focus-within .rail-label{max-width:140px;opacity:1;}
-  .railnav:hover,.railnav:focus-within{background:linear-gradient(to left,var(--hmm-evergreen) 70%,rgba(20,20,20,0));}
+  .railnav:hover,.railnav:focus-within{background:linear-gradient(to left,var(--hmm-field-dark) 70%,rgba(20,20,20,0));}
 }
 @media (prefers-reduced-motion:reduce){.railnav,.rail-item,.rail-mark,.rail-label{transition:none;}}
 /* A coarse pointer cannot hover, so the rail can never ride collapsed there and
@@ -151,7 +151,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    the pointer, which is what decides whether a label can hide; the matching
    section clearance is further down, after the padding shorthands it overrides. */
 @media (hover:none),(pointer:coarse){
-  .railnav{padding:10px 8px 10px 10px;gap:0;background:linear-gradient(to left,var(--hmm-evergreen) 62%,rgba(20,20,20,0));}
+  .railnav{padding:10px 8px 10px 10px;gap:0;background:linear-gradient(to left,var(--hmm-field-dark) 62%,rgba(20,20,20,0));}
   .rail-label{display:none;}
   .rail-label-s{display:block;}
 }
@@ -159,7 +159,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    marker with no name is a dot rather than navigation) and the sections give back
    the width the rail occupies. Short forms keep it inside that allowance. */
 @media(max-width:640px){
-  .railnav{padding:10px 8px 10px 10px;gap:0;background:linear-gradient(to left,var(--hmm-evergreen) 62%,rgba(20,20,20,0));}
+  .railnav{padding:10px 8px 10px 10px;gap:0;background:linear-gradient(to left,var(--hmm-field-dark) 62%,rgba(20,20,20,0));}
   .rail-item{min-height:44px;font-size:9px;letter-spacing:.08em;gap:7px;}
   .rail-label{display:none;}
   .rail-label-s{display:block;}
