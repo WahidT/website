@@ -36,3 +36,8 @@ tbody td.supports{font-size:12.5px;color:var(--hmm-text-muted,rgba(242,236,201,.
    a real character between them, which also matches the "NN · Label" eyebrow already used
    on the homepage. */
 .cat-sep{margin:0 .5em 0 .55em;color:var(--hmm-caption);font-weight:400;}
+
+/* A note under a category heading, where the list's relationship to a count stated elsewhere
+   needs saying. Added 2026-09-14 after two simulated readers counted the regulatory rows
+   against the thesis page's stated instrument count and found no explanation of the gap. */
+.src-note{font-size:12.5px;line-height:1.6;color:var(--hmm-caption);max-width:84ch;margin:0 0 18px;}
