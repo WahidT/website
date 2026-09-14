@@ -35,7 +35,7 @@ var HEAL_STEPS = {
         layers: ["design"],
         action: "opens",
         tense: "mixed",
-        detail: "Protein-structure prediction and de novo protein and molecule design, built on attention architectures, graph networks, and diffusion (for example structure prediction and diffusion-based protein design). Emerging-to-real; it opens previously undruggable targets."
+        detail: "Protein-structure prediction and de novo protein and molecule design, built on attention architectures, graph networks, and diffusion. Emerging-to-real; it opens previously undruggable targets."
       },
       reg: "Research ethics, laboratory biosafety, dual-use and gain-of-function oversight, patent and IP, data-sharing rules."
     },
@@ -114,12 +114,12 @@ var HEAL_STEPS = {
     {
       id: "08",
       name: "Waste / recovery",
-      def: "Handling biohazard, sharps, and pharmaceutical waste, and feeding real-world outcome data back to discovery and detection. The information loop closes here.",
+      def: "Handling biohazard, sharps, and pharmaceutical waste, and feeding real-world outcome data back to discovery and detection.",
       ai: {
         layers: ["perception"],
         action: "",
         tense: "mixed",
-        detail: "Medical-waste sorting robotics (CNN); real-world evidence pipelines that turn each treated patient into signal that sharpens the next detection cycle (the data recovery loop). Deployed to emerging."
+        detail: "Medical-waste sorting robotics (CNN); real-world evidence pipelines that turn each treated patient into signal that sharpens the next detection cycle. Deployed to emerging."
       },
       reg: "Biohazard and sharps handling, pharmaceutical disposal, incineration emissions, Basel Convention, antimicrobial effluent controls."
     }

@@ -88,7 +88,7 @@
     var root = document.getElementById("screen");
     if (!root) return;
     root.setAttribute("role", "figure");
-    root.setAttribute("aria-label", "Three filters run on ten markets, leaving three. Bar width is the number of markets still standing.");
+    root.setAttribute("aria-label", "Three filters run on ten markets, leaving three. ");
 
     /* The axis names the ten columns once. Every row below reads against it, which is why
        no row carries a market name of its own and why the figure needs no legend. */

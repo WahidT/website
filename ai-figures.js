@@ -73,7 +73,6 @@
       rpts.forEach(function(p){if(p.born>sweep)return;
         ctx.beginPath();ctx.arc(p.x,p.y+Math.sin(t*0.7+p.ph)*1.1,p.s,0,6.28);ctx.fillStyle=rgba(PEARL,p.s>1.5?0.85:0.5);ctx.fill();});
       mono(ctx,10.5);ctx.textAlign='right';ctx.fillStyle=rgba(PEARL,0.92);ctx.fillText('LEADER',xT-8,topY+8);
-      mono(ctx,8.5);ctx.fillStyle=LBL;ctx.fillText('record accumulated',xT-8,topY+21);
       // challenger curve, Tomato breathing dots, rising from its midway entry (accent use 1 of 2)
       var csweep=reduce?2:0.16+((t*0.1)%1.3);
       cpts.forEach(function(p){if(p.born>csweep)return;
@@ -94,7 +93,6 @@
       ctx.beginPath();ctx.moveTo(xLead,yC);ctx.lineTo(xLead+8,yC-3);ctx.lineTo(xLead+8,yC+3);ctx.closePath();ctx.fill();
       ctx.beginPath();ctx.moveTo(xT,yC);ctx.lineTo(xT-8,yC-3);ctx.lineTo(xT-8,yC+3);ctx.closePath();ctx.fill();
       mono(ctx,10);ctx.textAlign='center';ctx.fillStyle=rgba(C08,0.95);ctx.fillText("the barrier · years of record the model can't skip",(xLead+xT)/2,yC-9);
-      mono(ctx,8);ctx.fillStyle=LBL;ctx.fillText('same evidence, reached years apart',(xLead+xT)/2,yC+16);
       // DWG stamp + Rev
       mono(ctx,7.5);ctx.fillStyle=LBL;ctx.textAlign='left';ctx.fillText('DWG hmm-AI-05-D5',padL,H-12);
       ctx.textAlign='right';ctx.fillText('REV A',W-22,20);
@@ -131,7 +129,7 @@
       blob(x2,30,THESIS,0.5,1.3,'GO-TO-MARKET','hmm adds');
       ctx.strokeStyle=ACC;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x2+40,cy);ctx.lineTo(x3-46,cy);ctx.stroke();
       var ax=x3-46;ctx.fillStyle=ACC;ctx.beginPath();ctx.moveTo(ax,cy-4);ctx.lineTo(ax+6,cy);ctx.lineTo(ax,cy+4);ctx.fill();
-      blob(x3,37,PEARL,0.72,2.1,'GLOBAL','a global company');
+      blob(x3,37,PEARL,0.72,2.1,'GLOBAL','');   /* sub-label cut 2026-09-14; this renderer has no mount */
     });
   }
 

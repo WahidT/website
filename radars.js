@@ -229,7 +229,7 @@
     var t = document.createElement("table");
     t.className = "bars-spec";
     var cap = document.createElement("caption");
-    cap.textContent = "Specialisation index: a market's share of a necessity, divided by the share its own size predicts. An index of 1.0 sits where size predicts. It reads to one decimal, because the innovation row rests on 79 items across nine cells and a second decimal would claim a precision that base cannot carry. The lead is taken on the innovation row, which separates the markets at p = 0.012; the exit row reads p = 0.19 on 115 companies and counts the same catalogue again.";
+    cap.textContent = "Specialisation index: a market's share of a necessity, divided by the share its own size predicts. It reads to one decimal, because the innovation row rests on 79 items across nine cells and a second decimal would claim a precision that base cannot carry. The lead is taken on the innovation row, which separates the markets at p = 0.012; the exit row reads p = 0.19 on 115 companies and counts the same catalogue again.";
     t.appendChild(cap);
     var thead = document.createElement("thead"), hr = document.createElement("tr");
     hr.appendChild(document.createElement("td"));
@@ -290,7 +290,7 @@
     fig.appendChild(stage);
     var cap = document.createElement("figcaption");
     cap.className = "bars-cap";
-    cap.textContent = "One scale per group, so the three markets read across. The instrument counts partition the register, which is why those bars fill their axis exactly once. Listing share runs to the whole, because each market is a share of its own winner exits.";
+    cap.textContent = " Listing share runs to the whole, because each market is a share of its own winner exits.";
     fig.appendChild(cap);
     root.appendChild(fig);
     /* Both tables scroll inside their own box. The specialisation table carries six columns

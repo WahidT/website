@@ -178,7 +178,7 @@ var EAT_STEPS = {
     {
       id: "10",
       name: "Nutrient recovery",
-      def: "Returning crop residue and animal manure and effluent to the soil, closing the mass balance opened at step 01. Manure is the physical link that makes the two chains one system.",
+      def: "Returning crop residue and animal manure and effluent to the soil, closing the mass balance opened at step 01.",
       ai: {
         layers: ["perception", "design"],
         action: "",
