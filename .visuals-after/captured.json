@@ -1,0 +1,29 @@
+[
+  {
+    "page": "index.html",
+    "selector": "#screen",
+    "slug": "after-screen",
+    "name": "The screen, trimmed",
+    "kind": "chart",
+    "animated": true,
+    "draws": "Only the filters that cut.",
+    "file": ".visuals-after/01-after-screen.png",
+    "w": 1160,
+    "h": 391,
+    "matches": 1
+  },
+  {
+    "page": "index.html",
+    "selector": "#radars .bars-spec",
+    "slug": "after-matrix",
+    "name": "The matrix, trimmed",
+    "kind": "table",
+    "animated": false,
+    "settle": 2600,
+    "draws": "One decimal, no base.",
+    "file": ".visuals-after/02-after-matrix.png",
+    "w": 1404,
+    "h": 317,
+    "matches": 1
+  }
+]

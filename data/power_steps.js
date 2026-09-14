@@ -47,7 +47,7 @@ var POWER_STEPS = {
         tense: "mixed",
         detail: "Simulation surrogates for process chemistry, graph networks and diffusion for catalysts, reinforcement learning for process optimisation. Emerging on the design side, deployed on process control."
       },
-      reg: "Processing permit, industrial emissions, effluent standards. Refining capacity is the policy pressure point."
+      reg: "Processing permit, industrial emissions, effluent standards."
     },
     {
       id: "04",
