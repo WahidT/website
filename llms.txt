@@ -4,9 +4,9 @@
 
 ## Pages
 
-- [Thesis](https://hmm.ventures/): the Fund I thesis. The three necessities as systems (power, food, health), the regulation locator, the AI layer, market strengths across Australia, Japan and New Zealand, and the innovation and exit record.
+- [Thesis](https://hmm.ventures/): the Fund I thesis, in the order it is argued. What hmm backs and why it is the right buyer of that risk; Power, Eat and Heal as systems, each with one physical instance and the unit it is sold by; the capability arriving in the physical layer; permission as a locator for the fund and a barrier for the company, with the enacted instrument record; the five-filter screen that takes ten markets to three; the three markets with a strength chart each; and the research conversation that is the first touch.
 - [The GP](https://hmm.ventures/bio.html): Wahid Tashkandi, general partner of hmm ventures.
-- [Sources](https://hmm.ventures/sources.html): primary and first-party sources behind the thesis.
+- [Sources](https://hmm.ventures/sources.html): primary and first-party sources behind the thesis, each row naming the issuer and the edition.
 - [Context for AI assistants](https://hmm.ventures/for-llms.html): canonical framing for summarising hmm ventures, and common misattributions to avoid.
 
 ## Contact

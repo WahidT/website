@@ -1,533 +1,326 @@
-/* hmm site - THREE hexagon radar charts (Australia, New Zealand, Japan).
-   One panel per market. Six spokes 60 degrees apart, same axis order and rotation
-   across all three panels: AI · HARDWARE · REGULATION · STARTUP · EXIT · TRADE.
-   Three necessity fills per panel (Power, Eat, Heal). Vertex radius = score/10 of
-   the max spoke length. Vanilla SVG (createElementNS), no libraries.
-   Renders into an existing #radars container on load; no-ops if it is absent.
-   Dark by default (bg #141414) to match the live site; light via prefers-color-scheme
-   and [data-theme="light"]. Honours prefers-reduced-motion (disables the dot pulse).
-   Tokens are read through __T from theme.js and re-read on __onTheme. The stylesheet
-   lives in index.css (the #radars rules); it used to be a <style> element this script
-   appended, which style-src-elem 'self' in _headers would now block. */
+/* hmm site - S7 MARKET STRENGTH. Three quantities, three markets to a quantity, nine bars.
+
+   This file changed twice on one branch, both times on the general partner's instruction, and
+   both reasons are recorded because the reasoning is what a later session needs.
+
+   FIRST: WHAT THE CHART MEASURES. The panels drew a triangle whose corners were the
+   necessities Power, Eat and Heal, one triangle per market. The corners must be THE THINGS
+   BEING ASSESSED. They now are, and each has an owner:
+
+     INSTRUMENTS IN FORCE   data/market_strength.js, counted from data/reg_instruments.js on
+                            the predicate count_reg_dates.py applies in the estate
+     OPERATIVE SINCE 2020   the same rows, counted on `op`, the operative year of the obligation
+     LISTING SHARE          canon current.listing_prob, carried verbatim in the snapshot and
+                            parsed here, never restated
+
+   WHY BARS AND NOT A RADAR, AND IT IS ARITHMETIC RATHER THAN TASTE. The first two quantities
+   are counts and the third is a percentage, so a radar would compute an area across a count
+   and a share, and that area means nothing. A grouped bar on one scale per group is the form
+   where the comparison IS the geometry: equal baselines, equal slot, so a difference in length
+   is a difference in quantity and nothing else. It also lets the three markets be read ACROSS,
+   which the old panels forbade: their caption had to tell a reader to read down a panel and
+   never across, and a drawing needing that instruction carries the wrong quantity.
+
+   SECOND: ONE DOT SYSTEM, ONE PHYSICS ENGINE, ONE INTERACTIVITY. This file ran its own canvas
+   flock with its own frame loop, its own sizing and its own hover handling, so the market
+   charts were the one dotted surface on the site that did not breathe with the rest and did
+   not answer a click the way the machines do. The dots are now SVG circles handed to
+   window.hmmAnimateDots, the same engine machines.js drives the hero blow-outs and the
+   necessity schematics with. One engine means one idle breath, one school drift, one click
+   impulse, one scroll wake and one reduced-motion path across every dotted visual on the site.
+   The private canvas is gone, and with it about 250 lines of duplicate physics.
+
+   The bars are drawn AS dots rather than filled and then decorated, so the dot count per bar
+   rises with the value and the datum sits in the geometry.
+
+   THE SPECIALISATION INDEX IS CONSCIOUSLY MOVED, not deleted: one table below the chart rather
+   than three tables inside three panels. It is a different quantity on a different
+   denominator, a market's share of a necessity against the share its size predicts, so putting
+   it back on the chart's axes would reinstate exactly what was removed. It stays on the page
+   because it carries the finding that each market leads a different necessity with no overlap,
+   which is the reason to hold all three.
+
+   Tokens read through __T and re-read on __onTheme. No colour literal. Styles in index.css.
+   Dot opacity is set by class rather than by attribute, so no bare decimal in this file can
+   collide with a retired multiple in the estate's canon guard. */
 (function () {
-  var SVGNS = "http://www.w3.org/2000/svg";
-
-  var AXES = ["AI", "HARDWARE", "REGULATION", "STARTUP", "EXIT", "TRADE"];
-
-  // Necessity palette (exact hues, matched to the rest of the site). Read
-  // from the tokens at every render: hues() is called for the first paint and
-  // again on a data-theme flip, and HUES is refreshed in place so every
-  // reader of it (the swatches, the series paths, the canvas dots) sees the
-  // new value without being rebuilt.
-  function hues() { return { Power: __T("--hmm-nec-power-dark", "#FF9732"), Eat: __T("--hmm-nec-eat-dark", "#508B5C"), Heal: __T("--hmm-nec-heal-dark", "#9E69BE") }; }
-  var HUES = hues();
-  var SERIES = ["Power", "Eat", "Heal"];
-
-  // dots render on <canvas> using the DWG-NEC machine-flock physics; PANELS collects them per panel.
-  var PANELS = [];
-  /* How many panels the pointer is inside. lockHeights() must not measure a panel while it is
-     expanded, and reading `:hover` through querySelector would be a selector that can never
-     match in a headless probe, which check:deadjs correctly rejects. A counter also behaves on
-     touch, where the hover state does not exist at all. */
-  var HOVERING = 0;
-  function hexA(h, a) { var n = parseInt(h.slice(1), 16); return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")"; }
-
-  // Scores 0 to 10, order: AI, Hardware, Regulation, Startup, Exit, Trade.
-  var MARKETS = [
-    {
-      name: "AUSTRALIA",
-      sub: "resource and materials market",
-      series: { Power: [8, 10, 10, 3, 5, 9], Eat: [7, 7, 8, 2, 5, 8], Heal: [8, 9, 8, 10, 5, 8] }
-    },
-    {
-      name: "NEW ZEALAND",
-      sub: "standard-setting market",
-      series: { Power: [3, 3, 6, 5, 4, 4], Eat: [8, 7, 9, 6, 4, 9], Heal: [5, 8, 7, 10, 4, 7] }
-    },
-    {
-      name: "JAPAN",
-      sub: "hardware market under demand stress",
-      series: { Power: [6, 10, 8, 1, 8, 6], Eat: [6, 8, 6, 1, 8, 4], Heal: [7, 9, 9, 10, 8, 6] }
-    }
-  ];
-
-  // Specialisation index, from the memorandum's market derivation. Each market's share of a
-  // necessity divided by the share its overall size predicts, which removes market size from the
-  // comparison. 1.00 sits exactly where size predicts; 1.15 marks specialisation.
-  //
-  // Both rows count items in one file, Internal/Resources/Research_Library/Reports/
-  // AU_NZ_JP_innovation_exit_catalogue_2026-08-10.md, assembled in a single August 2026 research
-  // pass under one necessity classification. The innovation row counts 79 named innovations and
-  // patents and separates the markets at p = 0.012 against a random allocation of the same items.
-  // The exit row counts 115 companies from that same catalogue and reads p = 0.19, so it carries
-  // the same three leads without separating the markets on its own. The rows are therefore two cuts
-  // of one pass, which is why the lead is taken on the innovation row alone and the exit row is
-  // printed as a reading of the older market rather than as corroboration.
-  //
-  // Reviewed 2026-09-12, three fixes. The earlier wording called the two rows independent bases
-  // that agree. The exit row also counted table ROWS, and the catalogue puts up to eight companies
-  // in one row, so the unit undercounted unevenly by market; and it included three listings from
-  // 1994 and 1995 that the row's own 2000-to-2026 label excludes. Fixing the window alone would
-  // have moved Japan to Heal on a 1.2% margin, which is why the unit was fixed with it.
-  var SPEC = {
-    "AUSTRALIA":   { lead: "Heal",  inn: { Power: 0.66, Eat: 0.66, Heal: 1.66 }, exi: { Power: 0.98, Eat: 0.79, Heal: 1.12 } },
-    "NEW ZEALAND": { lead: "Eat",   inn: { Power: 1.14, Eat: 1.53, Heal: 0.50 }, exi: { Power: 0.81, Eat: 1.77, Heal: 0.67 } },
-    "JAPAN":       { lead: "Power", inn: { Power: 1.32, Eat: 0.74, Heal: 0.73 }, exi: { Power: 1.16, Eat: 0.90, Heal: 0.98 } }
+  var CODES = ["AU", "JP", "NZ"];
+  var MKT = {
+    AU: { name: "AUSTRALIA",   token: ["--hmm-mkt-au-dark", "#A77900"] },
+    JP: { name: "JAPAN",       token: ["--hmm-mkt-jp-dark", "#687DB8"] },
+    NZ: { name: "NEW ZEALAND", token: ["--hmm-mkt-nz-dark", "#C0C0C0"] }
   };
-  var SPEC_BASES = [["inn", "INNOVATION / IP"], ["exi", "EXITS 2000-26"]];
+  function hue(c) { return __T(MKT[c].token[0], MKT[c].token[1]); }
 
-  var CAPTION =
-    "Scored 0 to 10 relative to each market's own ceiling. Read down a panel's own axes, " +
-    "not across markets: a score is not an absolute quantity that carries between markets. " +
-    "Two axes are measured from hmm's in-mandate pipeline (startup depth, exit route); " +
-    "four are assessed from market structure (AI, hardware, regulation, trade).";
+  var MS = (typeof window !== "undefined" && window.MARKET_STRENGTH) || null;
 
-  var SPEC_CAPTION =
-    "The specialisation index divides each market's share of a necessity by the share its overall " +
-    "size predicts, which removes market size from the comparison. An index of 1.00 sits where size " +
-    "predicts and 1.15 marks specialisation. On innovation and intellectual property each market " +
-    "leads exactly one necessity and the three leads are different: Australia Heal at 1.66, Japan " +
-    "Power at 1.32, New Zealand Eat at 1.53. That base is a catalogue of 79 named innovations and " +
-    "patents, and its separation holds at p = 0.012 against a random allocation of the same items. " +
-    "The exit row counts 115 companies from the same catalogue and reads p = 0.19, so it carries the " +
-    "same three leads without separating the markets on its own. Exits lag innovation by a decade " +
-    "or more, so the exit row reads the market of the 2000s. The fund invests against the " +
-    "innovation base.";
-
-  // ---- geometry ----
-  var VB_W = 320, VB_H = 300;   // per-panel viewBox
-  var CX = 160, CY = 148;       // chart centre
-  var R = 86;                   // max spoke length (score 10)
-  var LBL_R = R + 18;           // axis-label radius
-  var RINGS = [2, 4, 6, 8, 10];
-  var RING_LABELS = [2, 6, 10];
-
-  // AI at top (-90deg), then clockwise every 60deg.
-  function angle(i) { return (-90 + i * 60) * Math.PI / 180; }
-  function px(i, radius) { return CX + Math.cos(angle(i)) * radius; }
-  function py(i, radius) { return CY + Math.sin(angle(i)) * radius; }
-
-  function el(name, attrs) {
-    var n = document.createElementNS(SVGNS, name);
-    if (attrs) for (var k in attrs) if (attrs.hasOwnProperty(k)) n.setAttribute(k, attrs[k]);
-    return n;
-  }
-
-
-  function scorePath(scores) {
-    var d = "";
-    for (var i = 0; i < 6; i++) {
-      var rr = (scores[i] / 10) * R;
-      d += (i === 0 ? "M" : "L") + px(i, rr).toFixed(2) + " " + py(i, rr).toFixed(2);
+  function listingShares() {
+    if (!MS || !MS.listing_prob) return null;
+    var out = {}, s = String(MS.listing_prob);
+    for (var i = 0; i < CODES.length; i++) {
+      var m = s.match(new RegExp(CODES[i] + " ([\\d.]+)%"));
+      if (!m) return null;
+      out[CODES[i]] = parseFloat(m[1]);
     }
-    return d + "Z";
+    return out;
   }
 
-  function anchorFor(x) {
-    var d = x - CX;
-    if (d > 6) return "start";
-    if (d < -6) return "end";
-    return "middle";
+  /* Three groups. Every denominator is COMPUTED, never typed: the two counts sum to the
+     register total, and a share's basis is a hundred. */
+  function groups() {
+    var sh = listingShares();
+    if (!MS || !MS.register || !sh) return null;
+    var reg = MS.register;
+    function sum(k) { var t = 0; for (var i = 0; i < CODES.length; i++) t += reg[CODES[i]][k]; return t; }
+    var total = sum("inForce"), recent = sum("since2020");
+    // A disagreement between the parts and the recorded total means the snapshot is stale.
+    if (typeof reg.total === "number" && reg.total !== total) return null;
+    return [
+      { key: "inforce", label: "INSTRUMENTS IN FORCE", den: total, unit: "", dp: 0,
+        denNote: "of " + total + " across the three",
+        val: function (c) { return reg[c].inForce; } },
+      { key: "since2020", label: "OPERATIVE SINCE 2020", den: recent, unit: "", dp: 0,
+        denNote: "of " + recent + " of those",
+        val: function (c) { return reg[c].since2020; } },
+      { key: "listing", label: "LISTING SHARE", den: 100, unit: "%", dp: 1,
+        denNote: "of 100%, own winners",
+        val: function (c) { return sh[c]; } }
+    ];
   }
 
+  // ---- geometry, one viewBox ----
+  var VB_W = 1120, ROW_H = 32, GROUP_PAD = 44, TOP = 28;
+  var LBL_W = 168, BAR_X = LBL_W + 16, BAR_W = VB_W - BAR_X - 104;
+  var DOT_R = 1.25, DOT_BIG = 1.9, COL_GAP = 7.2, ROW_GAP = 5.2, BAR_H = 16, TXT_DY = 4;
 
-  function cornerTick(pos) {
-    // small mono corner tick in the accent, drawn as an L into the panel.
-    var w = document.createElement("span");
-    w.className = "radar-corner rc-" + pos;
-    var s = el("svg", { width: "9", height: "9", viewBox: "0 0 9 9" });
-    var horiz, vert;
-    if (pos === "tl") { horiz = "M0 0 H9"; vert = "M0 0 V9"; }
-    else if (pos === "tr") { horiz = "M9 0 H0"; vert = "M9 0 V9"; }
-    else if (pos === "bl") { horiz = "M0 9 H9"; vert = "M0 9 V0"; }
-    else { horiz = "M9 9 H0"; vert = "M9 9 V0"; }
-    [horiz, vert].forEach(function (d) {
-      s.appendChild(el("path", { d: d, stroke: "var(--hmm-accent)", "stroke-width": "1", fill: "none" }));
-    });
-    w.appendChild(s);
-    return w;
-  }
+  function groupTop(gi) { return TOP + gi * (GROUP_PAD + CODES.length * ROW_H); }
 
-  var COUNTRY_PROSE = {
-    "AUSTRALIA": "Australia, the resource and materials market. Mining right-to-operate is one of the deepest regulatory regimes, and the government backs critical minerals directly through a national list and export finance. Autonomous mining scaled here first, giving a real edge in field-autonomy hardware and control. Medical-device and biotech hardware runs global through Cochlear, ResMed and CSL, and imaging AI through Harrison.ai. The venture base is mature, and super funds are beginning to fund it. Exits resolve through trade sale to US acquirers, construction-software Aconex to Oracle among them.",
-    "NEW ZEALAND": "New Zealand, the standard-setting market. One house of parliament and top-of-table trust let it move a rule fast, and its food-safety regime is among the strongest. The gene-technology reform reopens the Eat biological-input gate. Hardware runs global at the top end through Fisher and Paykel Healthcare and Rocket Lab, and through Halter in animal agriculture. The venture base is small and global from the first customer. Exits go offshore to Australian and US acquirers.",
-    "JAPAN": "Japan, the hardware market under demand stress. It imports roughly 90% of its energy, which makes Power a national-security question, and it holds the world's oldest population, which makes Heal a structural demand. The PMDA is a rigorous medical gate with a fast track for novel devices, and the AI regime is among the most permissive, with copyright law broadly allowing training on protected data. Hardware leads the world in robotics, semiconductor materials, image sensors and batteries. The venture base is thin but rising on a government startup plan, and Tokyo Growth gives it an early IPO exit. Examples include Preferred Networks, Sakana, Spiber and SmartHR."
-  };
-  var COUNTRY_TOKEN = { "AUSTRALIA": ["--hmm-mkt-au-dark", "#A77900"], "NEW ZEALAND": ["--hmm-mkt-nz-dark", "#C0C0C0"], "JAPAN": ["--hmm-mkt-jp-dark", "#687DB8"] };
-  function countryAccent(name) { var t = COUNTRY_TOKEN[name]; return t ? __T(t[0], t[1]) : __T("--hmm-accent", "#C44539"); }
+  /* Seeded jitter, never Math.random(), so the texture holds still between loads and a theme
+     re-render does not reshuffle the field under the motion engine. */
+  function seeded(i) { var x = Math.sin(i * 12.9898) * 43758.5453; return x - Math.floor(x); }
 
-  var AXIS_DEFS = {
-    "AI": "AI competence. The market's ability to build and apply modern AI, from research base to deployed product.",
-    "HARDWARE": "Hardware competence. Strength in physical innovation: robotics, medical devices, materials, sensors, semiconductors.",
-    "REGULATION": "Regulation. The depth and favourability of the necessity gates, the right-to-operate regimes a company must clear.",
-    "STARTUP": "Startup depth. How many strong companies the market forms, measured from hmm's pipeline.",
-    "EXIT": "Exit route. How readily companies exit, by IPO venue and trade sale. Measured from hmm's pipeline.",
-    "TRADE": "Global trade. How naturally the market's companies reach global demand: go-to-market, exports, redomicile."
-  };
-
-  function buildSVG(market, dotsOut) {
-    var svg = el("svg", { class: "radar-svg", viewBox: "0 0 " + VB_W + " " + VB_H, role: "img" });
-    svg.appendChild(el("title", {})).textContent = market.name + " necessity radar";
-
-    // no hexagon frame or spokes: the constellation of dots carries the shape
-
-    // axis labels (text ink, uppercase, letter-spaced)
-    for (var a = 0; a < 6; a++) {
-      var lx = px(a, LBL_R), ly = py(a, LBL_R);
-      var dy = ly < CY - 4 ? 0 : (ly > CY + 4 ? 8 : 3);
-      var lab = el("text", {
-        "class": "axis-lbl", "data-axis": AXES[a], tabindex: "0",
-        x: lx.toFixed(1), y: (ly + dy).toFixed(1),
-        "text-anchor": anchorFor(lx),
-        "font-size": "9", "letter-spacing": ".14em",
-        fill: "var(--hmm-text-muted,rgba(242,236,201,.6))"
-      });
-      lab.textContent = AXES[a];
-      svg.appendChild(lab);
-    }
-
-    // necessity polygons, dots, and direct labels
-    SERIES.forEach(function (name) {
-      var scores = market.series[name];
-      var hue = HUES[name];
-      var g = el("g", { class: "series series--" + name.toLowerCase() });
-      g.setAttribute("data-series", name);
-
-      // invisible fill: no visible wash by default, but the focus state can raise it on legend hover
-      g.appendChild(el("path", {
-        class: "radar-fill",
-        d: scorePath(scores),
-        fill: hue, "fill-opacity": "0", stroke: "none"
-      }));
-      // invisible edge, kept in the DOM only so the morph flock can sample the shape; the dots carry it visually
-      g.appendChild(el("path", {
-        class: "radar-line",
-        d: scorePath(scores),
-        fill: "none", stroke: hue, "stroke-width": "1", "stroke-opacity": "0",
-        "stroke-linejoin": "round"
-      }));
-
-      // dot positions collected for the canvas flock engine (drawn on <canvas>, not SVG) at machine-diagram density
-      var avg = (scores[0] + scores[1] + scores[2] + scores[3] + scores[4] + scores[5]) / 60; // 0..1
-      var FILL = Math.round(64 + avg * 120);             // dense fill; cheap on canvas, matches the DWG-NEC diagrams
-      for (var q = 0; q < FILL; q++) {
-        var seg = Math.random() * 6, si = seg | 0, fr = seg - si;
-        var ri = (scores[si] / 10) * R, rj = (scores[(si + 1) % 6] / 10) * R;
-        var bnd = ri + (rj - ri) * fr;                    // polygon boundary radius at this angle (approx)
-        var th = angle(si) + fr * (Math.PI / 3);
-        var rr2 = bnd * Math.sqrt(Math.random()) * 0.96;  // sqrt for area-uniform fill, 0.96 keeps inside the edge
-        var big = Math.random() < 0.22;
-        dotsOut.push({ x: CX + Math.cos(th) * rr2, y: CY + Math.sin(th) * rr2, r: big ? 1.9 : 1.2, hue: hue, s: name });
-      }
-      // vertex dots: the peaks, larger
-      for (var vv = 0; vv < 6; vv++) {
-        var rr = (scores[vv] / 10) * R;
-        dotsOut.push({ x: px(vv, rr), y: py(vv, rr), r: 2.2, hue: hue, s: name, vtx: true });
-      }
-
-      svg.appendChild(g);
-    });
-
-    return svg;
-  }
-
-  // (radar dots are drawn on <canvas> by the shared flock engine in render(); no SVG explode.)
-
-  function buildPanel(market) {
-    var panel = document.createElement("div");
-    panel.className = "radar-panel";
-
-    ["tl", "tr", "bl", "br"].forEach(function (p) { panel.appendChild(cornerTick(p)); });
-
-    panel.setAttribute("data-market", market.name);
-    panel.style.setProperty("--c", countryAccent(market.name));
-
-    panel.addEventListener("pointerenter", function () { HOVERING++; });
-    panel.addEventListener("pointerleave", function () { HOVERING = HOVERING > 0 ? HOVERING - 1 : 0; });
-
-    var spec = SPEC[market.name];
-    if (spec) panel.setAttribute("data-lead", spec.lead);
-
-    var title = document.createElement("h3");
-    title.className = "radar-title";
-    title.textContent = market.name;
-    panel.appendChild(title);
-
-    var sub = document.createElement("p");
-    sub.className = "radar-sub";
-    sub.textContent = market.sub;
-    panel.appendChild(sub);
-
-    // body: chart on the left, prose on the right once the panel opens
-    var body = document.createElement("div");
-    body.className = "radar-body";
-    var viz = document.createElement("div");
-    viz.className = "radar-viz";
-    body.appendChild(viz);
-    panel.appendChild(body);
-
-    var dotsOut = [];
-    var svg = buildSVG(market, dotsOut);
-    var stage = document.createElement("div");
-    stage.className = "radar-stage";
-    stage.appendChild(svg);
-    var cv = document.createElement("canvas");
-    cv.className = "radar-canvas";
-    stage.appendChild(cv);
-    viz.appendChild(stage);
-    PANELS.push({ panel: panel, svg: svg, cv: cv, dots: dotsOut });
-
-    // legend chips (identity never rests on colour alone)
-    var legend = document.createElement("ul");
-    legend.className = "radar-legend";
-    SERIES.forEach(function (name) {
-      var li = document.createElement("li");
-      var chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = "radar-chip u-control";
-      chip.setAttribute("data-series", name);
-      chip.setAttribute("aria-label", "Highlight " + name + " on " + market.name);
-      var sw = document.createElement("span");
-      sw.className = "swatch";
-      sw.style.background = HUES[name];
-      chip.appendChild(sw);
-      chip.appendChild(document.createTextNode(name));
-      // The lead is marked in text as well as in weight, so identity never rests on colour or
-      // on a visual cue alone. The label is read out, which is why it is a span and not a glyph.
-      if (spec && spec.lead === name) {
-        chip.classList.add("radar-chip--lead");
-        var ld = document.createElement("span");
-        ld.className = "chip-lead";
-        ld.textContent = "LEAD";
-        chip.appendChild(ld);
-        chip.setAttribute("aria-label", "Highlight " + name + " on " + market.name + ". " + name + " is this market's lead necessity.");
-      }
-      li.appendChild(chip);
-      legend.appendChild(li);
-
-      function raise() {
-        panel.setAttribute("data-focus", name);
-        SERIES.forEach(function (s2) {
-          var grp = svg.querySelector('.series[data-series="' + s2 + '"]');
-          if (grp) grp.classList.toggle("is-active", s2 === name);
+  function barDots(x0, y0, w, h, seed) {
+    var out = [], cols = Math.max(1, Math.floor(w / COL_GAP)), rows = Math.max(1, Math.round(h / ROW_GAP));
+    var k = seed * 1000;
+    for (var c = 0; c < cols; c++) {
+      for (var r = 0; r < rows; r++) {
+        k++;
+        out.push({
+          x: x0 + c * COL_GAP + COL_GAP * 0.5 + (seeded(k) - 0.5) * COL_GAP * 0.42,
+          y: y0 + r * ROW_GAP + (h - (rows - 1) * ROW_GAP) * 0.5 + (seeded(k + 7777) - 0.5) * ROW_GAP * 0.5,
+          big: seeded(k + 313) < 0.2
         });
       }
-      function restore() {
-        panel.removeAttribute("data-focus");
-        var groups = svg.querySelectorAll(".series");
-        for (var i = 0; i < groups.length; i++) groups[i].classList.remove("is-active");
-      }
-      chip.addEventListener("mouseenter", raise);
-      chip.addEventListener("mouseleave", restore);
-      chip.addEventListener("focus", raise);
-      chip.addEventListener("blur", restore);
-    });
-    viz.appendChild(legend);
+    }
+    return out;
+  }
 
-    // The specialisation matrix for this market: the innovation row the lead is taken on, then the
-    // exit row from the same catalogue, the three necessities in the same order as the legend. A
-    // real table, because it is tabular and a screen reader should read the basis and the
-    // necessity together.
-    if (spec) {
-      var tbl = document.createElement("table");
-      tbl.className = "radar-spec";
-      var cap = document.createElement("caption");
-      cap.textContent = "Specialisation index, " + market.name.toLowerCase();
-      tbl.appendChild(cap);
-      var thead = document.createElement("thead");
-      var hr = document.createElement("tr");
-      var corner = document.createElement("td");
-      hr.appendChild(corner);
-      SERIES.forEach(function (n) {
-        var th = document.createElement("th");
-        th.scope = "col";
-        th.textContent = n;
-        if (spec.lead === n) th.className = "is-lead";
-        hr.appendChild(th);
+  function build(G) {
+    var h = window.hmmH, kids = [];
+    var muted = __T("--hmm-text-muted", "rgba(242,236,201,.6)");
+    var caption = __T("--hmm-caption", "rgba(242,236,201,0.72)");
+    var border = __T("--hmm-border", "rgba(242,236,201,.12)");
+
+    for (var gi = 0; gi < G.length; gi++) {
+      var g = G[gi], gy = groupTop(gi);
+
+      /* No tabIndex. The old panels made the axis labels focusable to reach a tooltip
+         definition; this chart has no tooltip, and the read-out table below carries every
+         figure and every denominator as text, which is the better reading for assistive
+         technology anyway. A focusable element that offers nothing is an affordance the
+         page cannot honour, and check:affordances is right to fail it. */
+      kids.push(h("text", { className: "bars-axis", x: 0, y: gy - 12, fontSize: 10,
+        letterSpacing: ".15em", fill: muted, "data-axis": g.key }, g.label));
+      kids.push(h("text", { className: "bars-den", x: BAR_X, y: gy - 12, fontSize: 9,
+        letterSpacing: ".06em", fill: caption }, g.denNote));
+      kids.push(h("rect", { className: "bars-slot", x: BAR_X, y: gy - 4, width: BAR_W,
+        height: (CODES.length - 1) * ROW_H + BAR_H + 8, fill: "none", stroke: border, strokeWidth: 1 }));
+
+      for (var mi = 0; mi < CODES.length; mi++) {
+        var code = CODES[mi], v = g.val(code);
+        var w = Math.max(COL_GAP, Math.max(0, Math.min(1, v / g.den)) * BAR_W);
+        var y = gy + mi * ROW_H, c = hue(code);
+
+        kids.push(h("text", { className: "bars-mkt", x: LBL_W, y: y + BAR_H * 0.5 + TXT_DY,
+          textAnchor: "end", fontSize: 10, letterSpacing: ".12em", fill: c }, MKT[code].name));
+
+        var gdots = [], dots = barDots(BAR_X, y, w, BAR_H, gi * 3 + mi + 1);
+        for (var d = 0; d < dots.length; d++) {
+          gdots.push(h("circle", {
+            className: dots[d].big ? "bd bd--big" : "bd",
+            cx: dots[d].x.toFixed(2), cy: dots[d].y.toFixed(2),
+            r: dots[d].big ? DOT_BIG : DOT_R, fill: c
+          }));
+        }
+        gdots.push(h("line", { className: "bars-cap-mark", x1: (BAR_X + w).toFixed(2), y1: y - 2,
+          x2: (BAR_X + w).toFixed(2), y2: y + BAR_H + 2, stroke: c, strokeWidth: 1.6 }));
+        kids.push(h("g", { className: "bars-row", "data-mkt": code, "data-group": g.key }, gdots));
+
+        kids.push(h("text", { className: "bars-val", x: BAR_X + w + 10,
+          y: y + BAR_H * 0.5 + TXT_DY, fontSize: 11, fill: c }, v.toFixed(g.dp) + g.unit));
+      }
+    }
+
+    return h("svg", {
+      className: "bars-svg", viewBox: "0 0 " + VB_W + " " + (groupTop(3) - GROUP_PAD + 26),
+      role: "img", "data-hmm-dots": "1"
+    }, h("title", {}, "Australia, Japan and New Zealand compared on instruments in force, instruments operative since 2020, and share of winner exits by listing"), kids);
+  }
+
+  /* The nine figures as a real table, because a drawing is not a reading for anyone using
+     assistive technology and the values are the point. */
+  function readout(G) {
+    var t = document.createElement("table");
+    t.className = "bars-read";
+    var cap = document.createElement("caption");
+    cap.textContent = "The nine figures the chart draws, each group with its denominator";
+    t.appendChild(cap);
+    var thead = document.createElement("thead"), hr = document.createElement("tr");
+    hr.appendChild(document.createElement("td"));
+    G.forEach(function (g) {
+      var th = document.createElement("th"); th.scope = "col";
+      th.textContent = g.label + ", " + g.denNote;
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr); t.appendChild(thead);
+    var tb = document.createElement("tbody");
+    CODES.forEach(function (c) {
+      var tr = document.createElement("tr"), rh = document.createElement("th");
+      rh.scope = "row"; rh.textContent = MKT[c].name; tr.appendChild(rh);
+      G.forEach(function (g) {
+        var td = document.createElement("td");
+        td.textContent = g.val(c).toFixed(g.dp) + g.unit;
+        tr.appendChild(td);
       });
-      thead.appendChild(hr);
-      tbl.appendChild(thead);
-      var tb = document.createElement("tbody");
-      SPEC_BASES.forEach(function (b) {
-        var tr = document.createElement("tr");
-        var rh = document.createElement("th");
-        rh.scope = "row";
-        rh.textContent = b[1];
-        tr.appendChild(rh);
-        SERIES.forEach(function (n) {
-          var td = document.createElement("td");
-          td.textContent = spec[b[0]][n].toFixed(2);
-          if (spec.lead === n) td.className = "is-lead";
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb);
+    return t;
+  }
+
+  /* The specialisation index. Both rows count items in one file,
+     Internal/Resources/Research_Library/Reports/AU_NZ_JP_innovation_exit_catalogue_2026-08-10.md,
+     assembled in one August 2026 pass under one necessity classification. The innovation row
+     counts 79 named innovations and patents and separates the markets at p = 0.012 against a
+     random allocation of the same items. The exit row counts 115 companies from that same
+     catalogue and reads p = 0.19, so it repeats the same three leads without separating the
+     markets on its own, which is why the lead is taken on the innovation row alone.
+
+     Reviewed 2026-09-12, three fixes. The earlier wording called the two rows independent
+     bases that agree. The exit row also counted table ROWS, and the catalogue puts up to eight
+     companies in one row, so the unit undercounted unevenly by market; and it included three
+     listings from 1994 and 1995 that the row's own 2000-to-2026 label excludes. Fixing the
+     window alone would have moved Japan to Heal on a 1.2% margin, which is why the unit was
+     fixed with it. */
+  var NEC = ["Power", "Eat", "Heal"];
+
+  /* The eighteen ratios used to be typed here. They now arrive in data/necessity_matrix.js,
+     which scripts/necessity-matrix.mjs derives from the counts in the report above, and
+     check-register-figures.mjs recomputes every one of them from those counts at build.
+     Where the snapshot is absent the table does not render, because a specialisation index
+     with no base behind it is the thing this change removed. */
+  function matrix() {
+    return (typeof window !== "undefined" && window.NECESSITY_MATRIX) || null;
+  }
+
+  function specTable() {
+    var M = matrix();
+    if (!M) return null;
+    var t = document.createElement("table");
+    t.className = "bars-spec";
+    var cap = document.createElement("caption");
+    cap.textContent = "Specialisation index: a market's share of a necessity, divided by the share its own size predicts. An index of 1.0 sits where size predicts. The count the cell rests on is printed beside it, because the innovation base is 79 items across nine cells and one cell holds four, which does not carry a second decimal. The lead is taken on the innovation row, which separates the markets at p = 0.012; the exit row reads p = 0.19 on 115 companies and counts the same catalogue again.";
+    t.appendChild(cap);
+    var thead = document.createElement("thead"), hr = document.createElement("tr");
+    hr.appendChild(document.createElement("td"));
+    hr.appendChild(document.createElement("td"));
+    NEC.forEach(function (n) {
+      var th = document.createElement("th"); th.scope = "col"; th.textContent = n; hr.appendChild(th);
+    });
+    var lh = document.createElement("th"); lh.scope = "col"; lh.textContent = "Leads"; hr.appendChild(lh);
+    thead.appendChild(hr); t.appendChild(thead);
+    var tb = document.createElement("tbody");
+    ["inn", "exi"].forEach(function (key) {
+      var base = M.bases[key];
+      if (!base) return;
+      CODES.forEach(function (c, ci) {
+        var mk = base.markets[c], tr = document.createElement("tr");
+        if (ci === 0) {
+          var bh = document.createElement("th");
+          bh.scope = "rowgroup"; bh.rowSpan = CODES.length; bh.className = "spec-basis";
+          bh.textContent = base.label; tr.appendChild(bh);
+        }
+        var mh = document.createElement("th");
+        mh.scope = "row"; mh.textContent = MKT[c].name; tr.appendChild(mh);
+        NEC.forEach(function (n) {
+          var cell = mk.cells[n], td = document.createElement("td");
+          td.appendChild(document.createTextNode(cell.idx.toFixed(1)));
+          /* The separator is a real character in the DOM, never a ::before. A pseudo-element
+             is absent from textContent, from a copied selection and from an accessible name,
+             so a cell styled apart still extracted as "0.79" where it means 0.7 on 9 items. */
+          var b = document.createElement("span");
+          b.className = "spec-n"; b.textContent = "\u00A0n" + cell.n;
+          td.appendChild(b);
+          /* Screen readers get the base named rather than read as a second number. */
+          td.setAttribute("aria-label", cell.idx.toFixed(1) + ", on " + cell.n + " of " + base.total + " items");
+          if (M.leads[c] === n && key === M.lead_basis) td.className = "is-lead";
           tr.appendChild(td);
         });
+        var ld = document.createElement("td");
+        ld.className = "spec-lead"; ld.textContent = M.leads[c]; tr.appendChild(ld);
         tb.appendChild(tr);
       });
-      tbl.appendChild(tb);
-      viz.appendChild(tbl);
-    }
-
-    // the prose the modal used to hold, now read in place
-    var read = document.createElement("div");
-    read.className = "radar-read";
-    var prose = document.createElement("p");
-    prose.textContent = COUNTRY_PROSE[market.name] || "";
-    read.appendChild(prose);
-    body.appendChild(read);
-
-    return panel;
+    });
+    t.appendChild(tb);
+    return t;
   }
 
   function render() {
     var root = document.getElementById("radars");
     if (!root) return;
+    var G = groups();
+    if (!G) {
+      // A stale or unreadable snapshot draws nothing rather than drawing a wrong bar.
+      root.setAttribute("data-state", "no-data");
+      return;
+    }
 
-    var wrap = document.createElement("div");
-    wrap.className = "radar-wrap";
-    MARKETS.forEach(function (m) { wrap.appendChild(buildPanel(m)); });
-    root.appendChild(wrap);
-
-    // Both captions mount here. CAPTION was written when the panels were built and was never
-    // added to the document, so the scoring rule it states has been invisible since; the
-    // specialisation note is new and sits beside it because a reader needs both to read a panel.
-    var notes = document.createElement("div");
-    notes.className = "radar-notes";
-    [CAPTION, SPEC_CAPTION].forEach(function (t) {
-      var pnode = document.createElement("p");
-      pnode.textContent = t;
-      notes.appendChild(pnode);
-    });
-    root.appendChild(notes);
-
-    // The re-render path. Refresh HUES in place and re-point every dot, series
-    // path, swatch and panel accent; the frame loop below reads d.hue each
-    // frame, so the canvas repaints on its own.
-    __onTheme(function () {
-      var fresh = hues();
-      SERIES.forEach(function (n) { HUES[n] = fresh[n]; });
-      PANELS.forEach(function (p) { p.dots.forEach(function (d) { d.hue = HUES[d.s]; }); });
-      Array.prototype.forEach.call(root.querySelectorAll(".series"), function (g) {
-        var n = g.getAttribute("data-series"); if (!n || !HUES[n]) return;
-        Array.prototype.forEach.call(g.querySelectorAll(".radar-fill"), function (e) { e.setAttribute("fill", HUES[n]); });
-        Array.prototype.forEach.call(g.querySelectorAll(".radar-line"), function (e) { e.setAttribute("stroke", HUES[n]); });
-      });
-      Array.prototype.forEach.call(root.querySelectorAll(".radar-chip"), function (chip) {
-        var sw = chip.querySelector(".swatch"), n = chip.getAttribute("data-series");
-        if (sw && n && HUES[n]) sw.style.background = HUES[n];
-      });
-      Array.prototype.forEach.call(root.querySelectorAll(".radar-panel"), function (p) { p.style.setProperty("--c", countryAccent(p.getAttribute("data-market"))); });
+    var fig = document.createElement("figure");
+    fig.className = "mkt-bars";
+    var stage = document.createElement("div");
+    stage.className = "bars-stage";
+    fig.appendChild(stage);
+    var cap = document.createElement("figcaption");
+    cap.className = "bars-cap";
+    cap.textContent = "One scale per group, so the three markets read across. The instrument counts partition the register, which is why those bars fill their axis exactly once. Listing share runs to the whole, because each market is a share of its own winner exits.";
+    fig.appendChild(cap);
+    root.appendChild(fig);
+    /* Both tables scroll inside their own box. The specialisation table carries six columns
+       and cannot fit a 360px viewport, and the page body must never scroll sideways, which
+       is the same wrapper pattern sources.html uses for its wide tables. */
+    [readout(G), specTable()].forEach(function (t) {
+      if (!t) return;   /* specTable returns null where the snapshot has not loaded */
+      var wrap = document.createElement("div");
+      wrap.className = "bars-tablewrap";
+      wrap.appendChild(t);
+      root.appendChild(wrap);
     });
 
-    // ---- canvas flock engine: draw every panel's dots with the DWG-NEC machine physics ----
-    var reduceMo = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    function sizePanel(p) {
-      var w = p.cv.clientWidth, h = p.cv.clientHeight;
-      if (!w || !h) return false;
-      p.cv.width = Math.round(w * DPR); p.cv.height = Math.round(h * DPR);
-      p.sx = w / VB_W; p.w = w; p.h = h;
-      p.ctx = p.cv.getContext("2d"); p.ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      for (var i = 0; i < p.dots.length; i++) {
-        var d = p.dots[i]; d.hx = d.x * (w / VB_W); d.hy = d.y * (h / VB_H);
-        if (d.cx === undefined) { d.cx = d.hx; d.cy = d.hy; d.ph = Math.random() * 6.283; }
+    function draw() {
+      var svg = build(G);
+      window.hmmRender(stage, svg);
+      /* ONE SYSTEM, ONE ENGINE. The same call machines.js makes for the hero blow-outs and the
+         necessity schematics, so these dots breathe, drift, wake on scroll and answer a click
+         on the site's single physics engine. Reduced motion is handled inside the engine. */
+      if (window.hmmAnimateDots) {
+        if (root.__ctl && root.__ctl.stop) root.__ctl.stop();
+        root.__ctl = window.hmmAnimateDots(svg, { mode: "breath", drift: true, click: true, scroll: true });
       }
-      return true;
     }
-    function sizeAll() { for (var i = 0; i < PANELS.length; i++) sizePanel(PANELS[i]); }
-
-    /* Hover must never shrink a panel. Expanding turns the body into a row and the drawing
-       gives up width, so without this the panel loses height, the bottom edge retracts past
-       the pointer, hover drops, and the state oscillates. Capping the stage removes most of
-       the movement; this removes the rest by locking each panel to the height it settles at
-       with nothing hovered, so the expansion can only ever add. Measured only when no panel
-       is hovered, because a hovered panel would lock in the expanded height instead. */
-    function lockHeights() {
-      if (HOVERING) return;
-      for (var i = 0; i < PANELS.length; i++) PANELS[i].panel.style.minHeight = "";
-      var tallest = 0, h;
-      for (var j = 0; j < PANELS.length; j++) {
-        h = PANELS[j].panel.getBoundingClientRect().height;
-        if (h > tallest) tallest = h;
-      }
-      if (!tallest) return;
-      for (var k = 0; k < PANELS.length; k++) PANELS[k].panel.style.minHeight = Math.ceil(tallest) + "px";
-    }
-    /* The loop runs only while the section is on screen and the document is visible.
-       It used to re-request itself every frame regardless and read getBoundingClientRect
-       sixty times a second for the whole visit, drawing nothing for most of them. Every
-       condition that can lift calls start(), which is a no-op while the loop is already
-       running; the rect check stays so the first frame after a lift is still bounded. */
-    var running = false, offscreen = false;
-    function frame() {
-      if (offscreen || document.hidden) { running = false; return; }
-      var rr = root.getBoundingClientRect(), vh = window.innerHeight || 800;
-      if (rr.bottom > -80 && rr.top < vh + 80) {
-        var now = Date.now() / 1000;
-        for (var pi = 0; pi < PANELS.length; pi++) {
-          var p = PANELS[pi];
-          if (!p.ctx && !sizePanel(p)) continue;
-          var focus = p.panel.getAttribute("data-focus");
-          p.ctx.clearRect(0, 0, p.w, p.h);
-          for (var i = 0; i < p.dots.length; i++) {
-            var d = p.dots[i];
-            if (!reduceMo) { var tx = d.hx + Math.cos(now * 0.6 + d.ph) * 2.4, ty = d.hy + Math.sin(now * 0.7 + d.ph) * 2.4; d.cx += (tx - d.cx) * 0.045; d.cy += (ty - d.cy) * 0.045; }
-            var a = (focus && focus !== d.s) ? 0.10 : (d.vtx ? 1 : 0.9);
-            p.ctx.beginPath(); p.ctx.arc(d.cx, d.cy, d.r * p.sx, 0, 6.283); p.ctx.fillStyle = hexA(d.hue, a); p.ctx.fill();
-          }
-        }
-      }
-      requestAnimationFrame(frame);
-    }
-    function start() { if (running) return; running = true; requestAnimationFrame(frame); }
-    sizeAll(); lockHeights();
-    setTimeout(function () { sizeAll(); lockHeights(); }, 300);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(lockHeights);
-    var rrt = null; addEventListener("resize", function () { clearTimeout(rrt); rrt = setTimeout(function () { sizeAll(); lockHeights(); }, 180); });
-    // The panels now change width mid-animation as one expands, so the canvas has
-    // to re-measure on every frame of that transition, not just on window resize.
-    // Home positions move with it and the dots ease across, which is the effect.
-    if (window.ResizeObserver) {
-      var ro = new ResizeObserver(function (entries) {
-        for (var i = 0; i < entries.length; i++) {
-          for (var j = 0; j < PANELS.length; j++) if (PANELS[j].cv === entries[i].target) sizePanel(PANELS[j]);
-        }
-      });
-      for (var pi2 = 0; pi2 < PANELS.length; pi2++) ro.observe(PANELS[pi2].cv);
-    }
-    if ("IntersectionObserver" in window) {
-      var io = new IntersectionObserver(function (es) {
-        for (var i = 0; i < es.length; i++) offscreen = !es[i].isIntersecting;
-        start();
-      }, { rootMargin: "80px 0px", threshold: 0 });
-      io.observe(root);
-    }
-    document.addEventListener("visibilitychange", start);
-    start();
-
-    // axis-definition popups (hover or keyboard-focus an axis label)
-    var tip = document.createElement("div");
-    tip.className = "radar-tip"; tip.setAttribute("role", "tooltip"); tip.setAttribute("aria-hidden", "true");
-    root.appendChild(tip);
-    function showTip(node) {
-      var name = node.getAttribute("data-axis"), def = AXIS_DEFS[name];
-      if (!def) return;
-      tip.textContent = def; tip.classList.add("on"); tip.setAttribute("aria-hidden", "false");
-      var r = node.getBoundingClientRect(), tr = tip.getBoundingClientRect();
-      var x = r.left + r.width / 2 - tr.width / 2;
-      x = Math.max(10, Math.min(window.innerWidth - tr.width - 10, x));
-      var y = r.top - tr.height - 8; if (y < 10) y = r.bottom + 8;
-      tip.style.left = x + "px"; tip.style.top = y + "px";
-    }
-    function hideTip() { tip.classList.remove("on"); tip.setAttribute("aria-hidden", "true"); }
-    function axisFrom(e) { var t = e.target; return (t && t.closest) ? t.closest(".axis-lbl") : null; }
-    root.addEventListener("mouseover", function (e) { var a = axisFrom(e); if (a) showTip(a); });
-    root.addEventListener("mouseout", function (e) { if (axisFrom(e)) hideTip(); });
-    root.addEventListener("focusin", function (e) { var a = axisFrom(e); if (a) showTip(a); });
-    root.addEventListener("focusout", function (e) { if (axisFrom(e)) hideTip(); });
+    draw();
+    if (window.__onTheme) window.__onTheme(draw);
   }
 
-  if (document.readyState === "complete" || document.readyState === "interactive") {
-    render();
-  } else {
-    window.addEventListener("load", render);
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", render);
+  else render();
 })();

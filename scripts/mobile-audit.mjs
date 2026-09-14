@@ -2,8 +2,8 @@
    breakpoints, where nobody looks.
 
    Two regressions have already shipped through the gaps in this sweep. The
-   section rail is a fixed right-edge overlay, so content sized in vw — which
-   ignores the padding that clears the rail — slides under it; that is invisible
+   section rail is a fixed right-edge overlay, so content sized in vw, which
+   ignores the padding that clears the rail, slides under it, and that is invisible
    at 320 and 390px and only appears at 360, 375 and 412. And the regulation
    split floors its left column at 440px, so between 861 and 1040px the timeline
    rows had less width than they can render in and the page scrolled sideways by
@@ -98,7 +98,7 @@ for (const [name, viewport, touch] of PROFILES) {
     if (errors.length) problems.push(`js error: ${errors[0]}`);
 
     if (problems.length) failures++;
-    console.log(`${(name + ' / ' + route).padEnd(32)} ${problems.length ? 'FAIL — ' + problems.join(' | ') : 'pass'}`);
+    console.log(`${(name + ' / ' + route).padEnd(32)} ${problems.length ? 'FAIL: ' + problems.join(' | ') : 'pass'}`);
     await ctx.close();
   }
 }

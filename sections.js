@@ -48,6 +48,15 @@ if(SECCFG.power) SECCFG.power.exHTML="Power is the energy system: a resource ext
 if(SECCFG.eat) SECCFG.eat.exHTML="Eat is the food and farming system, crop and livestock in one cycle: grain feeds animals, manure feeds the soil. The cost pressure sits on nitrogen for crops and feed conversion for livestock. hmm backs the field-autonomy layer that bears on both.";
 if(SECCFG.heal) SECCFG.heal.exHTML="Heal is the healthcare system, from prevention through diagnosis and treatment to end-of-life care. Its limits are regulatory and financial: what a regulator approves and what a payer reimburses. hmm's read is that the value sits upstream, at detection, where disease caught early costs least to treat.";
 
+/* The unit and the physical instance, one of each per system (GP structure item 2,
+   2026-09-14). Lifted from the memorandum's section 3, which states the incumbent
+   position in each necessity as the thing it earns per. The term of art is shown as a
+   mechanism on first use, so a reader who has never met a grid connection standard or a
+   therapeutic goods approval can follow the chain. */
+if(SECCFG.power) SECCFG.power.unitHTML="The instance is a power plant, and it earns per megawatt hour delivered. Nothing is delivered until a network operator agrees to energise it, and that agreement is a grid connection standard: a written performance standard registered against one connection point. What it is negotiated against is the network's measured condition at that point, because the same plant at another point is another negotiation and another position in the queue.";
+if(SECCFG.eat) SECCFG.eat.unitHTML="The instance is a paddock, and its input is bought per tonne applied to a hectare. 156 million tonnes of contained nitrogen was synthesised in 2024 on United States Geological Survey data, so a rule constraining what is applied constrains a line item that is already metered.";
+if(SECCFG.heal) SECCFG.heal.unitHTML="The instance is a clinic, and it earns per test run and interpreted at a central node, being a laboratory or a hospital department with the instruments, the accreditation and the staff to operate them. A device or a diagnostic reaches that node through the regulator's register, which is what an approval is here: supply is unlawful without an entry, a sponsor in the market holds it, and for a higher-class device or in-vitro diagnostic the entry rests on conformity-assessment evidence naming the manufacturer.";
+
 function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
   var LAB="rgba(242,236,201,.85)",LINE="rgba(242,236,201,.4)",BRD="rgba(242,236,201,.22)";
   var N=S.length,M=14,BW,BH,vbW,vbH,ctr=[],e=[],kc=0,RING=(kind==='eat');
@@ -119,7 +128,7 @@ document.addEventListener('click',function(ev){if(!ev.target.closest('.blk')&&!e
     +'<div class="stage"><div class="stage-head"><span class="stage-eyebrow">'+cfg.eyebrow+'</span></div>'
     +'<div class="machine-wrap"></div><div class="stage-foot">DWG '+cfg.dwg+'</div></div>'
     +'<div class="panel">'
-    +'<div class="card">'+TK+'<div class="card-hdr"><span class="card-id">FIG '+fig+'.A</span><span class="card-eyebrow">'+cfg.exEyebrow+'</span></div><h2>'+cfg.exTitle+'</h2><p>'+cfg.exHTML+'</p><div class="card-foot"><span>'+cfg.dwg+'</span></div></div>'
+    +'<div class="card">'+TK+'<div class="card-hdr"><span class="card-id">FIG '+fig+'.A</span><span class="card-eyebrow">'+cfg.exEyebrow+'</span></div><h2>'+cfg.exTitle+'</h2><p>'+cfg.exHTML+'</p><p class="card-unit">'+(cfg.unitHTML||'')+'</p><div class="card-foot"><span>'+cfg.dwg+'</span></div></div>'
     +'<div class="card">'+TK+'<div class="card-hdr"><span class="card-id">FIG '+fig+'.B</span><span class="card-eyebrow">'+cfg.sysEyebrow+'</span></div><div class="schematic-wrap"></div>'
     +'<div class="stage-panel" aria-live="polite"></div></div>'
     +'</div>';
@@ -137,8 +146,9 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
 /* ---------- S7 regulatory timeline ---------- */
 (function(){var body=document.getElementById('tlBody');if(!body||!window.REG_INSTRUMENTS)return;
   function e2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
-  // lead sentence counts derive from the register. In force is REG_IN_FORCE, defined once in data/reg_instruments.js and shared with scripts/check-register-figures.mjs
-  (function(){var W=['zero','one','two','three','four','five','six','seven','eight','nine','ten'];var inf={AU:0,JP:0,NZ:0},s20=0,sched=0;REG_INSTRUMENTS.forEach(function(r){if(r.global)return;if(r.c!=='AU'&&r.c!=='JP'&&r.c!=='NZ')return;if(r.type!=='enforceable')return;if(REG_IN_FORCE(r)){inf[r.c]++;if(r.yr>=2020)s20++;}else if(r.status==='expected'){sched++;}});var tot=inf.AU+inf.JP+inf.NZ,sub=document.querySelector('.tl-sub');if(sub&&tot)sub.textContent='hmm maps '+tot+' enforceable instruments in force across the three markets: '+inf.AU+' in Australia, '+inf.JP+' in Japan, '+inf.NZ+' in New Zealand, '+s20+' of them since 2020, with '+(W[sched]||sched)+' more scheduled between 2027 and 2030. This is the regulatory surface the fund tracks. The global rows are the same rules re-pricing the space elsewhere.';})();
+  // lead sentence counts derive from the register. In force is REG_IN_FORCE, defined once in data/reg_instruments.js and shared with scripts/check-register-figures.mjs.
+  // The since-2020 count reads op, the operative year, never yr, which is a timeline position (see the field note in data/reg_instruments.js).
+  (function(){var W=['zero','one','two','three','four','five','six','seven','eight','nine','ten'];var inf={AU:0,JP:0,NZ:0},s20=0,sched=0;REG_INSTRUMENTS.forEach(function(r){if(r.global)return;if(r.c!=='AU'&&r.c!=='JP'&&r.c!=='NZ')return;if(r.type!=='enforceable')return;if(REG_IN_FORCE(r)){inf[r.c]++;if(r.op>=2020)s20++;}else if(r.status==='expected'){sched++;}});var tot=inf.AU+inf.JP+inf.NZ,sub=document.querySelector('.tl-sub');if(sub&&tot)sub.textContent='hmm maps '+tot+' enforceable instruments in force across the three markets: '+inf.AU+' in Australia, '+inf.JP+' in Japan, '+inf.NZ+' in New Zealand, '+s20+' of them operative since 2020, with '+(W[sched]||sched)+' more scheduled between 2027 and 2030.';})();
   var byYear={};REG_INSTRUMENTS.forEach(function(r){(byYear[r.yr]=byYear[r.yr]||[]).push(r);});
   function cTag(r){return '<span class="tl-c'+(r.global?' tl-c--global':'')+'">'+e2(r.c)+'</span>';}
   function row(r){return '<div class="tl-row u-panel tl-'+r.type+(r.global?' tl-global':'')+'" data-c="'+e2(r.c)+'">'+cTag(r)+'<span class="tl-date">'+e2(r.date)+'</span><span class="tl-name">'+e2(r.name)+'</span><span class="tl-org">'+e2(r.body)+'</span><span class="tl-status tl-st--'+r.status+'">'+e2(r.status)+'</span></div>';}
@@ -206,7 +216,10 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layoutSpine);
   addEventListener('load',layoutSpine);
   addEventListener('resize',function(){clearTimeout(window.__spineRT);window.__spineRT=setTimeout(layoutSpine,200);});
-  var FILTERS=[['all','All'],['inmarket','In-market'],['AU','AU'],['JP','JP'],['NZ','NZ'],['AMER','AMER'],['CA','Canada'],['GCC','GCC'],['EU','EU'],['UKI','UKI'],['GL','Global']];
+  /* R-D29, 2026-09-14: the Gulf entry left this list with its register row. The `present`
+   gate below would already hide the button, and the name goes too, so the list cannot
+   carry a banned geography waiting for a row to come back. */
+  var FILTERS=[['all','All'],['inmarket','In-market'],['AU','AU'],['JP','JP'],['NZ','NZ'],['AMER','AMER'],['CA','Canada'],['EU','EU'],['UKI','UKI'],['GL','Global']];
   var present={};REG_INSTRUMENTS.forEach(function(r){present[r.c]=1;});
   var fbar=document.getElementById('tlFilters');
   function applyFilter(f){

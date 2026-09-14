@@ -105,7 +105,7 @@ for (const route of ROUTES) {
 
   if (!dead.length) { console.log(`${route.padEnd(16)} pass`); continue; }
   findings++;
-  console.log(`${route.padEnd(16)} FAIL — ${dead.length} rule(s) with no element and no reference`);
+  console.log(`${route.padEnd(16)} FAIL: ${dead.length} rule(s) with no element and no reference`);
   for (const sel of dead) console.log(`    ${sel}`);
 }
 

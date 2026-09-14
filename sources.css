@@ -1,6 +1,6 @@
 /* hmm site - sources page styles. Was the inline <style> in sources.html
    until 2026-09-07; moved so style-src-elem in _headers can be 'self'. */
-html{background:var(--hmm-evergreen);color-scheme:dark;}
+html{background:var(--hmm-field-dark);color-scheme:dark;}
 body{margin:0;padding:0;font-family:var(--hmm-font-body,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-pearl,var(--hmm-pearl-beige));}
 a{color:inherit;}
 .src-top{padding:26px 30px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
@@ -28,3 +28,16 @@ tbody td.yr{font-family:var(--hmm-font-mono,'Raela Grotesque',monospace);font-si
 tbody td.juris{font-family:var(--hmm-font-mono,'Raela Grotesque',monospace);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));white-space:nowrap;}
 tbody td.supports{font-size:12.5px;color:var(--hmm-text-muted,rgba(242,236,201,.62));}
 @media(max-width:560px){.src-title{font-size:27px;}.src-wrap{padding:14px 18px 70px;}}
+
+/* The separator between a category number and its name. It exists for two reasons: the
+   served text read "04 Market" with the number abutting the word, which trips the
+   retired four-market pattern in the estate's canon guard on a page that asserts nothing
+   of the kind, and the aria-label read "04Market" as one token. Both are fixed by putting
+   a real character between them, which also matches the "NN · Label" eyebrow already used
+   on the homepage. */
+.cat-sep{margin:0 .5em 0 .55em;color:var(--hmm-caption);font-weight:400;}
+
+/* A note under a category heading, where the list's relationship to a count stated elsewhere
+   needs saying. Added 2026-09-14 after two simulated readers counted the regulatory rows
+   against the thesis page's stated instrument count and found no explanation of the gap. */
+.src-note{font-size:12.5px;line-height:1.6;color:var(--hmm-caption);max-width:84ch;margin:0 0 18px;}

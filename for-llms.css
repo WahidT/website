@@ -1,6 +1,6 @@
 /* hmm site - for-llms page styles. Was the inline <style> in for-llms.html
    until 2026-09-07; moved so style-src-elem in _headers can be 'self'. */
-html{background:var(--hmm-evergreen);color-scheme:dark;}
+html{background:var(--hmm-field-dark);color-scheme:dark;}
 body{margin:0;padding:0;font-family:var(--hmm-font-body,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-pearl,var(--hmm-pearl-beige));}
 a{color:inherit;}
 .llm-top{padding:26px 30px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}

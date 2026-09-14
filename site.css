@@ -13,5 +13,5 @@
 }
 
 /* Keyboard users get a way past the fixed rail and straight to the content. */
-.skip-link{position:absolute;left:-9999px;top:10px;z-index:100;padding:10px 14px;background:var(--hmm-pearl,#F2ECC9);color:var(--hmm-evergreen,#141414);font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;}
+.skip-link{position:absolute;left:-9999px;top:10px;z-index:100;padding:10px 14px;background:var(--hmm-pearl,#F2ECC9);color:var(--hmm-field-dark,#141414);font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;}
 .skip-link:focus{left:10px;outline:2px solid var(--hmm-accent,#C44539);outline-offset:2px;}

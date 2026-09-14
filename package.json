@@ -7,12 +7,16 @@
     "serve": "python3 -m http.server 8791",
     "audit:mobile": "node scripts/mobile-audit.mjs",
     "check:figures": "node scripts/check-register-figures.mjs",
+    "canon:figures": "node scripts/canon-figures.mjs",
     "check:tokens": "node scripts/check-tokens.mjs",
     "check:affordances": "node scripts/check-affordances.mjs",
     "check:deadcss": "node scripts/check-dead-css.mjs",
     "check:deadjs": "node scripts/check-deadjs.mjs",
     "check:csp": "node scripts/csp-hashes.mjs --check",
-    "check:machines": "node scripts/check-machines.mjs"
+    "check:machines": "node scripts/check-machines.mjs",
+    "check:openers": "node scripts/check-opener-patterns.mjs",
+    "canon:strength": "node scripts/market-strength.mjs",
+    "dump:served": "node scripts/dump-served-text.mjs"
   },
   "devDependencies": {
     "playwright": "^1.62.1"
