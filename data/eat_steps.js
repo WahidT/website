@@ -83,7 +83,14 @@ var EAT_STEPS = {
         tense: "deployed",
         detail: "Autonomous planters (RL, vision, spatial) on the plant side; individual-animal identification and stocking analytics (computer vision, RFID time-series) on the animal side. Deployed."
       },
-      reg: "Autonomous-machinery safety, seed-treatment restrictions (EU neonicotinoid ban), animal-movement and traceability records, stocking-density welfare limits."
+/* The traceability clause was cut on 2026-09-14. This field renders on the page under
+   "Regulation · the gate", so it states what a company must clear to operate that stage,
+   and traceability is banned on every surface (GP 2026-07-26) with no positional
+   qualifier. The emissions and effluent limits elsewhere in these files are a different
+   class and stay: those are operating standards and a price instrument, and the rule on
+   them is that they never LEAD the regulation clock, which they do not. The three items
+   left here are all right-to-operate, which is what the clock is led with. */
+      reg: "Autonomous-machinery safety, seed-treatment restrictions (EU neonicotinoid ban), stocking-density welfare limits."
     },
     {
       id: "04",

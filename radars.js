@@ -278,7 +278,7 @@
         fill: "var(--hmm-text-muted,rgba(242,236,201,.6))"
       });
       lab.textContent = AXES[a];
-      g.appendChild(lab);
+      svg.appendChild(lab);
       var val = el("text", {
         "class": "axis-val", x: lx.toFixed(1), y: (ly + dy + 11).toFixed(1),
         "text-anchor": anchorFor(lx), "font-size": "9", "letter-spacing": ".04em",
@@ -566,10 +566,13 @@
       var fresh = hues();
       SERIES.forEach(function (n) { HUES[n] = fresh[n]; });
       PANELS.forEach(function (p) { p.dots.forEach(function (d) { d.hue = HUES[d.s]; }); });
+      /* The two hue-carrying elements per necessity. The polygon strokes and the rings read
+         CSS variables, so they re-resolve on a theme flip without help; these two are set
+         from HUES in JS and have to be re-pointed here. */
       Array.prototype.forEach.call(root.querySelectorAll(".series"), function (g) {
         var n = g.getAttribute("data-series"); if (!n || !HUES[n]) return;
-        Array.prototype.forEach.call(g.querySelectorAll(".radar-fill"), function (e) { e.setAttribute("fill", HUES[n]); });
-        Array.prototype.forEach.call(g.querySelectorAll(".radar-line"), function (e) { e.setAttribute("stroke", HUES[n]); });
+        Array.prototype.forEach.call(g.querySelectorAll(".radar-vtx"), function (e) { e.setAttribute("fill", HUES[n]); });
+        Array.prototype.forEach.call(g.querySelectorAll(".axis-val"), function (e) { e.setAttribute("fill", HUES[n]); });
       });
       Array.prototype.forEach.call(root.querySelectorAll(".radar-chip"), function (chip) {
         var sw = chip.querySelector(".swatch"), n = chip.getAttribute("data-series");

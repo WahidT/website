@@ -517,7 +517,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 #radars .radar-notes p{flex:1 1 280px;margin:0;font-family:var(--hmm-font-body,inherit);font-size:11px;line-height:1.6;color:var(--hmm-caption,rgba(242,236,201,.72));}
 #radars .radar-panel[data-focus] .series:not(.is-active){opacity:.12;}
 #radars .radar-panel[data-focus] .series.is-active .radar-fill{fill-opacity:.24;}
-#radars .radar-panel[data-focus] .series.is-active .radar-line{stroke-width:2.6;}
+#radars .radar-panel[data-focus] .series.is-active .radar-vtx{stroke:var(--hmm-pearl);stroke-width:1.2;}
 /* The drawing is capped rather than fluid. Width:100% with height:auto made it scale
    without limit, so at 2560px the resting panel stood 923px tall, and the hover expansion
    then took width off it and made the panel SHORTER, which put a dead strip along the
