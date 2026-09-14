@@ -545,3 +545,86 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   #radars .radar-panel:hover .radar-read,#radars .radar-panel:focus-within .radar-read{flex:1;opacity:1;max-height:420px;padding-left:22px;border-left:1px solid var(--hmm-border,rgba(242,236,201,.12));}
 }
 @media (prefers-reduced-motion:reduce){#radars .radar-panel,#radars .radar-body,#radars .radar-read{transition:none;}}
+
+/* ---------- S1b the fit: the ruled opener reads a size up from body prose ----------
+   The opener is the first thing on the page after the hero and it is read in seconds,
+   so its first paragraph carries the larger size and the rest of the block steps down
+   to the section's own scale. */
+.through-lead{font-size:22px!important;line-height:1.45!important;color:var(--hmm-pearl)!important;max-width:64ch!important;}
+
+/* The unit and the physical instance, one per necessity, in card A beneath the
+   definition. Set a step down from the definition it follows, because it answers a
+   narrower question: what the thing is, and what it is sold by. */
+.card-unit{margin-top:12px!important;padding-top:12px;border-top:1px solid var(--hmm-border);}
+
+/* The dating rule beneath the register sentence. Same scale as the sentence, muted
+   one step, because it explains how the count above it is taken. */
+.tl-note{font-size:13px;line-height:1.6;color:var(--hmm-caption);max-width:66ch;margin:-8px 0 18px;}
+
+/* ---------- S8 the screen: ten markets in, three out ---------- */
+.scr{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:96px 48px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);}
+.scr>*{width:min(1160px,100%);}
+.scr-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
+.scr-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 18px;line-height:1.06;}
+.scr-lead{display:grid;grid-template-columns:1fr 1fr;gap:10px 46px;margin:0 0 40px;}
+.scr-lead p{font-size:15px;line-height:1.65;color:var(--hmm-text-muted);margin:0;max-width:62ch;}
+.scr-lead p:first-child{color:var(--hmm-pearl);}
+
+/* The table scrolls inside its own box. The page body never scrolls sideways. */
+.scr-tablewrap{overflow-x:auto;margin:0 0 26px;}
+.scr-table{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.6;min-width:720px;}
+.scr-table caption{text-align:left;font-size:13px;line-height:1.6;color:var(--hmm-caption);padding:0 0 14px;max-width:78ch;}
+.scr-table th,.scr-table td{text-align:left;vertical-align:top;padding:12px 18px 12px 0;border-top:1px solid var(--hmm-border);}
+.scr-table thead th{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--hmm-caption);border-top:none;padding-bottom:8px;}
+.scr-table tbody th{font-family:var(--hmm-font-mono);letter-spacing:.04em;font-size:12px;color:var(--hmm-pearl);white-space:nowrap;padding-right:26px;}
+.scr-table td{color:var(--hmm-text-muted);}
+.scr-table td:first-of-type{max-width:52ch;}
+.scr-after{font-size:14px;line-height:1.65;color:var(--hmm-text-muted);max-width:80ch;margin:0;}
+
+/* ---------- S7 the three market paragraphs above the charts ---------- */
+.mkt-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin:0 0 26px;}
+.mkt-note h3{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--hmm-accent-text);margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--hmm-border);}
+.mkt-note p{font-size:13.5px;line-height:1.62;color:var(--hmm-text-muted);margin:0;}
+
+/* ---------- S10 the close: the one thing asked ---------- */
+.close{display:flex;flex-direction:column;align-items:center;padding:112px 48px 128px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);text-align:center;}
+.close>*{width:min(760px,100%);}
+.close-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
+.close-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:12px 0 20px;line-height:1.1;}
+.close-body p{font-size:16px;line-height:1.68;color:var(--hmm-text-muted);margin:0 auto 14px;max-width:62ch;}
+.close-cta{margin-top:30px!important;}
+.close-mail{font-family:var(--hmm-font-mono);font-size:18px;letter-spacing:.04em;color:var(--hmm-accent-text);text-decoration:none;border-bottom:1px solid var(--hmm-accent);padding-bottom:3px;transition:color .25s var(--hmm-ease),border-color .25s var(--hmm-ease);}
+.close-mail:hover,.close-mail:focus-visible{color:var(--hmm-pearl);border-color:var(--hmm-pearl);}
+
+/* ---------- the measured strip under each market chart ----------
+   Three rows, three owners, generated into data/market_strength.js. The value and its
+   denominator both print, because a bar without a visible denominator is a bar a reader
+   cannot check. --c is the market accent, set on the panel by radars.js from the market
+   tokens, so no colour is written here. */
+#radars .radar-meas{display:flex;flex-direction:column;gap:7px;margin:12px 0 4px;padding-top:12px;border-top:1px solid var(--hmm-border,rgba(242,236,201,.12));}
+#radars .meas-row{display:grid;grid-template-columns:1fr 1.15fr auto auto;align-items:center;gap:8px;font-size:10px;letter-spacing:.06em;}
+#radars .meas-lbl{text-transform:uppercase;letter-spacing:.13em;color:var(--hmm-caption);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#radars .meas-track{position:relative;height:5px;background:var(--hmm-surface-2,rgba(242,236,201,.08));overflow:hidden;}
+#radars .meas-bar{position:absolute;left:0;top:0;bottom:0;background:var(--c,var(--hmm-accent));transition:width .6s var(--hmm-ease);}
+#radars .meas-val{font-variant-numeric:tabular-nums;color:var(--hmm-pearl);letter-spacing:.02em;}
+#radars .meas-den{font-variant-numeric:tabular-nums;color:var(--hmm-caption);letter-spacing:.02em;white-space:nowrap;}
+
+/* The index rings and the printed vertex value. The two labelled rings are the reading,
+   so they take the solid stroke and the dashed ones stay quiet. */
+#radars .ring-lbl,#radars .axis-val{font-family:var(--hmm-font-mono,inherit);font-variant-numeric:tabular-nums;}
+#radars .axis-val{letter-spacing:.03em;}
+#radars .radar-vtx{transition:r .3s var(--hmm-ease),fill-opacity .3s var(--hmm-ease);}
+#radars .series.is-active .radar-vtx{r:4.2;fill-opacity:1;}
+#radars .radar-exi{pointer-events:none;}
+
+@media (max-width:1080px){
+  .scr-lead{grid-template-columns:1fr;gap:14px;}
+  .mkt-notes{grid-template-columns:1fr;gap:22px;}
+}
+@media (max-width:720px){
+  .scr{padding:72px 22px;}
+  .close{padding:84px 22px 96px;}
+  .through-lead{font-size:19px!important;}
+  #radars .meas-row{grid-template-columns:1fr auto auto;}
+  #radars .meas-track{display:none;}
+}

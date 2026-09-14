@@ -1,9 +1,25 @@
-/* S7 regulatory timeline - the AU/JP/NZ in-mandate register. 33 enforceable in force + 4 scheduled to 2030 + 9 frameworks.
+/* S7 regulatory timeline - the AU/JP/NZ in-mandate register. 31 enforceable in force
+   + 4 scheduled to 2030 + 9 frameworks, being 13 Australia, 11 Japan and 7 New Zealand.
    SOURCED 2026-07-20/21 to primary legislation (research agent), from:
      internal regulatory source pass,JP,NZ}_2026-07-20.md + Frameworks_and_Guidelines_2026-07-21.md.
     Names shortened for display; full titles + primary-source URLs in the source files.
    NOTE: BIOSECURE / FDA AI-enabled device authorisations / ICH Q13 / CMS waiver are US-global "why-now"
-   evidence (internal canon, section 3), NOT part of this register - kept separate to preserve the 14/11/8 arithmetic.
+   evidence (internal canon, section 3), NOT part of this register - kept separate to preserve the
+   13/11/7 arithmetic.
+
+   R-D29, 2026-09-14. Three rows left this file. The Safeguard Mechanism (Crediting) Amendment
+   Act 2023 and the Climate Change Response Act 2002 Part 4 emissions trading scheme left the
+   counted stack, because the carbon-accounting ban says never lead the regulation clock with an
+   emissions-accounting instrument and a counted instrument leads the clock. The Gulf centralised
+   registration procedure left the global reliance rows, because the Gulf is a hard geography ban
+   and a register row is a surface. The count is struck by count_reg_dates.py from the sourced
+   tables and every surface printing it moves with that computation, so the memorandum and this
+   file are one arithmetic: 31 in force, 14 of them post-2020 by operative date. The two removed
+   emissions rows are held verbatim at
+   hmm-ventures/Archive/2026-09-14_emissions_instruments_out_of_count/.
+   ⚠ The Gulf row carried global:true and sat outside the in-force count, so its removal moves no
+   figure while the two emissions rows move four. The three are one ruling and two classes.
+
    yr places the row on the axis; yr<2020 = the standing base. Forecast rows (status "expected") are
    real phased/expected milestones flagged by the sourcing pass, shown dashed in 2027+.
    op is the operative year of the obligation the row describes: the latest year in the commencement
@@ -11,9 +27,9 @@
    count_reg_dates.py applies, so the two counts are one computation. It is the only field that can carry
    the "operative since 2020" count in the page's lead sentence. yr cannot: it is a timeline position
    (Japan's feed-in premium sits on its 2012 parent statute for display and binds from 2022), and a count
-   taken on yr shipped fourteen against a sourced fifteen. op is null where the sourced cell carries no
-   year (the National Electricity Rules, continuously amended). Every in-market enforceable row carries it;
-   scripts/check-register-figures.mjs fails if one does not. */
+   taken on yr shipped one fewer than the sourced tables produce. op is null where the sourced cell
+   carries no year (the National Electricity Rules, continuously amended). Every in-market enforceable
+   row carries it; scripts/check-register-figures.mjs fails if one does not. */
 var REG_INSTRUMENTS = [
   // ---- standing base (pre-2020) ----
   {c:"JP",name:"JAS Act (agricultural standards)",body:"MAFF",date:"1950",yr:1950,op:2018,type:"enforceable",status:"effective",src:"https://laws.e-gov.go.jp/law/325AC0000000175",src_title:"JAS Act (Japanese Agricultural Standards, 175/1950)"},
@@ -29,7 +45,6 @@ var REG_INSTRUMENTS = [
   {c:"NZ",name:"Agricultural Compounds & Vet Medicines Act 1997",body:"MPI",date:"2001",yr:2001,op:2001,type:"enforceable",status:"effective",src:"https://www.legislation.govt.nz/act/public/1997/87/en/latest/",src_title:"Agricultural Compounds & Vet Medicines Act 1997"},
   {c:"NZ",name:"WAND scheme (Medical Devices Regs 2003)",body:"Medsafe",date:"2003",yr:2003,op:2003,type:"enforceable",status:"effective",src:"https://www.medsafe.govt.nz/regulatory/wand.asp",src_title:"Medicines (Database of Medical Devices) Regs 2003 · WAND"},
   {c:"JP",name:"Cartagena Act (GMO / biodiversity)",body:"MAFF / METI / MEXT",date:"2004",yr:2004,op:2004,type:"enforceable",status:"effective",src:"https://laws.e-gov.go.jp/law/415AC0000000097",src_title:"Cartagena Act (GMO / biodiversity, 97/2003)"},
-  {c:"NZ",name:"NZ ETS (Climate Change Response Act, Pt 4)",body:"EPA",date:"2008",yr:2008,op:2008,type:"enforceable",status:"effective",src:"https://www.legislation.govt.nz/act/public/2002/0040/latest/DLM1662481.html",src_title:"Climate Change Response Act 2002, Pt 4 · NZ ETS"},
   {c:"JP",name:"FIT / FIP renewable-electricity Act",body:"METI",date:"2012",yr:2012,op:2022,type:"enforceable",status:"effective",src:"https://laws.e-gov.go.jp/law/423AC0000000108",src_title:"FIT / FIP Renewable Electricity Act (108/2011)"},
   {c:"JP",name:"Food Labelling Act",body:"Consumer Affairs Agency",date:"2015",yr:2015,op:2015,type:"enforceable",status:"effective",src:"https://laws.e-gov.go.jp/law/425AC0000000070",src_title:"Food Labelling Act (70/2013)"},
   {c:"NZ",name:"Food Act 2014",body:"MPI",date:"2016",yr:2016,op:2016,type:"enforceable",status:"effective",src:"https://www.legislation.govt.nz/act/public/2014/32/en/latest/",src_title:"Food Act 2014"},
@@ -48,7 +63,6 @@ var REG_INSTRUMENTS = [
   {c:"JP",name:"Economic Security Promotion Act (critical minerals)",body:"Cabinet Office / METI",date:"Aug 2022",yr:2022,op:2022,type:"enforceable",status:"effective"},
   {c:"JP",name:"METI AI Governance Guidelines",body:"METI",date:"Jan 2022",yr:2022,type:"framework",status:"effective",src:"https://www.meti.go.jp/shingikai/mono_info_service/ai_shakai_jisso/pdf/20220128_1.pdf",src_title:"METI AI Governance Guidelines v1.1"},
   {c:"JP",name:"GX Promotion Act",body:"METI",date:"Jun 2023",yr:2023,op:2024,type:"enforceable",status:"effective"},
-  {c:"AU",name:"Safeguard Mechanism (Crediting) Amendment Act 2023",body:"Clean Energy Regulator",date:"Jul 2023",yr:2023,op:2023,type:"enforceable",status:"effective",src:"https://www.legislation.gov.au/C2023A00014",src_title:"Safeguard Mechanism (Crediting) Amendment Act 2023"},
   {c:"AU",name:"Food Standards Code 3.2.2A, food-safety tools",body:"FSANZ",date:"Dec 2023",yr:2023,op:2023,type:"enforceable",status:"effective",src:"https://www.foodstandards.gov.au/business/food-safety/overview-food-safety-management-tools",src_title:"Food Standards Code 3.2.2A"},
   {c:"JP",name:"METI Critical Minerals Strategy",body:"METI",date:"Jan 2023",yr:2023,type:"framework",status:"effective",src:"https://www.meti.go.jp/policy/economy/economic_security/metal/torikumihoshin.pdf",src_title:"METI Critical Minerals Strategy"},
   {c:"JP",name:"PMDA AI/ML Medical Device Guidance",body:"PMDA",date:"2023",yr:2023,type:"framework",status:"effective",src:"https://www.pmda.go.jp/files/000266100.pdf",src_title:"PMDA AI/ML Medical Device Evaluation Guidance"},
@@ -67,7 +81,6 @@ var REG_INSTRUMENTS = [
   {c:"AMER",name:"BIOSECURE Act",body:"US Congress",date:"Dec 2025",yr:2025,type:"enforceable",status:"enacted",global:true},
   {c:"CA",name:"Access Consortium reliance (Health Canada)",body:"Access Consortium",date:"2020",yr:2020,type:"framework",status:"effective",global:true},
   {c:"UKI",name:"UK MHRA reliance (Access Consortium)",body:"MHRA",date:"2020",yr:2020,type:"framework",status:"effective",global:true},
-  {c:"GCC",name:"GCC centralized registration procedure",body:"GCC-DR",date:"standing",yr:2019,type:"enforceable",status:"effective",global:true},
   {c:"EU",name:"EU AI Act (high-risk class)",body:"European Commission",date:"2024",yr:2024,type:"enforceable",status:"effective",global:true},
   {c:"EU",name:"EU Critical Raw Materials Act",body:"European Commission",date:"2024",yr:2024,type:"enforceable",status:"effective",global:true},
   {c:"GL",name:"ICH Q13 continuous manufacturing",body:"ICH",date:"2023",yr:2023,type:"enforceable",status:"effective",global:true},

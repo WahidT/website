@@ -12,11 +12,13 @@
                   uses the same function, so the two cannot disagree.
      SINCE 2020 = in force, with op (the operative year of the obligation) 2020 or later.
                   Counted on op and never on yr: yr is a timeline position, and a count taken
-                  on it shipped fourteen against the fifteen the sourced instrument tables
-                  produce, on one row (Japan's feed-in premium: 2012 parent statute on the
-                  axis, operative from 2022). Every in-force row must carry op, as a year or
-                  as null, so a row added without it fails here instead of dropping out of
-                  the count silently.
+                  on it comes out one short of what the sourced instrument tables produce, on
+                  one row (Japan's feed-in premium: 2012 parent statute on the axis, operative
+                  from 2022). Every in-force row must carry op, as a year or as null, so a row
+                  added without it fails here instead of dropping out of the count silently.
+                  The totals moved on 2026-09-14 under R-D29, when the two emissions-accounting
+                  instruments left the counted stack; count_reg_dates.py in the estate is the
+                  same computation and the two now agree at 31 in force, 14 of them post-2020.
      SCHEDULED  = in-market, year 2027-2030
 
    Usage: node scripts/check-register-figures.mjs        (exit 1 on mismatch) */
@@ -119,4 +121,61 @@ for (const k of Object.keys(pageFigs)) {
 console.log(tierBad ? `\n${tierBad} problem(s) in the tier-liquidity sentence against canon.`
                     : '\nall five figures in the tier-liquidity sentence match canon.');
 
-process.exit(bad || tierBad ? 1 : 0);
+/* ---------------------------------------------------------------------------
+   The per-market strength snapshot, against its two owners.
+
+   Same defect a third time, and the third surface is a chart rather than a sentence.
+   data/market_strength.js carries a per-market instrument count and a per-market
+   listing share, and the two come from different owners: the counts from
+   data/reg_instruments.js, the share from canon. A chart is the easiest place for a
+   figure to go stale, because nobody re-reads a bar. So the snapshot is recomputed here
+   from the register on every build and compared, and its canon half is compared against
+   live canon wherever the estate file is reachable. Neither side is restated.
+   --------------------------------------------------------------------------- */
+const MSMOD = await import('./market-strength.mjs');
+
+let msBad = 0;
+console.log('');
+{
+  const snap = MSMOD.readSnapshot();
+  const freshReg = MSMOD.readRegister();
+  for (const c of [...MSMOD.MARKETS, 'total']) {
+    if (c === 'total') {
+      const ok = snap.register.total === freshReg.total;
+      if (!ok) msBad++;
+      console.log(`${ok ? 'ok  ' : 'FAIL'}  strength total      snapshot ${String(snap.register.total).padStart(3)}   register ${String(freshReg.total).padStart(3)}`);
+      continue;
+    }
+    for (const k of ['inForce', 'since2020']) {
+      const ok = snap.register[c][k] === freshReg[c][k];
+      if (!ok) msBad++;
+      console.log(`${ok ? 'ok  ' : 'FAIL'}  strength ${(c + ' ' + k).padEnd(17)} snapshot ${String(snap.register[c][k]).padStart(3)}   register ${String(freshReg[c][k]).padStart(3)}`);
+    }
+  }
+
+  const msLive = MSMOD.readLiveCanon();
+  if (msLive) {
+    if (msLive.listing_prob !== snap.listing_prob) {
+      console.error(`FAIL  ${MSMOD.SNAPSHOT} listing_prob is behind ${msLive.path}. Run: node scripts/market-strength.mjs --write`);
+      msBad++;
+    } else {
+      console.log(`ok    ${MSMOD.SNAPSHOT} listing_prob matches canon compiled ${msLive.compiled}`);
+    }
+  } else {
+    console.log(`note  canon.json not reachable here; ${MSMOD.SNAPSHOT} listing_prob checked for shape only.`);
+  }
+  // The parse has to keep working whether or not canon is reachable, because the chart
+  // parses the same string in the browser.
+  try {
+    const shares = MSMOD.parseListingProb(snap.listing_prob);
+    console.log(`ok    listing share parses: AU ${shares.AU}% JP ${shares.JP}% NZ ${shares.NZ}%`);
+  } catch (e) {
+    console.error(`FAIL  ${e.message}`);
+    msBad++;
+  }
+}
+console.log(msBad ? `\n${msBad} problem(s) in the market-strength snapshot against its owners.`
+                  : '\nthe market-strength snapshot matches the register and canon.');
+
+
+process.exit(bad || tierBad || msBad ? 1 : 0);
