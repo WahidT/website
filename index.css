@@ -586,3 +586,20 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 /* The lead is one paragraph now, so the two-column lead grid collapses to one. */
 .scr-lead--one{grid-template-columns:1fr;}
 .scr-lead--one p{max-width:76ch;}
+
+/* Under 768px the rail collapses (GP 2026-09-15). At phone widths it sat over the body text,
+   because a 70px fixed column on a 375px screen leaves no gutter for the sections to give
+   back without squeezing the measure to 40 characters. The hero cards and the footer links
+   still reach every section, so nothing is unreachable, and the sections take back the
+   right-hand clearance the rail occupied. The mobile audit treats a rail that is not
+   displayed as having no tap targets. Kept at the end of the file so it wins over the
+   clearance blocks above. */
+@media(max-width:767px){
+  .railnav{display:none;}
+  .through,.ai,.mkt,.reg,.scr,.ask{padding-right:48px;}
+  .nec{padding-right:0;}
+  .site-footer{padding-right:0;}
+}
+@media(max-width:640px){
+  .through,.ai,.mkt,.reg,.scr,.ask{padding-right:20px;}
+}
