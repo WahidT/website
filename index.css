@@ -603,3 +603,11 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 @media(max-width:640px){
   .through,.ai,.mkt,.reg,.scr,.ask{padding-right:20px;}
 }
+
+/* Touch viewports from 768px to 1100px (an iPad held landscape) keep the rail, because the
+   measure has room for it, but the screen section's display-size title ran under the rail's
+   short labels at 1024px. The section gives back the rail's width at those sizes, which is
+   what the phone rule below 768px does for every section by hiding the rail instead. */
+@media (pointer:coarse) and (min-width:768px) and (max-width:1100px){
+  .scr,.mkt{padding-right:96px;}
+}
