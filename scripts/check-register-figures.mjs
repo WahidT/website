@@ -274,12 +274,13 @@ console.log('');
   else {
     const byKey = Object.fromEntries(R.map(r => [r.key, r]));
     const freshReg = MSMOD.readRegister();
+    const freshTotal = MSMOD.MARKETS.reduce((a, m) => a + freshReg[m].inForce, 0);
     const shares = MSMOD.parseListingProb(msSnap.listing_prob);
     for (const c of MSMOD.MARKETS) {
       const checks = [
         ['leads', byKey.leads.cells[c], nmCtx.__.leads[c]],
-        ['inforce', byKey.inforce.cells[c], String(freshReg[c].inForce)],
-        ['since2020', byKey.since2020.cells[c], String(freshReg[c].since2020)],
+        ['inforce', byKey.inforce.cells[c], ((freshReg[c].inForce * 100 / freshTotal).toFixed(1)) + '%'],
+        ['since2020', byKey.since2020.cells[c], ((freshReg[c].since2020 * 100 / freshReg[c].inForce).toFixed(1)) + '%'],
         ['listing', byKey.listing.cells[c], shares[c] + '%'],
         ['route', byKey.route.cells[c], parseFloat(shares[c]) > 50 ? 'Listing' : 'Trade sale'],
       ];
