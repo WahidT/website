@@ -3,8 +3,8 @@
    WHY THIS EXISTS. The prose gate, the retired-figure sweep and the scope sweeps were all
    being run over the static HTML, and on this site that reads roughly a quarter of the
    homepage. The necessity stage panels come from data/*_steps.js, the instrument timeline
-   rows from data/reg_instruments.js, the market charts and their captions from radars.js,
-   and the sourcing stream from catalogue.js. On 2026-09-14 the homepage measured 2,448
+   rows from data/reg_instruments.js, the market table from markets.js, and until
+   2026-09-15 a sourcing stream from catalogue.js. On 2026-09-14 the homepage measured 2,448
    words static and 9,308 rendered, so 6,860 words of served text had never been through a
    gate at all. A checker pointed at the wrong target reports something confident and wrong,
    which is the recurring failure shape on this estate.

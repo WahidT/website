@@ -1,7 +1,7 @@
 /* Captures one PNG per figure from a capture list, against the running dev server.
 
    WHY A LIST RATHER THAN A SWEEP. A selector sweep finds containers and gets the grain
-   wrong: it captures #radars as one picture when that box holds a bar stage and two
+   wrong: it captured #radars as one picture when that box held a bar stage and two
    tables, and it drops the register timeline because the timeline's own svg is fourteen
    pixels wide. The list is the decision about what counts as one figure; this file only
    carries it out.

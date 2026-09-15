@@ -245,4 +245,58 @@ if (!fs.existsSync('data/necessity_matrix.js')) {
 console.log(nmBad ? `\n${nmBad} problem(s) in the specialisation matrix. Run: node scripts/necessity-matrix.mjs --write`
                   : '\nevery specialisation index derives from its own base, and each lead is the strongest cell on the innovation row.');
 
-process.exit(tierBad || msBad || nmBad ? 1 : 0);
+/* ---------------------------------------------------------------------------
+   The market table, every derived cell against the data it was derived from.
+
+   R-D37 (2026-09-15) folded the market section into one table drawn by markets.js. Five of
+   its rows are figures or facts read from data files, and one of them, the exit route, is
+   DERIVED: listings lead where a market's listing share of winner exits is above half.
+   A derivation that runs only in the browser is a derivation nobody checks, so markets.js
+   exports its row builder on window and this block runs the same file under node, feeds
+   it the snapshots, and reconciles: leads against data/necessity_matrix.js, the two
+   register counts against a fresh count of data/reg_instruments.js, the share against the
+   canon string, and the route against the share it must follow. The static markup of the
+   section is also checked to carry no digit, because the rule for this section is that
+   nothing numeric is typed into index.html.
+   --------------------------------------------------------------------------- */
+let mtBad = 0;
+console.log('');
+{
+  const nmCtx = {};
+  new Function('window', fs.readFileSync('data/necessity_matrix.js', 'utf8') + '\nwindow.__ = NECESSITY_MATRIX;')(nmCtx);
+  const msSnap = MSMOD.readSnapshot();
+  const win = { MARKET_STRENGTH: msSnap, NECESSITY_MATRIX: nmCtx.__ };
+  new Function('window', 'document', fs.readFileSync('markets.js', 'utf8'))(win, undefined);
+  const rowsFn = win.hmmMarketRows;
+  if (typeof rowsFn !== 'function') { console.error('FAIL  markets.js did not export hmmMarketRows'); mtBad++; }
+  const R = rowsFn ? rowsFn(msSnap, nmCtx.__) : null;
+  if (!R) { console.error('FAIL  markets.js drew no rows from the snapshots'); mtBad++; }
+  else {
+    const byKey = Object.fromEntries(R.map(r => [r.key, r]));
+    const freshReg = MSMOD.readRegister();
+    const shares = MSMOD.parseListingProb(msSnap.listing_prob);
+    for (const c of MSMOD.MARKETS) {
+      const checks = [
+        ['leads', byKey.leads.cells[c], nmCtx.__.leads[c]],
+        ['inforce', byKey.inforce.cells[c], String(freshReg[c].inForce)],
+        ['since2020', byKey.since2020.cells[c], String(freshReg[c].since2020)],
+        ['listing', byKey.listing.cells[c], shares[c] + '%'],
+        ['route', byKey.route.cells[c], parseFloat(shares[c]) > 50 ? 'Listing' : 'Trade sale'],
+      ];
+      for (const [k, got, want] of checks) {
+        const ok = got === want;
+        if (!ok) mtBad++;
+        console.log(`${ok ? 'ok  ' : 'FAIL'}  table ${(c + ' ' + k).padEnd(14)} drawn ${String(got).padStart(10)}   owner ${String(want).padStart(10)}`);
+      }
+    }
+  }
+  const sec = home.match(/<section class="mkt" id="s7">([\s\S]*?)<\/section>/);
+  const typed = sec ? sec[1].replace(/<!--[\s\S]*?-->/g, '').replace(/<[^>]+>/g, ' ').match(/\d/g) : null;
+  if (!sec) { console.error('FAIL  the markets section was not found in index.html'); mtBad++; }
+  else if (typed) { console.error(`FAIL  the markets section markup types ${typed.length} digit(s); every figure in it must come from markets.js`); mtBad++; }
+  else console.log('ok    the markets section markup carries no typed digit');
+}
+console.log(mtBad ? `\n${mtBad} problem(s) in the market table against its owners.`
+                  : '\nevery derived cell of the market table matches the data it reads.');
+
+process.exit(tierBad || msBad || nmBad || mtBad ? 1 : 0);
