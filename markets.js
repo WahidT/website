@@ -49,9 +49,9 @@
     NZ: "No pre-market approval for a device. A sponsor notifies a database within 30 working days, the listing cannot be presented as an endorsement, and the record is earned offshore at a foreign regulator."
   };
   var GATE_TWO = {
-    AU: "Reimbursement. Registration reaches a Pharmaceutical Benefits Scheme listing in 466 days on Medicines Australia's 2016 to 2021 series of new molecular entities, against 384 days across twenty OECD countries. A diagnostic runs the same gate through the Medical Services Advisory Committee to an item number.",
-    JP: "Reimbursement listing, the fastest of the three on the same medicines series, so a medicine that clears the first gate reaches its listing far ahead of the Australian calendar.",
-    NZ: "The replacement regime. The Therapeutic Products Act 2023 was struck out before its main provisions commenced; a company deployed under the notification regime holds the record a replacement would ask for."
+    AU: "Pharmaceutical Benefits Scheme listing, 466 days from registration",
+    JP: "Reimbursement listing, the fastest of the three",
+    NZ: "Replacement regime, none in force"
   };
 
   function rows(MS, NM) {
@@ -66,7 +66,7 @@
         cells: per(function (c) { return NM.leads[c]; }) },
       { key: "gate1", label: "First gate, Heal", note: "what must be held before a sale is lawful",
         cells: GATE_ONE, prose: true },
-      { key: "gate2", label: "Second gate, Heal", note: "what must be cleared before the sale is paid for",
+      { key: "gate2", label: "Second gate, Heal", note: "what must be cleared before the sale is paid for; days on Medicines Australia's 2016 to 2021 series of new molecular entities, 384 across twenty OECD countries",
         cells: GATE_TWO, prose: true },
       { key: "route", label: "Exit route", note: "listings lead where more than half of a market's winner exits list",
         cells: per(function (c) { return routeOf(sh[c]); }) },
