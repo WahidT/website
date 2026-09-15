@@ -20,20 +20,20 @@ var ACCENT_TOKEN={power:["--hmm-nec-power","#FF730B"],eat:["--hmm-nec-eat","#4F8
 function accentOf(kind){return __T(ACCENT_TOKEN[kind][0],ACCENT_TOKEN[kind][1]);}
 var SCHEMATIC_MOUNTS=[];
 var SECCFG={
-  power:{eyebrow:"Necessity 01 · Power",sub:"Distribution transformer · exploded",title:'The transformer, in <em>blow-out</em>',dwg:"hmm-NEC-01-D5",
-    exEyebrow:"Why Power is a necessity",exTitle:"The energy system",
+  power:{title:'The transformer, in <em>blow-out</em>',
+    exTitle:"The energy system",
     exHTML:"The energy system is the process chain, or a subset of it, from the extraction of primary energy to the use of final energy to supply services and goods. hmm's mandate extends it to the critical-minerals layer that constrains that chain, because that is where the returnable innovation in energy materials sits.",
-    sysEyebrow:"The power system · end to end",
+    
     sysIntro:"One chain, resource to end use and back to recovery. hmm backs the whole system and picks no single stage of it; the return in energy materials concentrates in the critical-minerals layer beneath the chain.",},
-  eat:{eyebrow:"Necessity 02 · Eat",sub:"Harvest mechanism · pickup reel",title:'The reel, in <em>blow-out</em>',dwg:"hmm-NEC-02-D5",
-    exEyebrow:"Why Eat is a necessity",exTitle:"The food system",
+  eat:{title:'The reel, in <em>blow-out</em>',
+    exTitle:"The food system",
     exHTML:"The food system gathers all the elements and activities relating to the production, processing, distribution, preparation and consumption of food, and the outputs of those activities. Its three constituent elements are <b>food supply chains, food environments and consumer behaviour</b>.",
-    sysEyebrow:"The food system · end to end",
+    
     sysIntro:"Seed to mouth, and back to the soil as nutrient. The advance that pays back sits in the field-autonomy layer, not in any one link of the chain.",},
-  heal:{eyebrow:"Necessity 03 · Heal",sub:"Auto-injector · exploded",title:'The needle, in <em>blow-out</em>',dwg:"hmm-NEC-03-D5",
-    exEyebrow:"Why Heal is a necessity",exTitle:"The health system",
+  heal:{title:'The needle, in <em>blow-out</em>',
+    exTitle:"The health system",
     exHTML:"The health system is all <b>organizations, people and actions whose primary intent is to promote, restore or maintain health</b>. It is defined by intent rather than by chain, so it sits downstream of its determinants rather than containing them.",
-    sysEyebrow:"The health system · end to end",
+    
     sysIntro:"Discovery to recovery, one chain of care. Value concentrates at the diagnostic read-out, upstream where a returned life-year costs least.",}
 };
 
@@ -123,13 +123,13 @@ document.addEventListener('click',function(ev){if(!ev.target.closest('.blk')&&!e
 
 /* build each necessity section */
 ["power","eat","heal"].forEach(function(kind){var cfg=SECCFG[kind],sec=document.getElementById(kind);
-  var fig=(cfg.dwg.match(/NEC-(\d+)/)||[])[1]||"0", TK='<span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>';
+  var TK='<span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>';
   sec.innerHTML=''
-    +'<div class="stage"><div class="stage-head"><span class="stage-eyebrow">'+cfg.eyebrow+'</span></div>'
-    +'<div class="machine-wrap"></div><div class="stage-foot">DWG '+cfg.dwg+'</div></div>'
+    +'<div class="stage">'
+    +'<div class="machine-wrap"></div></div>'
     +'<div class="panel">'
-    +'<div class="card">'+TK+'<div class="card-hdr"><span class="card-id">FIG '+fig+'.A</span><span class="card-eyebrow">'+cfg.exEyebrow+'</span></div><h2>'+cfg.exTitle+'</h2><p>'+cfg.exHTML+'</p><p class="card-unit">'+(cfg.unitHTML||'')+'</p><div class="card-foot"><span>'+cfg.dwg+'</span></div></div>'
-    +'<div class="card">'+TK+'<div class="card-hdr"><span class="card-id">FIG '+fig+'.B</span><span class="card-eyebrow">'+cfg.sysEyebrow+'</span></div><div class="schematic-wrap"></div>'
+    +'<div class="card">'+TK+'<h2>'+cfg.exTitle+'</h2><p>'+cfg.exHTML+'</p><p class="card-unit">'+(cfg.unitHTML||'')+'</p></div>'
+    +'<div class="card">'+TK+'<div class="schematic-wrap"></div>'
     +'<div class="stage-panel" aria-live="polite"></div></div>'
     +'</div>';
   HMM.renderBlowout(sec.querySelector('.machine-wrap'),kind);
@@ -148,7 +148,12 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
   function e2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
   // lead sentence counts derive from the register. In force is REG_IN_FORCE, defined once in data/reg_instruments.js and shared with scripts/check-register-figures.mjs.
   // The since-2020 count reads op, the operative year, never yr, which is a timeline position (see the field note in data/reg_instruments.js).
-  (function(){var W=['zero','one','two','three','four','five','six','seven','eight','nine','ten'];var inf={AU:0,JP:0,NZ:0},s20=0,sched=0;REG_INSTRUMENTS.forEach(function(r){if(r.global)return;if(r.c!=='AU'&&r.c!=='JP'&&r.c!=='NZ')return;if(r.type!=='enforceable')return;if(REG_IN_FORCE(r)){inf[r.c]++;if(r.op>=2020)s20++;}else if(r.status==='expected'){sched++;}});var tot=inf.AU+inf.JP+inf.NZ,sub=document.querySelector('.tl-sub');if(sub&&tot)sub.textContent='hmm maps '+tot+' enforceable instruments in force across the three markets: '+inf.AU+' in Australia, '+inf.JP+' in Japan, '+inf.NZ+' in New Zealand, '+s20+' of them operative since 2020, with '+(W[sched]||sched)+' more scheduled between 2027 and 2030.';})();
+  /* The enacted-record sentence was removed on 2026-09-15 (GP). The block that wrote it
+     from the live register went with it, and so did its build guard, because a checker
+     pointed at a target that no longer exists reports clean and that is its worst output.
+     The counts are still drawn and still guarded: the market bars print 13, 11 and 7 over
+     a denominator of 31, from data/market_strength.js, which check-register-figures.mjs
+     reconciles against data/reg_instruments.js on every deploy. */
   var byYear={};REG_INSTRUMENTS.forEach(function(r){(byYear[r.yr]=byYear[r.yr]||[]).push(r);});
   function cTag(r){return '<span class="tl-c'+(r.global?' tl-c--global':'')+'">'+e2(r.c)+'</span>';}
   function row(r){return '<div class="tl-row u-panel tl-'+r.type+(r.global?' tl-global':'')+'" data-c="'+e2(r.c)+'">'+cTag(r)+'<span class="tl-date">'+e2(r.date)+'</span><span class="tl-name">'+e2(r.name)+'</span><span class="tl-org">'+e2(r.body)+'</span><span class="tl-status tl-st--'+r.status+'">'+e2(r.status)+'</span></div>';}

@@ -169,8 +169,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .nec{min-height:100vh;display:flex;align-items:stretch;color:var(--hmm-pearl);font-family:var(--hmm-font-body);}
 .stage{flex:0.8;position:relative;display:flex;flex-direction:column;padding:40px 28px 28px 44px;border-right:1px solid var(--hmm-border);min-width:0;order:1;}
 .nec[data-flip="1"] .stage{order:2;border-right:none;border-left:1px solid var(--hmm-border);padding:40px 44px 28px 28px;}
-.stage-head{display:flex;gap:14px;align-items:baseline;margin-bottom:6px;}
-.stage-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:13px;font-weight:700;}
 .stage .machine-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;}
 .stage .machine-wrap svg{width:100%;height:100%;max-height:82vh;overflow:visible;}
 .machine-wrap svg .callout{transition:transform .28s var(--hmm-ease);cursor:zoom-in;}
@@ -178,12 +176,10 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .machine-wrap svg .callout--R{transform-box:fill-box;transform-origin:0% 50%;}
 .machine-wrap svg .callout:hover,.machine-wrap svg .callout:focus-within{transform:scale(2.15);}
 .machine-wrap svg .callout:focus{outline:none;}
-.stage-foot{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.12em;color:var(--hmm-caption);}
 .nec[data-flip="1"] .stage-foot{text-align:right;}
 .panel{flex:1.42;display:flex;flex-direction:column;gap:22px;padding:56px 56px;justify-content:center;min-width:0;order:2;}
 .nec[data-flip="1"] .panel{order:1;}
 .card{border:1px solid var(--hmm-border);padding:26px 28px;position:relative;background:rgba(242,236,201,.02);}
-.card-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:var(--hmm-text-muted);margin-bottom:12px;}
 .card h2{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-lg);margin:0 0 10px;}
 .card p{margin:0;font-size:14px;line-height:1.6;color:var(--hmm-text-muted);}
 .card p b{color:var(--hmm-pearl);font-weight:600;}
@@ -214,7 +210,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .sec-eat   .stage-eyebrow,.sec-eat   .sp-name{color:var(--hmm-nec-eat-dark);}
 .sec-heal  .stage-eyebrow,.sec-heal  .sp-name{color:var(--hmm-nec-heal-dark);}
 /* ---------- lens intro + through-line ---------- */
-.through-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
 .through p b{color:var(--hmm-pearl);font-weight:600;}
 .through{padding:84px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
 .through p{font-size:18px;line-height:1.6;color:var(--hmm-text-muted);max-width:80ch;margin:14px 0 0;}
@@ -232,7 +227,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    it sits in, so every one of these blocks bled ~30px past its own content box on
    both sides below 1208px and ran under the fixed rail on the right. */
 .ai>*{width:min(1160px,100%);}
-.ai-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
 .ai-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;line-height:1.06;}
 /* ---------- S5 rebuilt: flow, figures, reading key ---------- */
 .ai-flow{display:flex;flex-direction:column;gap:44px;margin:4px 0 44px;}
@@ -271,7 +265,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 /* ---------- S7 markets + S8 density ---------- */
 .mkt{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:96px 48px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);}
 .mkt>*{width:min(1180px,100%);}
-.mkt-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
 .mkt-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;line-height:1.06;}
 .mkt-lead{font-size:15px;line-height:1.6;color:var(--hmm-text-muted);max-width:82ch;margin:0 0 14px;}
 /* ---------- S10 the record (infinite scroll) ---------- */
@@ -299,37 +292,27 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .sec-power .card .tk{border-color:var(--hmm-nec-power);}
 .sec-eat .card .tk{border-color:var(--hmm-nec-eat);}
 .sec-heal .card .tk{border-color:var(--hmm-nec-heal);}
-.card-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.card-hdr .card-eyebrow{margin-bottom:0;}
-.card-id{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.12em;border:1px solid var(--hmm-border);padding:2px 7px;flex:0 0 auto;}
 .sec-power .card-id{color:var(--hmm-nec-power-dark);border-color:var(--hmm-nec-power);}
 .sec-eat .card-id{color:var(--hmm-nec-eat-dark);border-color:var(--hmm-nec-eat);}
 .sec-heal .card-id{color:var(--hmm-nec-heal-dark);border-color:var(--hmm-nec-heal);}
-.card-foot{display:flex;margin-top:16px;border-top:1px solid var(--hmm-border);}
-.card-foot span{flex:1;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;color:var(--hmm-caption);padding:8px 10px;border-right:1px solid var(--hmm-border);}
-.card-foot span:last-child{border-right:0;text-align:right;}
 /* ---------- S6 regulation lens ---------- */
 .reg{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
-.reg-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
 .reg-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;}
 .reg-title em{font-style:italic;color:var(--hmm-accent);}
 .reg-plate{position:relative;flex:1;border:1px solid var(--hmm-border);border-top:2px solid var(--hmm-accent);padding:22px 26px 0;background:rgba(242,236,201,.02);}
 .reg-plate .tk{border-color:var(--hmm-accent);}
-.reg-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.reg-id{font-family:var(--hmm-font-mono);font-size:11px;letter-spacing:.12em;border:1px solid var(--hmm-accent);color:var(--hmm-accent-text);padding:2px 8px;flex:0 0 auto;}
-.reg-label{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--hmm-accent-text);}
 .reg-plate p{margin:0;font-size:13.5px;line-height:1.62;color:var(--hmm-text-muted);}
 .reg-plate--wide{padding-bottom:18px;}
 .reg-plate p b{color:var(--hmm-pearl);font-weight:600;}
-.reg-foot{display:flex;margin-top:16px;border-top:1px solid var(--hmm-border);}
-.reg-foot span{flex:1;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;color:var(--hmm-caption);padding:8px 10px;border-right:1px solid var(--hmm-border);}
-.reg-foot span:last-child{border-right:0;text-align:right;}
 .reg-split{display:flex;gap:40px;width:100%;align-items:flex-start;}
 .reg-left{flex:0 0 clamp(440px,40%,560px);display:flex;flex-direction:column;gap:16px;}
 .reg-glyph{margin:0;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);position:relative;}
 .reg-glyph canvas{display:block;width:100%;height:172px;}
 .reg-glyph figcaption{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:9px 14px;border-top:1px solid var(--hmm-border);}
-.reg-jobs{display:flex;flex-direction:row;gap:14px;align-items:stretch;}
+/* The two plates size to their own content since 2026-09-15. They were stretched to a
+   common height while each carried a footer that anchored its base; with the footers gone
+   the shorter plate read as a hollow box. */
+.reg-jobs{display:flex;flex-direction:row;gap:14px;align-items:flex-start;}
 .reg-jobs .reg-plate{padding-bottom:16px;}
 .reg-left .reg-close{width:auto;margin-top:2px;}
 .reg-right{flex:1;min-width:0;margin-left:auto;}
@@ -349,7 +332,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .tl-filters button.on{border-color:var(--hmm-accent);color:var(--hmm-pearl);background:rgba(196,69,57,.22);}
 .tl-hidden{display:none!important;}
 /* ---------- S7 regulatory timeline ---------- */
-.tl-sub{font-size:14px;line-height:1.6;color:var(--hmm-text-muted);max-width:66ch;margin:0 0 18px;}
 .tl-legend{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 28px;font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);}
 .tl-legend b{color:var(--hmm-text-muted);font-weight:400;}
 .tl-body{width:min(1140px,100%);position:relative;}
@@ -448,7 +430,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .tl-date,.tl-org,.tl-c{font-size:11.5px;}
   .tl-status,.rec-tag,.tl-stand-label,.tl-stand-item{font-size:11px;}
   .rec-what{font-size:14px;} .rec-meta{font-size:12px;}
-  .card-eyebrow,.reg-label{font-size:11.5px;}
   /* footer nav: real navigation (GP / Sources / Contact), give each link a 44px tap height */
   .site-footer{padding:32px 20px;}
   .footer-nav{gap:2px 22px;flex-wrap:wrap;}
@@ -462,7 +443,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .nec{justify-content:center;}
   .nec .stage,.nec[data-flip="1"] .stage{flex:0 1 640px;max-width:640px;}
   .nec .panel,.nec[data-flip="1"] .panel{flex:0 1 740px;max-width:740px;}
-  .reg-eyebrow,.reg-title,.reg-split{max-width:1440px;width:100%;box-sizing:border-box;margin-left:auto;margin-right:auto;}
+  .reg-title,.reg-split{max-width:1440px;width:100%;box-sizing:border-box;margin-left:auto;margin-right:auto;}
   .through>*{max-width:1360px;margin-left:auto;margin-right:auto;}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
@@ -507,12 +488,10 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 
 /* The dating rule beneath the register sentence. Same scale as the sentence, muted
    one step, because it explains how the count above it is taken. */
-.tl-note{font-size:13px;line-height:1.6;color:var(--hmm-caption);max-width:66ch;margin:-8px 0 18px;}
 
 /* ---------- S8 the screen: ten markets in, three out ---------- */
 .scr{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:96px 48px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);}
 .scr>*{width:min(1160px,100%);}
-.scr-eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--hmm-accent-text);}
 .scr-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 18px;line-height:1.06;}
 .scr-lead{display:grid;grid-template-columns:1fr 1fr;gap:10px 46px;margin:0 0 40px;}
 .scr-lead p{font-size:15px;line-height:1.65;color:var(--hmm-text-muted);margin:0;max-width:62ch;}
