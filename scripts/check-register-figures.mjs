@@ -299,4 +299,43 @@ console.log('');
 console.log(mtBad ? `\n${mtBad} problem(s) in the market table against its owners.`
                   : '\nevery derived cell of the market table matches the data it reads.');
 
-process.exit(tierBad || msBad || nmBad || mtBad ? 1 : 0);
+/* ---------------------------------------------------------------------------
+   The catalogue counts, against catalogue.js.
+
+   The sourcing section states how many companies and innovation items the map holds per
+   market (GP 2026-09-15, replacing the named-company stream). The page reads the figures
+   from data/catalogue_counts.js; this block recounts catalogue.js and fails when the
+   snapshot is behind it, and it also greps every served page for the names, because the
+   ruling is that no company name from the catalogue is served.
+   --------------------------------------------------------------------------- */
+let ccBad = 0;
+console.log('');
+{
+  const CC = await import('./catalogue-counts.mjs');
+  const fresh = CC.count(CC.readCatalogue());
+  const snap = CC.readSnapshot();
+  for (const c of [...CC.MARKETS, 'total']) {
+    for (const k of ['companies', 'innovations']) {
+      const ok = snap.counts[c][k] === fresh[c][k];
+      if (!ok) ccBad++;
+      console.log(`${ok ? 'ok  ' : 'FAIL'}  catalogue ${(c + ' ' + k).padEnd(18)} snapshot ${String(snap.counts[c][k]).padStart(4)}   counted ${String(fresh[c][k]).padStart(4)}`);
+    }
+  }
+  const names = CC.readCatalogue().flatMap(r => String(r.name).split(',').map(x => x.trim())).filter(n => n.length > 3);
+  /* sources.html is a bibliography: a company named there is the issuer or subject of a
+     cited source (a regulator's approval notice, a listed company's filing), which is a
+     citation and never the catalogue. It is reported, never failed. */
+  for (const page of ['index.html', 'bio.html', 'for-llms.html', 'instruments.html', '404.html', 'llms.txt', 'sources.html']) {
+    const text = fs.readFileSync(page, 'utf8').replace(/<script\b[\s\S]*?<\/script>/gi, ' ');
+    const hit = names.filter(n => new RegExp('(?<![\\w-])' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])').test(text));
+    if (!hit.length) continue;
+    if (page === 'sources.html') { console.log(`note  sources.html cites ${hit.join(', ')} as the issuer or subject of a source row`); continue; }
+    ccBad++; console.error(`FAIL  ${page} serves catalogue names: ${hit.slice(0, 6).join(', ')}${hit.length > 6 ? '...' : ''}`);
+  }
+  if (!ccBad) console.log('ok    no catalogue company name on any served page');
+  if (/src="catalogue/.test(home)) { ccBad++; console.error('FAIL  index.html still loads the catalogue or its stream'); }
+}
+console.log(ccBad ? `\n${ccBad} problem(s) in the catalogue counts.`
+                  : '\nthe catalogue counts match catalogue.js and no catalogued name is served.');
+
+process.exit(tierBad || msBad || nmBad || mtBad || ccBad ? 1 : 0);
