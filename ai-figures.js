@@ -1,7 +1,8 @@
-/* hmm site - S5 AI figures, dotted engineering register, organic motion.
-   05.1 two vectors of opposite sign that cancel; 05.2 (the load-bearing one) value pooling behind the
-   gate while erosion is turned away at it; 05.3 the FDA count 6 -> 295 as gates forming. Canvas, DPR-aware.
-   Honours prefers-reduced-motion (draws a settled still frame). */
+/* hmm site - the two canvas figures, dotted engineering register, organic motion.
+   figRecord (05): the record the next entrant must rebuild. regGate (06): value pooling behind
+   the gate. Canvas, DPR-aware. Honours prefers-reduced-motion (draws a settled still frame).
+   The three sourcing figures (formation, go-to-market, arbitrage) were removed on 2026-09-15:
+   their mounts existed on no page, so the builders ran for nothing. */
 (function(){
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* A token as an [r,g,b] triple for the canvas, parsed from the custom
@@ -93,54 +94,6 @@
       ctx.beginPath();ctx.moveTo(xLead,yC);ctx.lineTo(xLead+8,yC-3);ctx.lineTo(xLead+8,yC+3);ctx.closePath();ctx.fill();
       ctx.beginPath();ctx.moveTo(xT,yC);ctx.lineTo(xT-8,yC-3);ctx.lineTo(xT-8,yC+3);ctx.closePath();ctx.fill();
       mono(ctx,10);ctx.textAlign='center';ctx.fillStyle=rgba(C08,0.95);ctx.fillText("the barrier · years of record the model can't skip",(xLead+xT)/2,yC-9);
-    });
-  }
-
-  // ---- 09.A · enter at formation ----
-  var m4=mount('figFormation',280);
-  if(m4){
-    var stages=['FORMATION','ANGEL','SEED','SERIES A','SERIES B','EXIT'];
-    frame(m4,function(t){var ctx=m4.ctx,W=m4.W(),H=m4.H(),y=H*0.6,L=48,R=W-30,n=stages.length;
-      ticks(ctx,W,H);
-      for(var i=0;i<=64;i++){var x=L+(R-L)*(i/64);ctx.beginPath();ctx.arc(x,y,1,0,6.28);ctx.fillStyle=LINE;ctx.fill();}
-      stages.forEach(function(s,i){var x=L+(R-L)*(i/(n-1)),f=(i===0);
-        ctx.strokeStyle=f?ACC:'rgba(242,236,201,0.28)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y-6);ctx.lineTo(x,y+6);ctx.stroke();
-        mono(ctx,7.5);ctx.fillStyle=f?ACC:LBL;ctx.textAlign='center';ctx.fillText(s,x,y+20);});
-      ctx.strokeStyle=ACC;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(L,30);ctx.lineTo(L,y-8);ctx.stroke();
-      mono(ctx,10);ctx.fillStyle=ACC;ctx.textAlign='left';ctx.fillText('hmm enters',L+6,42);
-      var ox=L+(R-L)*(2/(n-1));ctx.setLineDash([2,3]);ctx.strokeStyle='rgba(242,236,201,0.28)';ctx.beginPath();ctx.moveTo(ox,52);ctx.lineTo(ox,y-8);ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle=LBL;ctx.fillText('others enter',ox+6,60);
-      for(var i=0;i<20;i++){var p=((t*0.1+i/20)%1),x=L+(R-L)*p,a=Math.sin(p*Math.PI);ctx.beginPath();ctx.arc(x,y-15,(i%6===0?2:1.2),0,6.28);ctx.fillStyle=rgba(PEARL,0.28+0.5*a);ctx.fill();}
-    });
-  }
-
-  // ---- 09.B · build the go-to-market ----
-  var m5=mount('figGTM',280);
-  if(m5){
-    frame(m5,function(t){var ctx=m5.ctx,W=m5.W(),H=m5.H(),cy=H*0.44;ticks(ctx,W,H);
-      function blob(cx,r,col,alpha,off,label,sub){for(var i=0;i<64;i++){var ang=i*2.399+off,rr=r*Math.sqrt((i%32)/32),x=cx+Math.cos(ang)*rr,yy=cy+Math.sin(ang)*rr+Math.sin(t*0.6+i)*0.5;ctx.beginPath();ctx.arc(x,yy,i%7===0?1.8:1.05,0,6.28);ctx.fillStyle=rgba(col,alpha);ctx.fill();}
-        mono(ctx,9);ctx.fillStyle=rgba(col,0.9);ctx.textAlign='center';ctx.fillText(label,cx,cy+r+18);ctx.fillStyle=LBL;ctx.fillText(sub,cx,cy+r+30);}
-      var x1=W*0.19,x2=W*0.5,x3=W*0.83;
-      blob(x1,30,PEARL,0.55,0,'BUILT','the technical half');
-      mono(ctx,15);ctx.fillStyle=LBL;ctx.textAlign='center';ctx.fillText('+',(x1+x2)/2,cy+3);
-      blob(x2,30,THESIS,0.5,1.3,'GO-TO-MARKET','hmm adds');
-      ctx.strokeStyle=ACC;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x2+40,cy);ctx.lineTo(x3-46,cy);ctx.stroke();
-      var ax=x3-46;ctx.fillStyle=ACC;ctx.beginPath();ctx.moveTo(ax,cy-4);ctx.lineTo(ax+6,cy);ctx.lineTo(ax,cy+4);ctx.fill();
-      blob(x3,37,PEARL,0.72,2.1,'GLOBAL','');   /* sub-label cut 2026-09-14; this renderer has no mount */
-    });
-  }
-
-  // ---- 09.C · entry priced at home, value realised offshore ----
-  var m6=mount('figArb',280);
-  if(m6){
-    frame(m6,function(t){var ctx=m6.ctx,W=m6.W(),H=m6.H(),base=H-42,x1=W*0.3,x2=W*0.7,bw=34,lowH=46,highH=H*0.6;ticks(ctx,W,H);
-      function bar(cx,h,col,label,sub){for(var yy=base;yy>base-h;yy-=7){for(var xx=cx-bw/2;xx<=cx+bw/2;xx+=7){ctx.beginPath();ctx.arc(xx,yy,1.15,0,6.28);ctx.fillStyle=rgba(col,0.6);ctx.fill();}}
-        mono(ctx,9);ctx.fillStyle=rgba(col,0.9);ctx.textAlign='center';ctx.fillText(label,cx,base+16);ctx.fillStyle=LBL;ctx.fillText(sub,cx,base+27);}
-      bar(x1,lowH,PEARL,'HOME','entry valuation');
-      bar(x2,highH,THESIS,'OFFSHORE','value realised');
-      ctx.strokeStyle=ACC;ctx.lineWidth=1;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(x1,base-lowH-6);ctx.lineTo(x2,base-highH-6);ctx.stroke();ctx.setLineDash([]);
-      mono(ctx,10);ctx.fillStyle=ACC;ctx.textAlign='center';ctx.fillText('the arbitrage',(x1+x2)/2,base-((lowH+highH)/2)-12);
-      for(var i=0;i<16;i++){var p=((t*0.12+i/16)%1),x=x1+(x2-x1)*p,y=(base-lowH-6)+((base-highH-6)-(base-lowH-6))*p;ctx.beginPath();ctx.arc(x,y,i%5===0?2:1.15,0,6.28);ctx.fillStyle=rgba(PEARL,0.28+0.5*Math.sin(p*Math.PI));ctx.fill();}
     });
   }
 

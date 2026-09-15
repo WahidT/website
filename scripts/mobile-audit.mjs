@@ -49,7 +49,9 @@ const probe = async touch => {
     await new Promise(r => setTimeout(r, 110));
     out.hOverflow = Math.max(out.hOverflow, document.documentElement.scrollWidth - document.documentElement.clientWidth);
 
-    if (rail && rail.classList.contains('is-on')) {
+    /* Under 768px the rail is collapsed by CSS (2026-09-15), so a rail that is not displayed
+       has nothing to overlap and no tap target to measure. */
+    if (rail && rail.classList.contains('is-on') && getComputedStyle(rail).display !== 'none') {
       const rr = rail.getBoundingClientRect();
       document.querySelectorAll('p,h1,h2,h3,li,.box-go,.tl-row,.card,.reg-plate').forEach(el => {
         const b = el.getBoundingClientRect();

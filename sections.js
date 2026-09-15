@@ -14,24 +14,27 @@ var LEDGERS={
 Object.keys(LEDGERS).forEach(function(nec){var ul=document.querySelector('.ledger[data-ledger="'+nec+'"]');LEDGERS[nec].forEach(function(r){var li=document.createElement('li');li.innerHTML='<span>'+r[0]+'</span>';ul.appendChild(li);});});
 ["power","eat","heal"].forEach(function(nec){HMM.renderIcon(document.querySelector('.machine[data-machine="'+nec+'"]'),nec);});
 
-/* ---------- necessity section content ---------- */
+/* ---------- necessity section content ----------
+   The card heading is the system's name, Power, Eat or Heal (GP 2026-09-15), because that is
+   the name the memorandum and every other page use; the definition sentence under it still
+   says which physical system the name stands for. */
 /* Token names, read at each render rather than captured here, so a data-theme flip reaches the next paint. */
 var ACCENT_TOKEN={power:["--hmm-nec-power","#FF730B"],eat:["--hmm-nec-eat","#4F8A5B"],heal:["--hmm-nec-heal","#8752A5"]};
 function accentOf(kind){return __T(ACCENT_TOKEN[kind][0],ACCENT_TOKEN[kind][1]);}
 var SCHEMATIC_MOUNTS=[];
 var SECCFG={
   power:{title:'The transformer, in <em>blow-out</em>',
-    exTitle:"The energy system",
+    exTitle:"Power",
     exHTML:"The energy system is the process chain, or a subset of it, from the extraction of primary energy to the use of final energy to supply services and goods. hmm's mandate extends it to the critical-minerals layer that constrains that chain, because that is where the returnable innovation in energy materials sits.",
     
     sysIntro:"One chain, resource to end use and back to recovery. hmm backs the whole system and picks no single stage of it; the return in energy materials concentrates in the critical-minerals layer beneath the chain.",},
   eat:{title:'The reel, in <em>blow-out</em>',
-    exTitle:"The food system",
+    exTitle:"Eat",
     exHTML:"The food system gathers all the elements and activities relating to the production, processing, distribution, preparation and consumption of food, and the outputs of those activities. Its three constituent elements are <b>food supply chains, food environments and consumer behaviour</b>.",
     
     sysIntro:"Seed to mouth, and back to the soil as nutrient. The advance that pays back sits in the field-autonomy layer, not in any one link of the chain.",},
   heal:{title:'The needle, in <em>blow-out</em>',
-    exTitle:"The health system",
+    exTitle:"Heal",
     exHTML:"The health system is all <b>organizations, people and actions whose primary intent is to promote, restore or maintain health</b>. It is defined by intent rather than by chain, so it sits downstream of its determinants rather than containing them.",
     
     sysIntro:"Discovery to recovery, one chain of care. Value concentrates at the diagnostic read-out, upstream where a returned life-year costs least.",}
@@ -103,7 +106,7 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
   var fw=vbW-4;
   e.unshift(h("rect",{key:"frame",x:2,y:2,width:fw,height:vbH-4,fill:"none",stroke:"rgba(242,236,201,.1)",strokeWidth:1}));
   [[2,2,9,9],[vbW-2,2,-9,9],[2,vbH-2,9,-9],[vbW-2,vbH-2,-9,-9]].forEach(function(t,ti){e.push(h("line",{key:"fa"+ti,x1:t[0],y1:t[1],x2:t[0]+t[2],y2:t[1],stroke:acc,strokeWidth:1}));e.push(h("line",{key:"fb"+ti,x1:t[0],y1:t[1],x2:t[0],y2:t[1]+t[3],stroke:acc,strokeWidth:1}));});
-  return h("svg",{viewBox:"0 0 "+vbW+" "+vbH,role:"img","aria-label":cfg.exTitle+", end to end, as a block schematic"},e);
+  return h("svg",{viewBox:"0 0 "+vbW+" "+vbH,role:"img","aria-label":cfg.exTitle+" system, end to end, as a block schematic"},e);
 }
 
 function showStage(kind,name){var cfg=SECCFG[kind],st=(cfg.data||{})[name];
@@ -234,6 +237,14 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
     if(window.__layoutSpine)window.__layoutSpine();
   }
   if(fbar){FILTERS.forEach(function(fl){if(fl[0]==='all'||fl[0]==='inmarket'||present[fl[0]]){var b=document.createElement('button');b.type='button';b.className='u-control';b.textContent=fl[1];b.setAttribute('data-f',fl[0]);b.setAttribute('aria-pressed','false');b.onclick=function(){applyFilter(fl[0]);};fbar.appendChild(b);}});applyFilter('all');}
+})();
+/* ---------- S9 the map, in counts ----------
+   One sentence stating how many companies and innovation items the catalogue holds per
+   market and how they were assembled. Every figure is read from data/catalogue_counts.js,
+   which scripts/catalogue-counts.mjs writes from catalogue.js and the build guard
+   reconciles; nothing numeric is typed here or in index.html. */
+(function(){var el=document.getElementById('s9map'),C=window.CATALOGUE_COUNTS&&window.CATALOGUE_COUNTS.counts;if(!el)return;if(!C){el.hidden=true;return;}
+  el.textContent='The map holds '+C.AU.companies+' companies in Australia, '+C.JP.companies+' in Japan and '+C.NZ.companies+' in New Zealand, exited, listed or still private in the three systems, beside '+C.total.innovations+' hardware, software and patent items. It was assembled in one pass in August 2026, from the fund\'s primary-sourced exit cohort and a web search of each market, and the founders inside it are reached before a round exists.';
 })();
 /* ---------- section rail: active marking + reveal ---------- */
 (function(){

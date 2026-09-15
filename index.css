@@ -1,8 +1,8 @@
 /* hmm site - the index page stylesheet. This was the 37 KB <style> block in
    index.html until 2026-09-07; it moved here so style-src-elem in _headers can be
    'self' with no 'unsafe-inline'. Loaded after site.css, in the position the
-   inline block held, so the cascade is unchanged. The #radars rules at the end
-   were a <style> element radars.js appended at render, which the same directive
+   inline block held, so the cascade is unchanged. The market rules at the end
+   were a <style> element the market script appended at render, which the same directive
    would block. */
 html{background:var(--hmm-field-dark);color-scheme:dark;}
 html{scroll-behavior:smooth;}
@@ -45,7 +45,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .u-panel a,.u-panel button{cursor:pointer;}
 
 /* ---------- hero ---------- */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;position:relative;}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;position:relative;border-top:1px solid var(--hmm-border);}
 .hero-logo{position:absolute;top:26px;left:30px;z-index:8;color:var(--hmm-pearl);display:block;transition:opacity .3s var(--hmm-ease),color .2s var(--hmm-ease);}
 .hero-logo svg{height:26px;width:auto;display:block;}
 .hero-logo:hover{color:var(--hmm-accent);}
@@ -57,7 +57,8 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   /* The hero stacks taller than the viewport on a phone, and centring overflow
      pushed the kicker off the top edge and under the logo. Flow from the top
      instead, with enough headroom for the absolutely-positioned logo. */
-  .hero{min-height:auto;justify-content:flex-start;padding:88px 0 56px;gap:28px;}
+  .hero{min-height:auto;justify-content:flex-start;padding:56px 0 56px;gap:28px;}
+  .through{min-height:auto;padding-top:88px;}
   .hero-row{flex-direction:column;height:auto;width:92vw;gap:16px;}
   .hero-row .box{min-height:260px;}
   .tl-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;padding:8px 10px;}
@@ -211,7 +212,10 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .sec-heal  .stage-eyebrow,.sec-heal  .sp-name{color:var(--hmm-nec-heal-dark);}
 /* ---------- lens intro + through-line ---------- */
 .through p b{color:var(--hmm-pearl);font-weight:600;}
-.through{padding:84px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
+/* The fit is the first screen since 2026-09-15, so it fills the viewport and the logo above
+   it sits in the page flow rather than on the hero. The border moved to the hero, which now
+   follows it. */
+.through{min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:84px 48px;color:var(--hmm-pearl);}
 .through p{font-size:18px;line-height:1.6;color:var(--hmm-text-muted);max-width:80ch;margin:14px 0 0;}
 #mandate{text-align:center;}
 #mandate p{margin:14px auto 0;}
@@ -247,9 +251,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .src-split{display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:start;margin-top:14px;}
 .src-prose{min-width:0;}
 .src-q{font-family:var(--hmm-font-display);font-weight:700;font-size:25px;line-height:1.22;color:var(--hmm-pearl);margin:14px 0 16px;}
-.src-after{font-size:13.5px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
 .src-q{max-width:24ch;}
-.src-after{max-width:56ch;}
 .src-move-body p{max-width:62ch;}
 .src-moves{border-left:1px solid var(--hmm-border);}
 .src-move{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:20px 0;align-items:start;}
@@ -257,29 +259,16 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .src-move-i{font-family:var(--hmm-font-mono);font-size:22px;color:var(--hmm-accent);line-height:1;padding-left:16px;}
 .src-move-body h3{font-family:var(--hmm-font-display);font-weight:700;font-size:16px;margin:0 0 7px;line-height:1.15;color:var(--hmm-pearl);}
 .src-move-body p{font-size:13.5px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
-.src-stream{position:relative;height:min(72vh,620px);overflow:hidden;border-top:1px solid var(--hmm-border);border-bottom:1px solid var(--hmm-border);
-  -webkit-mask-image:linear-gradient(180deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(180deg,transparent,#000 10%,#000 90%,transparent);}
+/* The right column held a scrolling stream of named companies until 2026-09-15. It now
+   holds one sentence of counts, read from data/catalogue_counts.js, set as a plate. */
 .src-reccol{min-width:0;position:sticky;top:100px;align-self:start;}
-.src-reccol .src-after{margin-top:18px;}
-@media(max-width:860px){.src-split{grid-template-columns:1fr;}.src-reccol{position:static;top:0;}.src-stream{height:min(60vh,480px);}.src-reccol .src-after{margin-top:14px;}}
+.src-map{margin:14px 0 0;padding:22px 24px;border:1px solid var(--hmm-border);border-top:2px solid var(--hmm-accent);background:rgba(242,236,201,.02);font-size:14.5px;line-height:1.62;color:var(--hmm-text-muted);}
+@media(max-width:860px){.src-split{grid-template-columns:1fr;}.src-reccol{position:static;top:0;}}
 /* ---------- S7 markets + S8 density ---------- */
 .mkt{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:96px 48px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);}
 .mkt>*{width:min(1180px,100%);}
 .mkt-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;line-height:1.06;}
-.mkt-lead{font-size:15px;line-height:1.6;color:var(--hmm-text-muted);max-width:82ch;margin:0 0 14px;}
-/* ---------- S10 the record (infinite scroll) ---------- */
-.rec-title .hk-nec{color:var(--hmm-accent);}
-.rec-track{position:absolute;top:0;left:0;right:0;will-change:transform;}
-.rec-row{display:flex;flex-wrap:wrap;gap:5px 12px;align-items:baseline;padding:7px 8px;border-bottom:1px solid rgba(242,236,201,.06);}
-.rec-m{flex:0 0 24px;font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.06em;}
-.rec-m--AU{color:var(--hmm-mkt-au-dark);}.rec-m--JP{color:var(--hmm-mkt-jp-dark);}.rec-m--NZ{color:var(--hmm-mkt-nz-dark);}
-.rec-tag{flex:0 0 auto;font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);}
-.rec-nec--Power{color:var(--hmm-nec-power-dark);}.rec-nec--Eat{color:var(--hmm-nec-eat-dark);}.rec-nec--Heal{color:var(--hmm-nec-heal-dark);}.rec-nec--DeepTech{color:var(--hmm-caption);}
-.rec-name{font-size:13.5px;color:var(--hmm-pearl);}
-.rec-name sup{color:var(--hmm-accent);font-size:9px;margin-left:1px;}
-.rec-meta{font-family:var(--hmm-font-mono);font-size:10.5px;color:var(--hmm-text-muted);letter-spacing:.02em;}
-.rec-what{font-size:12.5px;line-height:1.4;color:var(--hmm-text-muted);flex-basis:100%;padding-left:36px;}
-@media(prefers-reduced-motion:reduce){.rec-track{position:static;}}
+.mkt-lead{font-size:15px;line-height:1.6;color:var(--hmm-text-muted);max-width:82ch;margin:0 0 14px;align-self:flex-start;}
 .tk{position:absolute;width:9px;height:9px;pointer-events:none;}
 .tk--tl{left:6px;top:6px;border-top:1px solid;border-left:1px solid;}
 .tk--tr{right:6px;top:6px;border-top:1px solid;border-right:1px solid;}
@@ -380,7 +369,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    the 48px these sections carry left 28px of every one of them underneath it. The
    640px block below keeps its own 66px, tuned to the 68px the rail is down there. */
 @media (hover:none),(pointer:coarse){
-  .through,.ai,.mkt,.reg,.nec,.scr{padding-right:78px;}
+  .through,.ai,.mkt,.reg,.nec,.scr,.ask{padding-right:78px;}
   .site-footer{padding-right:78px;}
 }
 @media(max-width:1040px){
@@ -401,7 +390,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .tl-filters button{min-height:44px;padding:11px 14px;}
 }
 @media(max-width:640px){
-  .through,.ai,.mkt,.reg,.nec,.scr{padding-left:20px;padding-right:66px;}
+  .through,.ai,.mkt,.reg,.nec,.scr,.ask{padding-left:20px;padding-right:66px;}
   .site-footer{padding-right:66px;}
   .hero-row{width:calc(100vw - 86px);}
   .ai,.mkt{padding-top:64px;padding-bottom:64px;}
@@ -428,8 +417,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   /* legibility: nothing that carries meaning drops below ~11px, core reading copy sits at 14-15px */
   .tl-name{font-size:14px;}
   .tl-date,.tl-org,.tl-c{font-size:11.5px;}
-  .tl-status,.rec-tag,.tl-stand-label,.tl-stand-item{font-size:11px;}
-  .rec-what{font-size:14px;} .rec-meta{font-size:12px;}
+  .tl-status,.tl-stand-label,.tl-stand-item{font-size:11px;}
   /* footer nav: real navigation (GP / Sources / Contact), give each link a 44px tap height */
   .site-footer{padding:32px 20px;}
   .footer-nav{gap:2px 22px;flex-wrap:wrap;}
@@ -448,32 +436,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
 
-/* ---------- radars: the three market hexagons (radars.js) ----------
-   Same treatment as the three necessity cards: hover expands the panel and
-   opens its prose beside the chart, siblings give up width and dim. Gated on
-   a real pointer for the same reason the hero is - :hover sticks on touch, so
-   a phone would keep whichever panel was tapped last expanded for good.
-   :focus-within carries it for the keyboard: the legend chips inside each
-   panel are focusable, so tabbing in opens that panel's prose.
-   Unlike the hero, the shrinking siblings hold labelled charts rather than a
-   drawing, so they get a 210px floor and the whole gesture is held back until
-   1100px - below that the prose simply sits under its chart, always readable,
-   which is what touch gets too. */
-  transition:flex .5s var(--hmm-ease),opacity .4s var(--hmm-ease),background .3s var(--hmm-ease),border-color .3s var(--hmm-ease);}
-  padding:3px 8px;cursor:pointer;font:inherit;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-text-muted,rgba(242,236,201,.6));}
-/* the lead necessity: marked in text on the chip, never in colour alone */
-/* specialisation matrix: two rows off one catalogue, three necessities, lead in the panel accent */
-/* the two captions under the three panels */
-/* The drawing is capped rather than fluid. Width:100% with height:auto made it scale
-   without limit, so at 2560px the resting panel stood 923px tall, and the hover expansion
-   then took width off it and made the panel SHORTER, which put a dead strip along the
-   bottom edge: hovering there collapsed the panel out from under the pointer and the
-   state oscillated. The canvas overlays the stage at 100%, so capping the stage keeps
-   the dots registered against the labels. */
-  background:var(--hmm-surface-solid);border:1px solid var(--hmm-border,rgba(242,236,201,.18));border-top:2px solid var(--hmm-accent);padding:9px 12px;box-sizing:border-box;
-  font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);font-size:11px;line-height:1.5;color:var(--hmm-text-muted,rgba(242,236,201,.72));max-width:260px;}
-@media (hover:hover) and (pointer:fine) and (min-width:1100px){
-}
 
 /* ---------- S1b the fit: the ruled opener reads a size up from body prose ----------
    The opener is the first thing on the page after the hero and it is read in seconds,
@@ -499,25 +461,18 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 
 /* The table scrolls inside its own box. The page body never scrolls sideways. */
 
-/* ---------- S7 the three market paragraphs above the charts ---------- */
-.mkt-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin:0 0 26px;}
-.mkt-note h3{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--hmm-accent-text);margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--hmm-border);}
-.mkt-note p{font-size:13.5px;line-height:1.62;color:var(--hmm-text-muted);margin:0;}
 
 /* ---------- S10 the close: the one thing asked ---------- */
-
-/* ---------- the measured strip under each market chart ----------
-   Three rows, three owners, generated into data/market_strength.js. The value and its
-   denominator both print, because a bar without a visible denominator is a bar a reader
-   cannot check. --c is the market accent, set on the panel by radars.js from the market
-   tokens, so no colour is written here. */
-
-/* The index rings and the printed vertex value. The two labelled rings are the reading,
-   so they take the solid stroke and the dashed ones stay quiet. */
+.ask{padding:96px 48px 110px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);display:flex;flex-direction:column;align-items:center;text-align:center;}
+.ask>*{width:min(880px,100%);}
+.ask-lead{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);line-height:1.12;margin:0 0 22px;}
+.ask-line{font-size:17px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
+.ask-line a{color:var(--hmm-accent-text);text-decoration:none;border-bottom:1px solid var(--hmm-accent);}
+.ask-line a:hover,.ask-line a:focus-visible{color:var(--hmm-pearl);}
+.footer-contact[href^="mailto:"]{text-transform:none;letter-spacing:.04em;}
 
 @media (max-width:1080px){
   .scr-lead{grid-template-columns:1fr;gap:14px;}
-  .mkt-notes{grid-template-columns:1fr;gap:22px;}
 }
 @media (max-width:720px){
   /* Left and block padding only. The right padding is the rail clearance and it is
@@ -527,40 +482,25 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .through-lead{font-size:19px!important;}
 }
 
-/* ---------- S7 market strength: nine dotted bars, one scale per group ----------
-   Replaces the three radar panels. The dots are SVG circles on the site's one physics
-   engine (window.hmmAnimateDots), so opacity is set here by class rather than as an
-   attribute in radars.js: a bare decimal in that file can collide with a retired
-   multiple in the estate's canon guard. */
-#radars{font-family:var(--hmm-font-mono,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-text);position:relative;width:100%;margin:6px 0 14px;}
-#radars[data-state="no-data"]{display:none;}
-#radars .mkt-bars{margin:0;padding:0;}
-#radars .bars-stage{width:100%;}
-#radars .bars-svg{display:block;width:100%;height:auto;overflow:visible;touch-action:manipulation;}
-#radars .bars-axis{font-family:var(--hmm-font-mono,inherit);text-transform:uppercase;}
-#radars .bars-den,#radars .bars-mkt,#radars .bars-val{font-family:var(--hmm-font-mono,inherit);font-variant-numeric:tabular-nums;}
-#radars .bars-val{font-weight:600;}
-#radars .bd{opacity:.66;}
-#radars .bd--big{opacity:.95;}
-#radars .bars-cap-mark{opacity:.9;}
-#radars .bars-cap{margin:14px 0 0;font-family:var(--hmm-font-body,inherit);font-size:13px;line-height:1.55;color:var(--hmm-caption);max-width:86ch;}
-#radars .bars-tablewrap{overflow-x:auto;margin:26px 0 0;}
-#radars .bars-read,#radars .bars-spec{width:100%;border-collapse:collapse;font-size:12px;min-width:420px;}
-#radars .bars-read caption,#radars .bars-spec caption{text-align:left;font-size:12px;line-height:1.55;color:var(--hmm-caption);padding:0 0 10px;max-width:86ch;}
-#radars .bars-read th,#radars .bars-read td,#radars .bars-spec th,#radars .bars-spec td{text-align:right;padding:7px 10px;border-top:1px solid var(--hmm-border);font-variant-numeric:tabular-nums;font-weight:400;}
-#radars .bars-read thead th,#radars .bars-spec thead th{text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:var(--hmm-caption);border-top:none;}
-#radars .bars-read tbody th,#radars .bars-spec tbody th{text-align:left;text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:var(--hmm-text-muted);}
-#radars .bars-spec .spec-basis{vertical-align:top;color:var(--hmm-accent-text);letter-spacing:.12em;}
-#radars .bars-spec .spec-lead{text-align:left;color:var(--hmm-accent-text);text-transform:uppercase;letter-spacing:.1em;font-size:10px;}
-#radars .bars-spec .is-lead{color:var(--hmm-text);font-weight:600;}
-/* The base each index rests on, set small and muted so it reads as an annotation on the
-   figure rather than a second figure. It is the reason the index prints to one decimal. */
-#radars .bars-spec .spec-n{display:inline-block;margin-left:6px;min-width:2ch;font-size:10px;color:var(--hmm-text-faint);}
+/* ---------- S7 the three markets as one table (markets.js, R-D37 2026-09-15) ----------
+   Row labels carry a one-line note under them so the table explains its own rows and no
+   prose is needed beside it. Figure cells are tabular; the two gate rows are short prose.
+   The table scrolls inside its own box, so the page body never scrolls sideways. */
+#markets{width:100%;margin:6px 0 18px;color:var(--hmm-text);}
+#markets[data-state="no-data"]{display:none;}
+#markets .mkt-tablewrap{overflow-x:auto;}
+#markets .mkt-table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px;}
+#markets .mkt-table caption{text-align:left;font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:0 0 12px;}
+#markets .mkt-table th,#markets .mkt-table td{text-align:left;vertical-align:top;padding:12px 14px;border-top:1px solid var(--hmm-border);}
+#markets .mkt-table thead th{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--hmm-accent-text);border-top:none;padding-bottom:10px;}
+#markets .mkt-table tbody th{width:19%;font-weight:400;}
+#markets .mkt-rowlabel{display:block;font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;color:var(--hmm-pearl);}
+#markets .mkt-rownote{display:block;margin-top:5px;font-size:11.5px;line-height:1.45;color:var(--hmm-caption);max-width:22ch;}
+#markets .mkt-fig{font-family:var(--hmm-font-mono);font-variant-numeric:tabular-nums;font-size:15px;font-weight:600;color:var(--hmm-pearl);}
+#markets .mkt-prose{font-size:12.5px;line-height:1.55;color:var(--hmm-text-muted);max-width:34ch;}
 @media (max-width:720px){
-  #radars .bars-svg{min-width:560px;}
-  #radars .bars-stage{overflow-x:auto;}
-  #radars .bars-read,#radars .bars-spec{font-size:11px;min-width:400px;}
-  #radars .bars-read caption,#radars .bars-spec caption{max-width:88vw;}
+  #markets .mkt-table{font-size:12px;min-width:640px;}
+  #markets .mkt-table th,#markets .mkt-table td{padding:10px 10px;}
 }
 
 /* ---------- S8 the screen: ten markets in, three out ----------
@@ -646,3 +586,28 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 /* The lead is one paragraph now, so the two-column lead grid collapses to one. */
 .scr-lead--one{grid-template-columns:1fr;}
 .scr-lead--one p{max-width:76ch;}
+
+/* Under 768px the rail collapses (GP 2026-09-15). At phone widths it sat over the body text,
+   because a 70px fixed column on a 375px screen leaves no gutter for the sections to give
+   back without squeezing the measure to 40 characters. The hero cards and the footer links
+   still reach every section, so nothing is unreachable, and the sections take back the
+   right-hand clearance the rail occupied. The mobile audit treats a rail that is not
+   displayed as having no tap targets. Kept at the end of the file so it wins over the
+   clearance blocks above. */
+@media(max-width:767px){
+  .railnav{display:none;}
+  .through,.ai,.mkt,.reg,.scr,.ask{padding-right:48px;}
+  .nec{padding-right:0;}
+  .site-footer{padding-right:0;}
+}
+@media(max-width:640px){
+  .through,.ai,.mkt,.reg,.scr,.ask{padding-right:20px;}
+}
+
+/* Touch viewports from 768px to 1100px (an iPad held landscape) keep the rail, because the
+   measure has room for it, but the screen section's display-size title ran under the rail's
+   short labels at 1024px. The section gives back the rail's width at those sizes, which is
+   what the phone rule below 768px does for every section by hiding the rail instead. */
+@media (pointer:coarse) and (min-width:768px) and (max-width:1100px){
+  .scr,.mkt{padding-right:96px;}
+}

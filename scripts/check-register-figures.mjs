@@ -245,4 +245,97 @@ if (!fs.existsSync('data/necessity_matrix.js')) {
 console.log(nmBad ? `\n${nmBad} problem(s) in the specialisation matrix. Run: node scripts/necessity-matrix.mjs --write`
                   : '\nevery specialisation index derives from its own base, and each lead is the strongest cell on the innovation row.');
 
-process.exit(tierBad || msBad || nmBad ? 1 : 0);
+/* ---------------------------------------------------------------------------
+   The market table, every derived cell against the data it was derived from.
+
+   R-D37 (2026-09-15) folded the market section into one table drawn by markets.js. Five of
+   its rows are figures or facts read from data files, and one of them, the exit route, is
+   DERIVED: listings lead where a market's listing share of winner exits is above half.
+   A derivation that runs only in the browser is a derivation nobody checks, so markets.js
+   exports its row builder on window and this block runs the same file under node, feeds
+   it the snapshots, and reconciles: leads against data/necessity_matrix.js, the two
+   register counts against a fresh count of data/reg_instruments.js, the share against the
+   canon string, and the route against the share it must follow. The static markup of the
+   section is also checked to carry no digit, because the rule for this section is that
+   nothing numeric is typed into index.html.
+   --------------------------------------------------------------------------- */
+let mtBad = 0;
+console.log('');
+{
+  const nmCtx = {};
+  new Function('window', fs.readFileSync('data/necessity_matrix.js', 'utf8') + '\nwindow.__ = NECESSITY_MATRIX;')(nmCtx);
+  const msSnap = MSMOD.readSnapshot();
+  const win = { MARKET_STRENGTH: msSnap, NECESSITY_MATRIX: nmCtx.__ };
+  new Function('window', 'document', fs.readFileSync('markets.js', 'utf8'))(win, undefined);
+  const rowsFn = win.hmmMarketRows;
+  if (typeof rowsFn !== 'function') { console.error('FAIL  markets.js did not export hmmMarketRows'); mtBad++; }
+  const R = rowsFn ? rowsFn(msSnap, nmCtx.__) : null;
+  if (!R) { console.error('FAIL  markets.js drew no rows from the snapshots'); mtBad++; }
+  else {
+    const byKey = Object.fromEntries(R.map(r => [r.key, r]));
+    const freshReg = MSMOD.readRegister();
+    const shares = MSMOD.parseListingProb(msSnap.listing_prob);
+    for (const c of MSMOD.MARKETS) {
+      const checks = [
+        ['leads', byKey.leads.cells[c], nmCtx.__.leads[c]],
+        ['inforce', byKey.inforce.cells[c], String(freshReg[c].inForce)],
+        ['since2020', byKey.since2020.cells[c], String(freshReg[c].since2020)],
+        ['listing', byKey.listing.cells[c], shares[c] + '%'],
+        ['route', byKey.route.cells[c], parseFloat(shares[c]) > 50 ? 'Listing' : 'Trade sale'],
+      ];
+      for (const [k, got, want] of checks) {
+        const ok = got === want;
+        if (!ok) mtBad++;
+        console.log(`${ok ? 'ok  ' : 'FAIL'}  table ${(c + ' ' + k).padEnd(14)} drawn ${String(got).padStart(10)}   owner ${String(want).padStart(10)}`);
+      }
+    }
+  }
+  const sec = home.match(/<section class="mkt" id="s7">([\s\S]*?)<\/section>/);
+  const typed = sec ? sec[1].replace(/<!--[\s\S]*?-->/g, '').replace(/<[^>]+>/g, ' ').match(/\d/g) : null;
+  if (!sec) { console.error('FAIL  the markets section was not found in index.html'); mtBad++; }
+  else if (typed) { console.error(`FAIL  the markets section markup types ${typed.length} digit(s); every figure in it must come from markets.js`); mtBad++; }
+  else console.log('ok    the markets section markup carries no typed digit');
+}
+console.log(mtBad ? `\n${mtBad} problem(s) in the market table against its owners.`
+                  : '\nevery derived cell of the market table matches the data it reads.');
+
+/* ---------------------------------------------------------------------------
+   The catalogue counts, against catalogue.js.
+
+   The sourcing section states how many companies and innovation items the map holds per
+   market (GP 2026-09-15, replacing the named-company stream). The page reads the figures
+   from data/catalogue_counts.js; this block recounts catalogue.js and fails when the
+   snapshot is behind it, and it also greps every served page for the names, because the
+   ruling is that no company name from the catalogue is served.
+   --------------------------------------------------------------------------- */
+let ccBad = 0;
+console.log('');
+{
+  const CC = await import('./catalogue-counts.mjs');
+  const fresh = CC.count(CC.readCatalogue());
+  const snap = CC.readSnapshot();
+  for (const c of [...CC.MARKETS, 'total']) {
+    for (const k of ['companies', 'innovations']) {
+      const ok = snap.counts[c][k] === fresh[c][k];
+      if (!ok) ccBad++;
+      console.log(`${ok ? 'ok  ' : 'FAIL'}  catalogue ${(c + ' ' + k).padEnd(18)} snapshot ${String(snap.counts[c][k]).padStart(4)}   counted ${String(fresh[c][k]).padStart(4)}`);
+    }
+  }
+  const names = CC.readCatalogue().flatMap(r => String(r.name).split(',').map(x => x.trim())).filter(n => n.length > 3);
+  /* sources.html is a bibliography: a company named there is the issuer or subject of a
+     cited source (a regulator's approval notice, a listed company's filing), which is a
+     citation and never the catalogue. It is reported, never failed. */
+  for (const page of ['index.html', 'bio.html', 'for-llms.html', 'instruments.html', '404.html', 'llms.txt', 'sources.html']) {
+    const text = fs.readFileSync(page, 'utf8').replace(/<script\b[\s\S]*?<\/script>/gi, ' ');
+    const hit = names.filter(n => new RegExp('(?<![\\w-])' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])').test(text));
+    if (!hit.length) continue;
+    if (page === 'sources.html') { console.log(`note  sources.html cites ${hit.join(', ')} as the issuer or subject of a source row`); continue; }
+    ccBad++; console.error(`FAIL  ${page} serves catalogue names: ${hit.slice(0, 6).join(', ')}${hit.length > 6 ? '...' : ''}`);
+  }
+  if (!ccBad) console.log('ok    no catalogue company name on any served page');
+  if (/src="catalogue/.test(home)) { ccBad++; console.error('FAIL  index.html still loads the catalogue or its stream'); }
+}
+console.log(ccBad ? `\n${ccBad} problem(s) in the catalogue counts.`
+                  : '\nthe catalogue counts match catalogue.js and no catalogued name is served.');
+
+process.exit(tierBad || msBad || nmBad || mtBad || ccBad ? 1 : 0);
