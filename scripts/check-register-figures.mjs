@@ -38,34 +38,15 @@ if (missingOp.length) {
   for (const r of missingOp) console.error(`  ${r.c}  ${r.name}`);
   process.exit(1);
 }
-const byCountry = c => inForce.filter(r => r.c === c).length;
-const actual = {
-  total: inForce.length,
-  AU: byCountry('AU'), JP: byCountry('JP'), NZ: byCountry('NZ'),
-  since2020: inForce.filter(r => r.op !== null && r.op >= 2020).length,
-  scheduled: R.filter(r => !r.global && r.yr >= 2027 && r.yr <= 2030).length,
-};
+/* The enacted-record sentence was removed from index.html on 2026-09-15 (GP), so the block
+   that checked its six figures went with it. A guard whose target no longer exists reports
+   clean, and a clean bill from a checker that read nothing is its most dangerous output.
 
-const html = fs.readFileSync('index.html', 'utf8');
-const m = html.match(/hmm maps (\d+) enforceable instruments in force across the three markets: (\d+) in Australia, (\d+) in Japan, (\d+) in New Zealand, (\d+) of them operative since 2020, with (\w+) more scheduled between 2027 and 2030/);
-if (!m) {
-  console.error('FAIL: the enacted-record sentence was not found in index.html.');
-  console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
-  process.exit(1);
-}
-const stated = {
-  total: +m[1], AU: +m[2], JP: +m[3], NZ: +m[4], since2020: +m[5],
-  scheduled: WORDS[m[6].toLowerCase()] ?? NaN,
-};
-
-let bad = 0;
-for (const k of Object.keys(actual)) {
-  const ok = stated[k] === actual[k];
-  if (!ok) bad++;
-  console.log(`${ok ? 'ok  ' : 'FAIL'}  ${k.padEnd(10)} page says ${String(stated[k]).padStart(3)}   data says ${String(actual[k]).padStart(3)}`);
-}
-console.log(bad ? `\n${bad} figure(s) in the enacted-record sentence disagree with the register.`
-                : '\nall six figures in the enacted-record sentence match the register.');
+   ⚠ The register counts are NOT unguarded. They are drawn by the market bars, which read
+   data/market_strength.js, and the block further down reconciles that snapshot against
+   data/reg_instruments.js on every deploy: per market in force, per market operative since
+   2020, and the total. The in-force predicate and the operative-year integrity check above
+   still run. What was lost is a check on one sentence, not a check on the arithmetic. */
 
 /* ---------------------------------------------------------------------------
    The tier-liquidity sentence on for-llms.html, against canon.
@@ -264,4 +245,4 @@ if (!fs.existsSync('data/necessity_matrix.js')) {
 console.log(nmBad ? `\n${nmBad} problem(s) in the specialisation matrix. Run: node scripts/necessity-matrix.mjs --write`
                   : '\nevery specialisation index derives from its own base, and each lead is the strongest cell on the innovation row.');
 
-process.exit(bad || tierBad || msBad || nmBad ? 1 : 0);
+process.exit(tierBad || msBad || nmBad ? 1 : 0);

@@ -68,5 +68,5 @@ _cwv-audit/**
 # scripts/capture-visuals.mjs. Generated on demand from the live page and never committed:
 # a committed PNG of a drawing is a second copy of that drawing, and it is the copy that
 # goes stale the moment the renderer changes.
-.visuals/
+.visuals*/
 .tmp/
