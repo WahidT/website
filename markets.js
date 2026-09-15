@@ -44,12 +44,12 @@
   function routeOf(sharePct) { return parseFloat(sharePct) > 50 ? "Listing" : "Trade sale"; }
 
   var GATE_ONE = {
-    AU: "An entry on the Australian Register of Therapeutic Goods, held by a sponsor in the market. Supply without an entry is unlawful.",
-    JP: "Agency approval, filed in Japanese through a designated marketing authorisation holder, a Japan-resident licence holder who files for the manufacturer because the agency accepts no application direct from abroad.",
-    NZ: "No pre-market approval for a device. A sponsor notifies a database within 30 working days, the listing cannot be presented as an endorsement, and the record is earned offshore at a foreign regulator."
+    AU: "Pre-market approval, held by a sponsor in the market",
+    JP: "Pre-market approval, filed in Japanese through a resident licence holder",
+    NZ: "Notification, no pre-market approval; the record is earned offshore"
   };
   var GATE_TWO = {
-    AU: "Pharmaceutical Benefits Scheme listing, 466 days from registration",
+    AU: "Reimbursement listing, the slowest of the three",
     JP: "Reimbursement listing, the fastest of the three",
     NZ: "Replacement regime, none in force"
   };
@@ -61,19 +61,20 @@
     for (var i = 0; i < CODES.length; i++) { total += reg[CODES[i]].inForce; recent += reg[CODES[i]].since2020; }
     if (typeof reg.total === "number" && reg.total !== total) return null;   // a stale snapshot draws nothing
     function per(f) { var o = {}; for (var j = 0; j < CODES.length; j++) o[CODES[j]] = f(CODES[j]); return o; }
+    function pct(n, d) { return d ? (Math.round(n / d * 1000) / 10).toFixed(1) + "%" : ""; }
     return [
       { key: "leads", label: "Leads", note: "the system each market leads, on the specialisation index",
         cells: per(function (c) { return NM.leads[c]; }) },
       { key: "gate1", label: "First gate, Heal", note: "what must be held before a sale is lawful",
         cells: GATE_ONE, prose: true },
-      { key: "gate2", label: "Second gate, Heal", note: "what must be cleared before the sale is paid for; days on Medicines Australia's 2016 to 2021 series of new molecular entities, 384 across twenty OECD countries",
+      { key: "gate2", label: "Second gate, Heal", note: "what must be cleared before the sale is paid for",
         cells: GATE_TWO, prose: true },
       { key: "route", label: "Exit route", note: "listings lead where more than half of a market's winner exits list",
         cells: per(function (c) { return routeOf(sh[c]); }) },
-      { key: "inforce", label: "Instruments in force", note: "of " + total + " across the three",
-        cells: per(function (c) { return String(reg[c].inForce); }) },
-      { key: "since2020", label: "Operative since 2020", note: "of " + recent + " of those",
-        cells: per(function (c) { return String(reg[c].since2020); }) },
+      { key: "inforce", label: "Share of the register", note: "each market's share of the instruments in force across the three",
+        cells: per(function (c) { return pct(reg[c].inForce, total); }) },
+      { key: "since2020", label: "Operative since 2020", note: "the share of each market's own instruments whose obligation took effect in this decade",
+        cells: per(function (c) { return pct(reg[c].since2020, reg[c].inForce); }) },
       { key: "listing", label: "Listing share of winner exits", note: "each market's share of its own winner exits, so the row does not sum",
         cells: per(function (c) { return sh[c] + "%"; }) }
     ];
