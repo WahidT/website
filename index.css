@@ -369,7 +369,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    the 48px these sections carry left 28px of every one of them underneath it. The
    640px block below keeps its own 66px, tuned to the 68px the rail is down there. */
 @media (hover:none),(pointer:coarse){
-  .through,.ai,.mkt,.reg,.nec,.scr{padding-right:78px;}
+  .through,.ai,.mkt,.reg,.nec,.scr,.ask{padding-right:78px;}
   .site-footer{padding-right:78px;}
 }
 @media(max-width:1040px){
@@ -390,7 +390,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .tl-filters button{min-height:44px;padding:11px 14px;}
 }
 @media(max-width:640px){
-  .through,.ai,.mkt,.reg,.nec,.scr{padding-left:20px;padding-right:66px;}
+  .through,.ai,.mkt,.reg,.nec,.scr,.ask{padding-left:20px;padding-right:66px;}
   .site-footer{padding-right:66px;}
   .hero-row{width:calc(100vw - 86px);}
   .ai,.mkt{padding-top:64px;padding-bottom:64px;}
@@ -463,6 +463,13 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 
 
 /* ---------- S10 the close: the one thing asked ---------- */
+.ask{padding:96px 48px 110px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);display:flex;flex-direction:column;align-items:center;text-align:center;}
+.ask>*{width:min(880px,100%);}
+.ask-lead{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);line-height:1.12;margin:0 0 22px;}
+.ask-line{font-size:17px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
+.ask-line a{color:var(--hmm-accent-text);text-decoration:none;border-bottom:1px solid var(--hmm-accent);}
+.ask-line a:hover,.ask-line a:focus-visible{color:var(--hmm-pearl);}
+.footer-contact[href^="mailto:"]{text-transform:none;letter-spacing:.04em;}
 
 @media (max-width:1080px){
   .scr-lead{grid-template-columns:1fr;gap:14px;}
