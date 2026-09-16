@@ -1,30 +1,14 @@
-/* hmm site - S7 THE THREE MARKETS AS ONE ASSET (GP ruling R-D37, 2026-09-15).
+/* markets.js: the three markets as one table.
 
-   The section held three paragraphs of prose, nine dotted bars and two tables. The general
-   partner asked for one compressed, information-dense asset, so it is one table: the three
-   markets as columns and, as rows, the things a family-office reader compares across them.
-
-   EVERY FIGURE IS READ, NEVER TYPED, and each row names its owner:
-
-     Leads                      data/necessity_matrix.js, the lead on the innovation row
-     Instruments in force       data/market_strength.js, counted from data/reg_instruments.js
-     Operative since 2020       the same rows, counted on `op`, the operative year
-     Listing share              canon current.listing_prob, carried verbatim in the snapshot
-                                and parsed here, never restated
-     Exit route                 DERIVED from the listing share: where more than half of a
-                                market's winner exits list, listings lead; otherwise trade
-                                sale leads. The same derivation runs in
-                                scripts/check-register-figures.mjs, so the route printed and
-                                the share it rests on cannot disagree.
-
-   The two gate rows are words, lifted from the market prose this table replaced, and they
-   describe the health gates because that is where the page already owned the mechanism and
-   the timing figure. Those figures (466 and 384 days, 30 working days) belong to external
-   publications named on the sources page, which is why they are the only ones written here.
-
-   rows(MS, NM) is pure and is exported on window so the build guard can execute this file
-   under node and reconcile every derived cell against the data it was derived from. The
-   render half runs only where a document exists. No colour literal; styles in index.css. */
+   Australia, Japan and New Zealand as columns and, as rows, three things a family-office reader
+   compares across them: the system each market leads (from data/necessity_matrix.js, the
+   specialisation index), the exit route (derived from the listing share: listings lead where
+   more than half of a market's winner exits list), and the listing share of winner exits
+   (canon current.listing_prob, carried in data/market_strength.js). GP instruction 2026-09-16:
+   the two gate rows and the two register rows were cut, so the table carries concepts and
+   percentages only. Every cell is derived here from the snapshots the build guard reads, and
+   rows(MS, NM) is pure and exported on window so scripts/check-register-figures.mjs can run
+   this file under node and reconcile each cell against its owner. */
 (function () {
   var CODES = ["AU", "JP", "NZ"];
   var NAMES = { AU: "Australia", JP: "Japan", NZ: "New Zealand" };
@@ -43,16 +27,6 @@
   /* Listings lead where they take more than half of a market's winner exits. */
   function routeOf(sharePct) { return parseFloat(sharePct) > 50 ? "Listing" : "Trade sale"; }
 
-  var GATE_ONE = {
-    AU: "Pre-market approval, held by a sponsor in the market",
-    JP: "Pre-market approval, filed in Japanese through a resident licence holder",
-    NZ: "Notification, no pre-market approval; the record is earned offshore"
-  };
-  var GATE_TWO = {
-    AU: "Reimbursement listing, the slowest of the three",
-    JP: "Reimbursement listing, the fastest of the three",
-    NZ: "Replacement regime, none in force"
-  };
 
   function rows(MS, NM) {
     var sh = listingShares(MS);
@@ -61,20 +35,11 @@
     for (var i = 0; i < CODES.length; i++) { total += reg[CODES[i]].inForce; recent += reg[CODES[i]].since2020; }
     if (typeof reg.total === "number" && reg.total !== total) return null;   // a stale snapshot draws nothing
     function per(f) { var o = {}; for (var j = 0; j < CODES.length; j++) o[CODES[j]] = f(CODES[j]); return o; }
-    function pct(n, d) { return d ? (Math.round(n / d * 1000) / 10).toFixed(1) + "%" : ""; }
     return [
       { key: "leads", label: "Leads", note: "the system each market leads, on the specialisation index",
         cells: per(function (c) { return NM.leads[c]; }) },
-      { key: "gate1", label: "First gate, Heal", note: "what must be held before a sale is lawful",
-        cells: GATE_ONE, prose: true },
-      { key: "gate2", label: "Second gate, Heal", note: "what must be cleared before the sale is paid for",
-        cells: GATE_TWO, prose: true },
       { key: "route", label: "Exit route", note: "listings lead where more than half of a market's winner exits list",
         cells: per(function (c) { return routeOf(sh[c]); }) },
-      { key: "inforce", label: "Share of the register", note: "each market's share of the instruments in force across the three",
-        cells: per(function (c) { return pct(reg[c].inForce, total); }) },
-      { key: "since2020", label: "Operative since 2020", note: "the share of each market's own instruments whose obligation took effect in this decade",
-        cells: per(function (c) { return pct(reg[c].since2020, reg[c].inForce); }) },
       { key: "listing", label: "Listing share of winner exits", note: "each market's share of its own winner exits, so the row does not sum",
         cells: per(function (c) { return sh[c] + "%"; }) }
     ];
@@ -89,7 +54,7 @@
     var t = document.createElement("table");
     t.className = "mkt-table";
     var cap = document.createElement("caption");
-    cap.textContent = "Australia, Japan and New Zealand compared on the system each leads, the two gates, the exit route, the instrument register and the listing share of winner exits";
+    cap.textContent = "Australia, Japan and New Zealand compared on the system each leads, the exit route and the listing share of winner exits";
     t.appendChild(cap);
     var thead = document.createElement("thead"), hr = document.createElement("tr");
     hr.appendChild(document.createElement("td"));
