@@ -279,8 +279,6 @@ console.log('');
     for (const c of MSMOD.MARKETS) {
       const checks = [
         ['leads', byKey.leads.cells[c], nmCtx.__.leads[c]],
-        ['inforce', byKey.inforce.cells[c], ((freshReg[c].inForce * 100 / freshTotal).toFixed(1)) + '%'],
-        ['since2020', byKey.since2020.cells[c], ((freshReg[c].since2020 * 100 / freshReg[c].inForce).toFixed(1)) + '%'],
         ['listing', byKey.listing.cells[c], shares[c] + '%'],
         ['route', byKey.route.cells[c], parseFloat(shares[c]) > 50 ? 'Listing' : 'Trade sale'],
       ];
