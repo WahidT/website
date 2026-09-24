@@ -25,19 +25,13 @@ var SCHEMATIC_MOUNTS=[];
 var SECCFG={
   power:{title:'The transformer, in <em>blow-out</em>',
     exTitle:"Power",
-    exHTML:"The energy system is the process chain, or a subset of it, from the extraction of primary energy to the use of final energy to supply services and goods. hmm's mandate extends it to the critical-minerals layer that constrains that chain, because that is where the returnable innovation in energy materials sits.",
-    
-    sysIntro:"One chain, resource to end use and back to recovery. hmm backs the whole system and picks no single stage of it; the return in energy materials concentrates in the critical-minerals layer beneath the chain.",},
+    exHTML:"The energy system is the process chain, or a subset of it, from the extraction of primary energy to the use of final energy to supply services and goods. hmm's mandate extends it to the critical-minerals layer that constrains that chain, because that is where the returnable innovation in energy materials sits.",},
   eat:{title:'The reel, in <em>blow-out</em>',
     exTitle:"Eat",
-    exHTML:"The food system gathers all the elements and activities relating to the production, processing, distribution, preparation and consumption of food, and the outputs of those activities. Its three constituent elements are <b>food supply chains, food environments and consumer behaviour</b>.",
-    
-    sysIntro:"Seed to mouth, and back to the soil as nutrient. The advance that pays back sits in the field-autonomy layer, not in any one link of the chain.",},
+    exHTML:"The food system gathers all the elements and activities relating to the production, processing, distribution, preparation and consumption of food, and the outputs of those activities. Its three constituent elements are <b>food supply chains, food environments and consumer behaviour</b>.",},
   heal:{title:'The needle, in <em>blow-out</em>',
     exTitle:"Heal",
-    exHTML:"The health system is all <b>organizations, people and actions whose primary intent is to promote, restore or maintain health</b>. It is defined by intent rather than by chain, so it sits downstream of its determinants rather than containing them.",
-    
-    sysIntro:"Discovery to recovery, one chain of care. Value concentrates at the diagnostic read-out, upstream where a returned life-year costs least.",}
+    exHTML:"The health system is all <b>organizations, people and actions whose primary intent is to promote, restore or maintain health</b>. It is defined by intent rather than by chain, so it sits downstream of its determinants rather than containing them.",}
 };
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
@@ -47,9 +41,9 @@ function stagesFromSteps(S){return S.steps.map(function(st){var m=st.name.match(
 function stepMap(S){var m={};S.steps.forEach(function(st){m[st.name]=st;});return m;}
 [['power',window.POWER_STEPS],['eat',window.EAT_STEPS],['heal',window.HEAL_STEPS]].forEach(function(p){var S=p[1];if(!S)return;SECCFG[p[0]].stages=stagesFromSteps(S);SECCFG[p[0]].data=stepMap(S);SECCFG[p[0]].exHTML=S.definition.replace(/\s*It is a necessity because[^.]*\./,'');});
 // plain-language definitions: name the system, where hmm invests, where returns concentrate. No shared template, fewer absolutes, conclusions attributed to hmm.
-if(SECCFG.power) SECCFG.power.exHTML="Power is the energy system: a resource extracted, refined, generated, carried across the grid, used, and its materials recovered. hmm works one layer down, on the storage and the critical minerals that constrain every stage. That is where the returns have concentrated.";
-if(SECCFG.eat) SECCFG.eat.exHTML="Eat is the food and farming system, crop and livestock in one cycle: grain feeds animals, manure feeds the soil. The cost pressure sits on nitrogen for crops and feed conversion for livestock. hmm backs the field-autonomy layer that bears on both.";
-if(SECCFG.heal) SECCFG.heal.exHTML="Heal is the healthcare system, from prevention through diagnosis and treatment to end-of-life care. Its limits are regulatory and financial: what a regulator approves and what a payer reimburses. hmm's read is that the value sits upstream, at detection, where disease caught early costs least to treat.";
+if(SECCFG.power) SECCFG.power.exHTML="Power is the energy system: a resource extracted, refined, generated, carried across the grid, used, and its materials recovered. We work one layer down, on the storage and the critical minerals that constrain every stage. That is where the returns have concentrated.";
+if(SECCFG.eat) SECCFG.eat.exHTML="Eat is the food and farming system, crop and livestock in one cycle: grain feeds animals, manure feeds the soil. The cost pressure sits on nitrogen for crops and feed conversion for livestock. We back the field-autonomy layer that bears on both.";
+if(SECCFG.heal) SECCFG.heal.exHTML="Heal is the healthcare system, from prevention through diagnosis and treatment to end-of-life care. Its limits are regulatory and financial: what a regulator approves and what a payer reimburses. Our read is that the value sits upstream, at detection, where disease caught early costs least to treat.";
 
 /* The unit and the physical instance, one of each per system (GP structure item 2,
    2026-09-14). Lifted from the memorandum's section 3, which states the incumbent
@@ -101,29 +95,17 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
     var ln=s.n,ly=q.y+BH/2-(ln.length-1)*6+3;
     ln.forEach(function(t,k){g.push(h("text",{key:"t"+k,x:q.x+BW/2,y:ly+k*12,textAnchor:"middle",fontFamily:"var(--hmm-font-mono)",fontSize:9,letterSpacing:.5,fill:LAB,style:{textTransform:"uppercase",pointerEvents:"none"}},t));});
     if(s.note)g.push(h("text",{key:"n",x:q.x+BW/2,y:q.y+BH+12,textAnchor:"middle",fontFamily:"var(--hmm-font-mono)",fontSize:7,letterSpacing:.4,fill:acc,style:{pointerEvents:"none"}},s.note));
-    e.push(h("g",{key:"g"+i,className:"blk",tabIndex:0,role:"button","aria-label":s.key,"data-key":s.key,
-      onClick:function(){showStage(kind,s.key);},onKeyDown:function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();showStage(kind,s.key);}}},g));});
+    e.push(h("g",{key:"g"+i,className:"blk","data-key":s.key},g));});
   var fw=vbW-4;
   e.unshift(h("rect",{key:"frame",x:2,y:2,width:fw,height:vbH-4,fill:"none",stroke:"rgba(242,236,201,.1)",strokeWidth:1}));
   [[2,2,9,9],[vbW-2,2,-9,9],[2,vbH-2,9,-9],[vbW-2,vbH-2,-9,-9]].forEach(function(t,ti){e.push(h("line",{key:"fa"+ti,x1:t[0],y1:t[1],x2:t[0]+t[2],y2:t[1],stroke:acc,strokeWidth:1}));e.push(h("line",{key:"fb"+ti,x1:t[0],y1:t[1],x2:t[0],y2:t[1]+t[3],stroke:acc,strokeWidth:1}));});
   return h("svg",{viewBox:"0 0 "+vbW+" "+vbH,role:"img","aria-label":cfg.exTitle+" system, end to end, as a block schematic"},e);
 }
 
-function showStage(kind,name){var cfg=SECCFG[kind],st=(cfg.data||{})[name];
-  var sec=document.getElementById(kind);
-  sec.querySelectorAll('.blk').forEach(function(g){g.classList.toggle('blk--active',g.getAttribute('data-key')===name);});
-  var panel=sec.querySelector('.stage-panel');
-  if(!st){panel.innerHTML='<div class="sp-name">'+esc(name)+'</div><div class="sp-facet"><div class="none">not surfaced</div></div>';return;}
-  var ai=st.ai||{};
-  panel.innerHTML='<div class="sp-name">'+esc((st.id?st.id+' · ':'')+st.name)+'</div>'
-    +'<div class="sp-def">'+esc(st.def||'')+'</div>'
-    +'<div class="sp-facet sp-ai"><div class="sp-label">AI</div><p>'+esc(ai.detail||'')+'</p></div>'
-    +'<div class="sp-facet sp-reg"><div class="sp-label">Regulation · the gate</div><p>'+esc(st.reg||'')+'</p></div>';
-}
-function closeAll(){document.querySelectorAll('.nec').forEach(function(sec){sec.querySelectorAll('.blk--active').forEach(function(g){g.classList.remove('blk--active');});var p=sec.querySelector('.stage-panel');if(p)p.innerHTML='';});}
-document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeAll();});
-document.addEventListener('click',function(ev){if(!ev.target.closest('.blk')&&!ev.target.closest('.stage-panel'))closeAll();});
-
+/* The per-stage panels (a definition, an AI facet and a regulation facet per block) left
+   the public page on 2026-09-24 (docs/REVIEW_2026-09-24.md, F4): the stage chain is the
+   model's own instrument, and the drawing stays as the drawing it is. The *_steps.js files
+   still feed the stage names and the schematic geometry. */
 /* build each necessity section */
 ["power","eat","heal"].forEach(function(kind){var cfg=SECCFG[kind],sec=document.getElementById(kind);
   var TK='<span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>';
@@ -132,19 +114,13 @@ document.addEventListener('click',function(ev){if(!ev.target.closest('.blk')&&!e
     +'<div class="machine-wrap"></div></div>'
     +'<div class="panel">'
     +'<div class="card">'+TK+'<h2>'+cfg.exTitle+'</h2><p>'+cfg.exHTML+'</p><p class="card-unit">'+(cfg.unitHTML||'')+'</p></div>'
-    +'<div class="card">'+TK+'<div class="schematic-wrap"></div>'
-    +'<div class="stage-panel" aria-live="polite"></div></div>'
+    +'<div class="card">'+TK+'<div class="schematic-wrap"></div></div>'
     +'</div>';
   HMM.renderBlowout(sec.querySelector('.machine-wrap'),kind);
   var smount=sec.querySelector('.schematic-wrap');hmmRender(smount,Schematic(kind));SCHEMATIC_MOUNTS.push({mount:smount,kind:kind});
 });
-/* A theme flip redraws each schematic with the accent re-read. hmmRender replaces the
-   tree, so the open stage (a class on one block) is carried across by its data-key. */
-__onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
-  var open=m.mount.querySelector('.blk--active'),key=open&&open.getAttribute('data-key');
-  hmmRender(m.mount,Schematic(m.kind));
-  if(key){var g=m.mount.querySelector('.blk[data-key="'+key.replace(/"/g,'\\"')+'"]');if(g)g.classList.add('blk--active');}
-});});
+/* A theme flip redraws each schematic with the accent re-read. */
+__onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){hmmRender(m.mount,Schematic(m.kind));});});
 
 /* ---------- S7 regulatory timeline ---------- */
 (function(){var body=document.getElementById('tlBody');if(!body||!window.REG_INSTRUMENTS)return;
@@ -237,14 +213,6 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
     if(window.__layoutSpine)window.__layoutSpine();
   }
   if(fbar){FILTERS.forEach(function(fl){if(fl[0]==='all'||fl[0]==='inmarket'||present[fl[0]]){var b=document.createElement('button');b.type='button';b.className='u-control';b.textContent=fl[1];b.setAttribute('data-f',fl[0]);b.setAttribute('aria-pressed','false');b.onclick=function(){applyFilter(fl[0]);};fbar.appendChild(b);}});applyFilter('all');}
-})();
-/* ---------- S9 the map, in counts ----------
-   One sentence stating how many companies and innovation items the catalogue holds per
-   market and how they were assembled. Every figure is read from data/catalogue_counts.js,
-   which scripts/catalogue-counts.mjs writes from catalogue.js and the build guard
-   reconciles; nothing numeric is typed here or in index.html. */
-(function(){var el=document.getElementById('s9map'),C=window.CATALOGUE_COUNTS&&window.CATALOGUE_COUNTS.counts;if(!el)return;if(!C){el.hidden=true;return;}
-  el.textContent='The map holds '+C.AU.companies+' companies in Australia, '+C.JP.companies+' in Japan and '+C.NZ.companies+' in New Zealand, exited, listed or still private in the three systems, beside '+C.total.innovations+' hardware, software and patent items. It was assembled in one pass in August 2026, from the fund\'s primary-sourced exit cohort and a web search of each market, and the founders inside it are reached before a round exists.';
 })();
 /* ---------- section rail: active marking + reveal ---------- */
 (function(){
