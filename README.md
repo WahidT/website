@@ -23,7 +23,6 @@ subsetted WOFF2, plus metric-matched fallbacks), `hmm-tokens.css` (generated fro
 design tokens, never hand-edited) and `site.css` (the live site's overrides, edited here).
 Page-specific styles follow as a fourth file named for the page (`index.css`, `bio.css`,
 `sources.css`, `for-llms.css`, `404.css`), so `style-src-elem` in `_headers` can be `'self'`;
-`index.css` also carries the `#markets` rules for the table `markets.js` mounts (the bar chart's script used to append its own `<style>`).
 The thesis page's scripts load in order: `theme.js` (the one `__T` token reader and the
 `__onTheme` re-render hook), `machines.js`, `sections.js`, `transitions.js`, then the figures,
 then `fit.js`, which samples the fit paragraphs into dots and hands them to the same engine
