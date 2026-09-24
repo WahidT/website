@@ -248,7 +248,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .ai-fig--hero canvas{height:320px;}
 .ai-fig figcaption{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:10px 14px;border-top:1px solid var(--hmm-border);}
 .ai-pull .k{display:block;font-family:var(--hmm-font-mono);font-weight:400;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:12px;}
-.src-split{display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:start;margin-top:14px;}
+.src-split{margin-top:14px;}
 .src-prose{min-width:0;}
 .src-q{font-family:var(--hmm-font-display);font-weight:700;font-size:25px;line-height:1.22;color:var(--hmm-pearl);margin:14px 0 16px;}
 .src-q{max-width:24ch;}
@@ -259,11 +259,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .src-move-i{font-family:var(--hmm-font-mono);font-size:22px;color:var(--hmm-accent);line-height:1;padding-left:16px;}
 .src-move-body h3{font-family:var(--hmm-font-display);font-weight:700;font-size:16px;margin:0 0 7px;line-height:1.15;color:var(--hmm-pearl);}
 .src-move-body p{font-size:13.5px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
-/* The right column held a scrolling stream of named companies until 2026-09-15. It now
-   holds one sentence of counts, read from data/catalogue_counts.js, set as a plate. */
-.src-reccol{min-width:0;position:sticky;top:100px;align-self:start;}
-.src-map{margin:14px 0 0;padding:22px 24px;border:1px solid var(--hmm-border);border-top:2px solid var(--hmm-accent);background:rgba(242,236,201,.02);font-size:14.5px;line-height:1.62;color:var(--hmm-text-muted);}
-@media(max-width:860px){.src-split{grid-template-columns:1fr;}.src-reccol{position:static;top:0;}}
 /* ---------- S8 density ---------- */
 .tk{position:absolute;width:9px;height:9px;pointer-events:none;}
 .tk--tl{left:6px;top:6px;border-top:1px solid;border-left:1px solid;}

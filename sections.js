@@ -238,14 +238,6 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){
   }
   if(fbar){FILTERS.forEach(function(fl){if(fl[0]==='all'||fl[0]==='inmarket'||present[fl[0]]){var b=document.createElement('button');b.type='button';b.className='u-control';b.textContent=fl[1];b.setAttribute('data-f',fl[0]);b.setAttribute('aria-pressed','false');b.onclick=function(){applyFilter(fl[0]);};fbar.appendChild(b);}});applyFilter('all');}
 })();
-/* ---------- S9 the map, in counts ----------
-   One sentence stating how many companies and innovation items the catalogue holds per
-   market and how they were assembled. Every figure is read from data/catalogue_counts.js,
-   which scripts/catalogue-counts.mjs writes from catalogue.js and the build guard
-   reconciles; nothing numeric is typed here or in index.html. */
-(function(){var el=document.getElementById('s9map'),C=window.CATALOGUE_COUNTS&&window.CATALOGUE_COUNTS.counts;if(!el)return;if(!C){el.hidden=true;return;}
-  el.textContent='The map holds '+C.AU.companies+' companies in Australia, '+C.JP.companies+' in Japan and '+C.NZ.companies+' in New Zealand, exited, listed or still private in the three systems, beside '+C.total.innovations+' hardware, software and patent items. It was assembled in one pass in August 2026, from the fund\'s primary-sourced exit cohort and a web search of each market, and the founders inside it are reached before a round exists.';
-})();
 /* ---------- section rail: active marking + reveal ---------- */
 (function(){
   var rail=document.getElementById('railnav'); if(!rail) return;

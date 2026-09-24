@@ -184,27 +184,18 @@ console.log(msBad ? `\n${msBad} problem(s) in the market-strength snapshot again
 
 
 /* ---------------------------------------------------------------------------
-   The catalogue counts, against catalogue.js.
+   No catalogue company name on any served page.
 
-   The sourcing section states how many companies and innovation items the map holds per
-   market (GP 2026-09-15, replacing the named-company stream). The page reads the figures
-   from data/catalogue_counts.js; this block recounts catalogue.js and fails when the
-   snapshot is behind it, and it also greps every served page for the names, because the
-   ruling is that no company name from the catalogue is served.
+   Until 2026-09-15 the sourcing section carried a stream of every named company in
+   catalogue.js, and until 2026-09-24 a sentence of counts read from a snapshot of it.
+   Both left on the general partner's ruling. The ruling that no company name from the
+   catalogue is served stands, so this block greps every served page for the names.
+   catalogue.js is loaded by no page and stays in the repository as the owner this reads.
    --------------------------------------------------------------------------- */
 let ccBad = 0;
 console.log('');
 {
   const CC = await import('./catalogue-counts.mjs');
-  const fresh = CC.count(CC.readCatalogue());
-  const snap = CC.readSnapshot();
-  for (const c of [...CC.MARKETS, 'total']) {
-    for (const k of ['companies', 'innovations']) {
-      const ok = snap.counts[c][k] === fresh[c][k];
-      if (!ok) ccBad++;
-      console.log(`${ok ? 'ok  ' : 'FAIL'}  catalogue ${(c + ' ' + k).padEnd(18)} snapshot ${String(snap.counts[c][k]).padStart(4)}   counted ${String(fresh[c][k]).padStart(4)}`);
-    }
-  }
   const names = CC.readCatalogue().flatMap(r => String(r.name).split(',').map(x => x.trim())).filter(n => n.length > 3);
   /* sources.html is a bibliography: a company named there is the issuer or subject of a
      cited source (a regulator's approval notice, a listed company's filing), which is a
@@ -219,7 +210,7 @@ console.log('');
   if (!ccBad) console.log('ok    no catalogue company name on any served page');
   if (/src="catalogue/.test(home)) { ccBad++; console.error('FAIL  index.html still loads the catalogue or its stream'); }
 }
-console.log(ccBad ? `\n${ccBad} problem(s) in the catalogue counts.`
-                  : '\nthe catalogue counts match catalogue.js and no catalogued name is served.');
+console.log(ccBad ? `\n${ccBad} problem(s) in the catalogue sweep.`
+                  : '\nno catalogued name is served.');
 
 process.exit(tierBad || msBad || ccBad ? 1 : 0);

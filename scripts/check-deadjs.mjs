@@ -2,8 +2,7 @@
    string literals in the root scripts that match nothing on any page.
 
    The probe runs against the rendered DOM, not the markup, because most of the
-   site's selectors target elements the scripts build (the schematic mounts, the
-   count sentence); a grep of the HTML alone would flag all of
+   site's selectors target elements the scripts build (the schematic mounts); a grep of the HTML alone would flag all of
    them. A selector that matches nothing after every page has rendered and been
    scrolled is code waiting on an element that no longer exists, which is how the
    S5 helix builder for #aiSplit outlived its section by a full audit cycle.
