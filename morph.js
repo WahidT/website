@@ -17,7 +17,6 @@
     {id:'power',col:[224,129,46]},
     {id:'eat',  col:[79,138,91]},
     {id:'heal', col:[62,121,166]},
-    {id:'s5',   col:[196,69,57]},
     {id:'s6',   col:[196,69,57], spine:true},    // dots transition in, then load straight top-to-bottom
     /* 2026-09-14: the radar panels became nine dotted bars, so the selectors this row
        sampled no longer exist. It now samples the bar dots themselves, which are the

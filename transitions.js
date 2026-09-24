@@ -9,7 +9,7 @@
   resize(); addEventListener('resize',function(){resize();retarget();});
 
   var NEC={power:[224,129,46],eat:[79,138,91],heal:[62,121,166],ai:[196,69,57],reg:[196,69,57]};
-  var COLKEY={power:'power',eat:'eat',heal:'heal',s5:'ai',s6:'reg'};
+  var COLKEY={power:'power',eat:'eat',heal:'heal',s6:'reg'};
   function currentColor(){
     var vc=innerHeight/2, best=null, bd=1e9;
     Object.keys(COLKEY).forEach(function(id){var el=document.getElementById(id);if(!el)return;var r=el.getBoundingClientRect();var c=r.top+r.height/2;var d=Math.abs(c-vc);if(d<bd){bd=d;best=COLKEY[id];}});

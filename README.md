@@ -1,6 +1,8 @@
 # hmm.ventures
 
 The public site for **hmm ventures**. A single-scroll thesis page plus a GP bio and a sources page.
+`_redirects` returns 404 for `catalogue.js` and `docs/`, which sit in the published root and are not
+surfaces.
 
 Static HTML/CSS/JS. There is no build step: Netlify publishes the repository root as-is
 (see `netlify.toml`). Editing any file and pushing to `main` deploys. The Netlify build

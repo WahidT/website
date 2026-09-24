@@ -6,7 +6,7 @@
    would block. */
 html{background:var(--hmm-field-dark);color-scheme:dark;}
 html{scroll-behavior:smooth;}
-#mandate,#power,#eat,#heal,#s5,#s6,#s9,#sfoot{scroll-margin-top:16px;}
+#mandate,#power,#eat,#heal,#s6,#s9,#sfoot{scroll-margin-top:16px;}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
 body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);}
 #dotfield{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;}
@@ -51,6 +51,11 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .hero-logo:hover{color:var(--hmm-accent);}
 .hero-kicker{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.22em;font-size:12px;font-weight:400;margin:0;color:var(--hmm-text-muted);}
 .hero-kicker .hk-nec{color:var(--hmm-accent-text);}
+/* The identity line and the thesis under the kicker (2026-09-24). Centred, one measure,
+   the identity line in pearl and the two paragraphs muted, so the eye lands on the noun. */
+.hero-lede{width:min(72ch,94vw);text-align:center;display:flex;flex-direction:column;gap:14px;}
+.hero-lede p{margin:0;font-size:17px;line-height:1.6;color:var(--hmm-text-muted);}
+.hero-lede .hero-id{font-size:19px;color:var(--hmm-pearl);}
 .hero-row{display:flex;gap:22px;width:min(1160px,94vw);height:360px;}
 /* ---- mobile (≤640px): stack the hero machines, wrap the timeline rows ---- */
 @media(max-width:640px){
@@ -186,26 +191,8 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .card p b{color:var(--hmm-pearl);font-weight:600;}
 .schematic-wrap{margin:6px 0 14px;}
 .schematic-wrap svg{width:100%;max-width:528px;height:auto;overflow:visible;display:block;margin:0 auto;}
-.blk rect{transition:stroke .2s var(--hmm-ease),stroke-width .2s var(--hmm-ease);}
-.blk:focus{outline:none;}
 .blk rect{transition:stroke .18s var(--hmm-ease),stroke-width .18s var(--hmm-ease),fill .18s var(--hmm-ease);}
-.blk{cursor:pointer;}
-.blk:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
-.blk:hover rect,.blk:focus rect{stroke-width:2.6;}
-.blk--active rect{stroke-width:2.6;}
 @keyframes spIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-.stage-panel>*{animation:spIn .72s var(--hmm-ease) both;}
-.stage-panel>*:nth-child(2){animation-delay:.08s;}
-.stage-panel>*:nth-child(3){animation-delay:.16s;}
-.stage-panel>*:nth-child(4){animation-delay:.24s;}
-.stage-panel{margin-top:12px;}
-.sp-name{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.16em;font-size:12px;margin-bottom:10px;}
-.sp-facet{margin-bottom:9px;}
-.sp-label{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-text-muted);}
-.sp-facet .none{font-size:12px;color:var(--hmm-caption);font-style:italic;}
-.sp-def{font-size:12.5px;line-height:1.5;color:var(--hmm-text-muted);margin:0 0 13px;}
-.sp-facet p{font-size:12.5px;line-height:1.46;color:var(--hmm-pearl);margin:3px 0 0;}
-.stage-panel>*:nth-child(5){animation-delay:.32s;}
 /* per-necessity accent */
 .sec-power .stage-eyebrow,.sec-power .sp-name{color:var(--hmm-nec-power-dark);}
 .sec-eat   .stage-eyebrow,.sec-eat   .sp-name{color:var(--hmm-nec-eat-dark);}
@@ -219,34 +206,13 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .through p{font-size:18px;line-height:1.6;color:var(--hmm-text-muted);max-width:80ch;margin:14px 0 0;}
 #mandate{text-align:center;}
 #mandate p{margin:14px auto 0;}
-.sec-power .blk:hover rect,.sec-power .blk:focus rect{stroke:rgba(255,115,11,1);fill:rgba(255,115,11,.12);}
-.sec-eat   .blk:hover rect,.sec-eat   .blk:focus rect{stroke:rgba(79,138,91,1);fill:rgba(79,138,91,.12);}
-.sec-heal  .blk:hover rect,.sec-heal  .blk:focus rect{stroke:rgba(135,82,165,1);fill:rgba(135,82,165,.12);}
-.sec-power .blk--active rect{stroke:var(--hmm-nec-power)!important;}
-.sec-eat   .blk--active rect{stroke:var(--hmm-nec-eat)!important;}
-.sec-heal  .blk--active rect{stroke:var(--hmm-nec-heal)!important;}
 /* ---------- S5 AI impact ---------- */
 .ai{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:96px 48px;color:var(--hmm-pearl);border-top:1px solid var(--hmm-border);}
 /* min(px,100%), never min(px,96vw): 96vw ignores the 48px padding of the section
    it sits in, so every one of these blocks bled ~30px past its own content box on
    both sides below 1208px and ran under the fixed rail on the right. */
 .ai>*{width:min(1160px,100%);}
-.ai-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;line-height:1.06;}
 /* ---------- S5 rebuilt: flow, figures, reading key ---------- */
-.ai-flow{display:flex;flex-direction:column;gap:44px;margin:4px 0 44px;}
-.ai-flow--split{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center;}
-.ai-flow--split .ai-col-text{display:flex;flex-direction:column;justify-content:center;gap:30px;min-width:0;}
-.ai-flow--split .ai-fig{margin:0;display:flex;flex-direction:column;min-width:0;}
-.ai-flow--split .ai-fig--hero canvas{height:420px;flex:none;min-height:0;width:100%;}
-@media(max-width:860px){.ai-flow--split{grid-template-columns:1fr;gap:32px;}.ai-flow--split .ai-fig--hero canvas{flex:none;height:300px;}}
-.ai-step-hdr{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.ai-step-id{font-family:var(--hmm-font-mono);font-size:11px;letter-spacing:.12em;border:1px solid var(--hmm-accent);color:var(--hmm-accent-text);padding:2px 8px;flex:0 0 auto;}
-.ai-step-label{font-family:var(--hmm-font-display);font-weight:700;font-size:20px;line-height:1.1;}
-.ai-step p{font-size:14.5px;line-height:1.62;color:var(--hmm-text-muted);max-width:66ch;margin:0 0 11px;}
-.ai-fig{margin:0;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);position:relative;}
-.ai-fig canvas{display:block;width:100%;height:280px;}
-.ai-fig--hero canvas{height:320px;}
-.ai-fig figcaption{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:10px 14px;border-top:1px solid var(--hmm-border);}
 .ai-pull .k{display:block;font-family:var(--hmm-font-mono);font-weight:400;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:12px;}
 .src-split{margin-top:14px;}
 .src-prose{min-width:0;}
@@ -278,7 +244,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 /* ---------- S6 regulation lens ---------- */
 .reg{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
 .reg-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;}
-.reg-title em{font-style:italic;color:var(--hmm-accent);}
 .reg-plate{position:relative;flex:1;border:1px solid var(--hmm-border);border-top:2px solid var(--hmm-accent);padding:22px 26px 0;background:rgba(242,236,201,.02);}
 .reg-plate .tk{border-color:var(--hmm-accent);}
 .reg-plate p{margin:0;font-size:13.5px;line-height:1.62;color:var(--hmm-text-muted);}
@@ -584,7 +549,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    short labels at 1024px. The section gives back the rail's width at those sizes, which is
    what the phone rule below 768px does for every section by hiding the rail instead. */
 @media (pointer:coarse) and (min-width:768px) and (max-width:1100px){
-  .scr{padding-right:96px;}
+  .scr,.reg{padding-right:96px;}
 }
 
 /* ---------- S1 the fit breaks into dots on scroll (fit.js) ----------
