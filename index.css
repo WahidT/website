@@ -418,10 +418,9 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 /* The table scrolls inside its own box. The page body never scrolls sideways. */
 
 
-/* ---------- S10 the close: the one thing asked ---------- */
+/* ---------- S10 the close: the address ---------- */
 .ask{padding:96px 48px 110px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);display:flex;flex-direction:column;align-items:center;text-align:center;}
 .ask>*{width:min(880px,100%);}
-.ask-lead{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);line-height:1.12;margin:0 0 22px;}
 .ask-line{font-size:17px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
 .ask-line a{color:var(--hmm-accent-text);text-decoration:none;border-bottom:1px solid var(--hmm-accent);}
 .ask-line a:hover,.ask-line a:focus-visible{color:var(--hmm-pearl);}
