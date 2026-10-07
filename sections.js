@@ -103,7 +103,7 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
 }
 
 /* The per-stage panels (a definition, an AI facet and a regulation facet per block) left
-   the public page on 2026-09-24 (docs/REVIEW_2026-09-24.md, F4): the stage chain is the
+   the public page on 2026-09-24: the stage chain is the
    model's own instrument, and the drawing stays as the drawing it is. The *_steps.js files
    still feed the stage names and the schematic geometry. */
 /* build each necessity section */
@@ -232,6 +232,13 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){hmmRender(m.mount,Sche
       var r=pairs[i].el.getBoundingClientRect();
       var seen=Math.min(r.bottom,vh)-Math.max(r.top,0);
       if(seen>bv){bv=seen;best=pairs[i];}
+    }
+    // At the foot of the page the last section wins. The close carries the address alone
+    // (R-D47), shorter than the section above it, so on area it never would.
+    var last=pairs[pairs.length-1];
+    if(last&&scrollY+vh>=document.documentElement.scrollHeight-2){
+      var lr=last.el.getBoundingClientRect();
+      if(lr.bottom>0&&lr.top<vh){best=last;bv=Math.max(bv,1);}
     }
     if(best&&bv>0&&best!==cur){
       if(cur){cur.a.classList.remove('is-active');cur.a.removeAttribute('aria-current');}

@@ -40,7 +40,7 @@ const ROUTES = ['index.html', 'bio.html', 'sources.html', 'for-llms.html'];
    against appears only where a vw-sized block happens to sit beside the rail,
    so a single-position check reports a false pass. */
 const probe = async touch => {
-  const out = { hOverflow: 0, railOverlap: [], railTaps: [], clipped: [] };
+  const out = { hOverflow: 0, railOverlap: [], railTaps: [], clipped: [], railFoot: '' };
   const rail = document.getElementById('railnav');
   const step = innerHeight * 0.5;
 
@@ -74,6 +74,21 @@ const probe = async touch => {
         out.clipped.push(`${el.className.split(' ')[0]} ${el.scrollHeight}>${el.clientHeight}`);
     });
   }
+  /* At the foot of the page the rail must mark the last section. The rail ranks sections by
+     how much of the screen each fills, and a close shorter than the section above it never
+     wins on area: after the close was cut to the address alone (R-D47, 2026-10-07) "Contact"
+     stayed dark at every width from 768px, even after a click on it, and nothing here saw it. */
+  /* The page grows as sections build on scroll, so one jump can land short of the real foot. */
+  for (let i = 0; i < 20; i++) {
+    scrollTo(0, document.documentElement.scrollHeight);
+    await new Promise(r => setTimeout(r, 200));
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) break;
+  }
+  if (rail && rail.classList.contains('is-on') && getComputedStyle(rail).display !== 'none') {
+    const items = [...rail.querySelectorAll('.rail-item[data-sec]:not(.rail-top)')];
+    const last = items[items.length - 1], active = rail.querySelector('.rail-item.is-active');
+    if (last && active !== last) out.railFoot = `${active ? active.dataset.sec : 'nothing'} marked, not ${last.dataset.sec}`;
+  }
   out.railOverlap = [...new Set(out.railOverlap)];
   out.railTaps = [...new Set(out.railTaps)];
   out.clipped = [...new Set(out.clipped)];
@@ -97,6 +112,7 @@ for (const [name, viewport, touch] of PROFILES) {
     if (r.railOverlap.length) problems.push(`rail over content: ${r.railOverlap.join(', ')}`);
     if (r.railTaps.length) problems.push(`rail tap target under 44px: ${r.railTaps.join(', ')}`);
     if (r.clipped.length) problems.push(`clipped: ${r.clipped.join(', ')}`);
+    if (r.railFoot) problems.push(`rail at the foot: ${r.railFoot}`);
     if (errors.length) problems.push(`js error: ${errors[0]}`);
 
     if (problems.length) failures++;
