@@ -233,6 +233,13 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){hmmRender(m.mount,Sche
       var seen=Math.min(r.bottom,vh)-Math.max(r.top,0);
       if(seen>bv){bv=seen;best=pairs[i];}
     }
+    // At the foot of the page the last section wins. The close carries the address alone
+    // (R-D47), shorter than the section above it, so on area it never would.
+    var last=pairs[pairs.length-1];
+    if(last&&scrollY+vh>=document.documentElement.scrollHeight-2){
+      var lr=last.el.getBoundingClientRect();
+      if(lr.bottom>0&&lr.top<vh){best=last;bv=Math.max(bv,1);}
+    }
     if(best&&bv>0&&best!==cur){
       if(cur){cur.a.classList.remove('is-active');cur.a.removeAttribute('aria-current');}
       best.a.classList.add('is-active');best.a.setAttribute('aria-current','true');
