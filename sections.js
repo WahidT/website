@@ -103,7 +103,7 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
 }
 
 /* The per-stage panels (a definition, an AI facet and a regulation facet per block) left
-   the public page on 2026-09-24 (docs/REVIEW_2026-09-24.md, F4): the stage chain is the
+   the public page on 2026-09-24: the stage chain is the
    model's own instrument, and the drawing stays as the drawing it is. The *_steps.js files
    still feed the stage names and the schematic geometry. */
 /* build each necessity section */
