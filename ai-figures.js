@@ -1,6 +1,6 @@
-/* hmm site - the two canvas figures, dotted engineering register, organic motion.
-   figRecord (05): the record the next entrant must rebuild. regGate (06): value pooling behind
-   the gate. Canvas, DPR-aware. Honours prefers-reduced-motion (draws a settled still frame).
+/* hmm site - the one canvas figure, dotted engineering register, organic motion.
+   regGate (06): value pooling behind the gate. figRecord (05) left with its section on
+   2026-09-24. Canvas, DPR-aware. Honours prefers-reduced-motion (draws a settled still frame).
    The three sourcing figures (formation, go-to-market, arbitrage) were removed on 2026-09-15:
    their mounts existed on no page, so the builders ran for nothing. */
 (function(){
@@ -34,68 +34,6 @@
     loop();
   }
   function ticks(ctx,W,H){var a=8;[[2,2,1,1],[W-2,2,-1,1],[2,H-2,1,-1],[W-2,H-2,-1,-1]].forEach(function(c){ctx.strokeStyle=ACC;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(c[0],c[1]);ctx.lineTo(c[0]+a*c[2],c[1]);ctx.moveTo(c[0],c[1]);ctx.lineTo(c[0],c[1]+a*c[3]);ctx.stroke();});}
-
-  // ---- 05 · the record the next entrant must rebuild ----
-  // One metric (accumulated real-world evidence) vs time. Leader's dotted curve rises to Today;
-  // challenger sits at zero until Today, then a Tomato record just begins. The barrier is the horizontal
-  // time-gap below the plot: years of record the model can't skip. One accent (Tomato), used twice only.
-  var m1=mount('figRecord',320);
-  if(m1){
-    var rpts=null,cpts=null,lastWR=0,G=null;
-    function seedR(W,H){
-      var padL=76,padR=62,padT=44,padB=64,baseY=H-padB,topY=padT+6,xT=W-padR;
-      var fMid=0.56, xMid=padL+(xT-padL)*fMid;               // challenger enters midway through the timeline
-      var yC=baseY-(baseY-topY)*0.5;                          // evidence the challenger holds today (half the leader's)
-      var fL=1-Math.pow(0.5,1/1.9), xLead=padL+(xT-padL)*fL;  // where the leader's curve first reached that same level
-      G={padL:padL,baseY:baseY,topY:topY,xT:xT,xMid:xMid,yC:yC,xLead:xLead};
-      rpts=[];var n=116;
-      for(var i=0;i<n;i++){var f=i/(n-1),e=1-Math.pow(1-f,1.9);
-        rpts.push({x:padL+(xT-padL)*f,y:baseY-(baseY-topY)*e,born:f,
-          s:Math.random()<0.16?2.0:Math.random()<0.5?1.3:0.85,ph:Math.random()*6.28});}
-      cpts=[];var m=54;
-      for(var j=0;j<m;j++){var u=j/(m-1),e2=1-Math.pow(1-u,1.6);
-        cpts.push({x:xMid+(xT-xMid)*u,y:baseY-(baseY-yC)*e2,born:u,
-          s:Math.random()<0.16?1.9:Math.random()<0.5?1.25:0.8,ph:Math.random()*6.28});}
-    }
-    frame(m1,function(t){var ctx=m1.ctx,W=m1.W(),H=m1.H();
-      if(W!==lastWR){seedR(W,H);lastWR=W;}
-      var padL=G.padL,baseY=G.baseY,topY=G.topY,xT=G.xT,xMid=G.xMid,yC=G.yC,xLead=G.xLead,cy=(topY+baseY)/2;
-      ticks(ctx,W,H);
-      // axes, recessive
-      ctx.strokeStyle=LINE;ctx.lineWidth=0.75;
-      ctx.beginPath();ctx.moveTo(padL,topY-4);ctx.lineTo(padL,baseY);ctx.lineTo(xT,baseY);ctx.stroke();
-      // Today datum, dashed
-      ctx.strokeStyle=FAINT;ctx.setLineDash([2,4]);ctx.beginPath();ctx.moveTo(xT,topY-4);ctx.lineTo(xT,baseY);ctx.stroke();ctx.setLineDash([]);
-      mono(ctx,9);ctx.fillStyle=LBL;ctx.textAlign='left';ctx.fillText('2015',padL,baseY+15);
-      ctx.textAlign='right';ctx.fillStyle=FAINT;ctx.fillText('TODAY',xT,topY-8);
-      ctx.save();ctx.translate(padL-14,cy);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.fillStyle=LBL;mono(ctx,8.5);ctx.fillText('REAL-WORLD EVIDENCE, ACCUMULATED',0,0);ctx.restore();
-      var sweep=reduce?2:0.16+((t*0.1)%1.3);
-      // leader curve, neutral breathing dots
-      rpts.forEach(function(p){if(p.born>sweep)return;
-        ctx.beginPath();ctx.arc(p.x,p.y+Math.sin(t*0.7+p.ph)*1.1,p.s,0,6.28);ctx.fillStyle=rgba(PEARL,p.s>1.5?0.85:0.5);ctx.fill();});
-      mono(ctx,10.5);ctx.textAlign='right';ctx.fillStyle=rgba(PEARL,0.92);ctx.fillText('LEADER',xT-8,topY+8);
-      // challenger curve, Tomato breathing dots, rising from its midway entry (accent use 1 of 2)
-      var csweep=reduce?2:0.16+((t*0.1)%1.3);
-      cpts.forEach(function(p){if(p.born>csweep)return;
-        ctx.beginPath();ctx.arc(p.x,p.y+Math.sin(t*0.8+p.ph)*1.0,p.s,0,6.28);ctx.fillStyle=rgba(C08,p.s>1.5?0.9:0.62);ctx.fill();});
-      // challenger entry: matches capability the moment it arrives, at zero record
-      ctx.beginPath();ctx.arc(xMid,baseY,2.4,0,6.28);ctx.fillStyle=rgba(C08,0.9);ctx.fill();
-      ctx.strokeStyle=FAINT;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(xMid,baseY);ctx.lineTo(xMid,topY+2);ctx.stroke();ctx.setLineDash([]);
-      mono(ctx,8.5);ctx.textAlign='center';ctx.fillStyle=LBL;ctx.fillText('challenger enters · matches the model',xMid,baseY+15);
-      // challenger head label
-      mono(ctx,10.5);ctx.textAlign='left';ctx.fillStyle=rgba(C08,0.95);ctx.fillText('CHALLENGER',xT-4,yC-10);
-      // the barrier: horizontal gap at equal evidence, leader reached yC years earlier (accent use 2 of 2)
-      var lead=Math.min(1,csweep/1.0);   // reveal the dimension line with the challenger
-      // anchor points at the shared evidence level
-      ctx.beginPath();ctx.arc(xLead,yC,2.2,0,6.28);ctx.fillStyle=rgba(PEARL,0.85);ctx.fill();
-      ctx.beginPath();ctx.arc(xT,yC,2.6,0,6.28);ctx.fillStyle=rgba(C08,0.95);ctx.fill();
-      ctx.strokeStyle=ACC;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(xLead,yC);ctx.lineTo(xT,yC);ctx.stroke();
-      ctx.fillStyle=ACC;
-      ctx.beginPath();ctx.moveTo(xLead,yC);ctx.lineTo(xLead+8,yC-3);ctx.lineTo(xLead+8,yC+3);ctx.closePath();ctx.fill();
-      ctx.beginPath();ctx.moveTo(xT,yC);ctx.lineTo(xT-8,yC-3);ctx.lineTo(xT-8,yC+3);ctx.closePath();ctx.fill();
-      mono(ctx,10);ctx.textAlign='center';ctx.fillStyle=rgba(C08,0.95);ctx.fillText("the barrier · years of record the model can't skip",(xLead+xT)/2,yC-9);
-    });
-  }
 
   // ---- 06 · the gate: value streams in from the open side and pools behind the regulatory barrier ----
   var mg=mount('regGate',172);

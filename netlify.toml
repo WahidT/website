@@ -7,7 +7,7 @@
 # deploy. check-opener-patterns joined them on 2026-09-14 under R-D26: two lexical
 # patterns, a regulator cast as an actor and a first-person or pointer close, run over
 # the served text of every page. check-register-figures grew a third block the same day,
-# for the per-market strength snapshot the market charts read. --ignore-scripts skips the Playwright Chromium postinstall, which these
+# for the per-market strength snapshot the screen reads. --ignore-scripts skips the Playwright Chromium postinstall, which these
 # checks do not need: check:machines is static too, evaluating machines.js against a
 # recording stub of hmmH. GitHub Actions (.github/workflows/ci.yml) runs the full set.
 [build]

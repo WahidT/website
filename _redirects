@@ -1,0 +1,7 @@
+# The root is published as-is (netlify.toml), so every file in it is fetchable by URL.
+# Two paths must not be: catalogue.js names companies, and R-D35 (2026-09-15) keeps every
+# company name off the public surface; the guard keeps them off the pages and this keeps
+# them off the domain. docs/ holds working documents, which are not distribution surfaces.
+# The trailing ! forces the rule over a file that exists at the path.
+/catalogue.js   /404.html   404!
+/docs/*         /404.html   404!

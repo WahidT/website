@@ -27,7 +27,7 @@ const PAGES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'instr
    size passes, because a missed figure is the failure here and a spurious one is cheap. */
 const SEL = [
   '[role="figure"]', 'figure', '.machine-wrap', '.machine', '.plate', '.fig',
-  '#screen', '#markets', '#dotfield',
+  '#screen', '#dotfield',
   '.ai-fig', '.aif', '.ins-machine', '.ins-icon', '.timeline', '.tl',
   'svg', 'canvas', 'table',
 ].join(',');
@@ -36,7 +36,7 @@ async function inventory(page, route) {
   return page.evaluate((route) => {
     const SELECTORS = [
       '[role="figure"]', 'figure', '.machine-wrap', '.machine', '.plate', '.fig',
-      '#screen', '#markets', '#dotfield',
+      '#screen', '#dotfield',
       '.ai-fig', '.aif', '.ins-machine', '.ins-icon', '.timeline', '.tl',
       'svg', 'canvas', 'table',
     ].join(',');
