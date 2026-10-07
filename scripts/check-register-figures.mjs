@@ -105,14 +105,16 @@ for (const k of Object.keys(pageFigs)) {
    that loads first. So both are parsed against the same snapshot, and either disagreeing
    fails the deploy. Neither is restated here. */
 const home = fs.readFileSync('index.html', 'utf8');
-const h = home.match(/Companies whose product cannot be sold without an approval reach a liquidity event at ([\d.]+)%, against ([\d.]+)% where no approval gates the sale, measured on ([\d,]+) companies across the three markets at an odds ratio of ([\d.]+)\. The tier between them, where a buyer sits under a compliance obligation, reaches ([\d.]+)%/);
+const h = home.match(/Across ([\d,]+) companies in Australia, Japan and New Zealand, those whose product cannot be sold without an approval reach a liquidity event at ([\d.]+)%, against ([\d.]+)% where no approval gates the sale, an odds ratio of ([\d.]+)\. The tier between them, where a buyer sits under a compliance obligation, reaches ([\d.]+)%/);
 if (!h) {
   console.error('FAIL: plate 06.D\'s measured sentence was not found in index.html.');
   console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
   process.exit(1);
 }
+/* Reworded 2026-10-07 (the plates cut down at the GP's instruction): the register count now
+   leads the sentence, so it is the first group. */
 const homeFigs = {
-  hardApprovalPct: h[1], noGatePct: h[2], registerCount: h[3],
+  registerCount: h[1], hardApprovalPct: h[2], noGatePct: h[3],
   oddsRatio: h[4], buyerObligationPct: h[5],
 };
 console.log('');
