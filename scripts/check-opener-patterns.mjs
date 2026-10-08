@@ -94,7 +94,7 @@ const PATTERNS = [
   {
     name: 'first-person or pointer close',
     re: /\b(?:that(?:'s|\u2019s| is) what (?:i|we)\b|that(?:'s|\u2019s| is) what i(?:'m|\u2019m| am)\b|this is what (?:i|we) (?:invest|back|do)\b|that(?:'s|\u2019s| is) the fund\b)/gi,
-    fix: 'Delete the pointer and let the replacement sentence carry the fact. The ruled close is "We lead seed rounds for founders rebuilding how populations are powered, fed and healed."',
+    fix: 'Delete the pointer and let the replacement sentence carry the fact. The ruled close is "We lead pre-permission rounds for founders rebuilding how populations are powered, fed and healed."',
   },
 ];
 
