@@ -110,6 +110,7 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
 ["power","eat","heal"].forEach(function(kind){var cfg=SECCFG[kind],sec=document.getElementById(kind);
   var TK='<span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>';
   sec.innerHTML=''
+    +'<div class="eyebrow">'+cfg.exTitle+'</div>'
     +'<div class="stage">'
     +'<div class="machine-wrap"></div></div>'
     +'<div class="panel">'
