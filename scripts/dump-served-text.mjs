@@ -27,7 +27,7 @@ import path from 'node:path';
 import http from 'node:http';
 import { chromium } from 'playwright';
 
-const PAGES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'instruments.html'];
+const PAGES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'register.html', 'instruments.html'];
 const OUT = process.argv[2] || '.served-text';
 const PORT = Number(process.env.HMM_SERVE_PORT || 8799);
 

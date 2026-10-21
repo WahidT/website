@@ -75,10 +75,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .through{min-height:auto;padding-top:88px;}
   .hero-row{flex-direction:column;height:auto;width:92vw;gap:16px;}
   .hero-row .box{min-height:260px;}
-  .tl-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;padding:8px 10px;}
-  .tl-row .tl-name{flex:1 1 100%;order:3;}
-  .tl-row .tl-org{flex:1 1 100%;order:4;font-size:10px;color:var(--hmm-caption);}
-  .tl-row .tl-c{order:1;} .tl-row .tl-date{order:2;} .tl-row .tl-status{order:5;}
 }
 .box{position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;cursor:pointer;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);color:inherit;text-decoration:none;transition:flex .5s var(--hmm-ease),background .3s var(--hmm-ease),border-color .3s var(--hmm-ease),opacity .4s var(--hmm-ease);}
 .box:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
@@ -258,8 +254,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .reg-plate p{margin:0;font-size:13.5px;line-height:1.62;color:var(--hmm-text-muted);}
 .reg-plate--wide{padding-bottom:18px;}
 .reg-plate p b{color:var(--hmm-pearl);font-weight:600;}
-.reg-split{display:flex;gap:40px;width:100%;align-items:flex-start;}
-.reg-left{flex:0 0 clamp(440px,40%,560px);display:flex;flex-direction:column;gap:16px;}
+.reg-body{display:flex;flex-direction:column;gap:16px;width:100%;max-width:760px;}
 .reg-glyph{margin:0;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);position:relative;}
 .reg-glyph canvas{display:block;width:100%;height:172px;}
 .reg-glyph figcaption{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:9px 14px;border-top:1px solid var(--hmm-border);}
@@ -268,79 +263,18 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    the shorter plate read as a hollow box. */
 .reg-jobs{display:flex;flex-direction:row;gap:14px;align-items:flex-start;}
 .reg-jobs .reg-plate{padding-bottom:16px;}
-.reg-left .reg-close{width:auto;margin-top:2px;}
-.reg-right{flex:1;min-width:0;margin-left:auto;}
-.reg-right .tl-body{width:100%;margin-left:auto;}
-.reg-tl-head{margin-bottom:14px;}
-.reg-tl-head .reg-label{color:var(--hmm-accent-text);}
-.reg-tl-head .tl-sub{margin:8px 0 12px;max-width:none;}
-.tl-filter-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 16px;}
-.tl-filter-label{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-text-muted);}
-.tl-filters{display:flex;flex-wrap:wrap;gap:6px;}
-/* Resting border sits at border-hover, not border: at .12 alpha these read as
-   labels rather than controls. The selected chip carries fill + border, and
-   keeps a pearl label. Accent-on-dark measured 3.58:1, below AA at this size. */
-.tl-filters button{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.1em;font-size:9.5px;background:rgba(242,236,201,.03);border:1px solid var(--hmm-border-hover);color:var(--hmm-text-muted);padding:5px 10px;cursor:pointer;transition:var(--hmm-transition);}
-.tl-filters button:hover{border-color:var(--hmm-accent);color:var(--hmm-pearl);background:rgba(242,236,201,.07);}
-.tl-filters button:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
-.tl-filters button.on{border-color:var(--hmm-accent);color:var(--hmm-pearl);background:rgba(196,69,57,.22);}
-.tl-hidden{display:none!important;}
-/* ---------- S7 regulatory timeline ---------- */
-.tl-legend{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 28px;font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);}
-.tl-legend b{color:var(--hmm-text-muted);font-weight:400;}
-.tl-body{width:min(1140px,100%);position:relative;}
-.tl-spine{position:absolute;left:calc(-1 * (var(--spine-w) + 4px));top:0;pointer-events:none;z-index:0;--spine-w:14px;}
-.tl-year{display:flex;position:relative;transition:opacity .75s ease, transform .75s cubic-bezier(.2,.7,.2,1);}
-.tl-year.pre{opacity:0;transform:translateY(30px);}
-.tl-year.show{opacity:1;transform:none;}
-@media (prefers-reduced-motion: reduce){.tl-year.pre{opacity:1;transform:none;}}
-.tl-axis{flex:0 0 84px;position:relative;padding:12px 0 12px 20px;}
-.tl-node{position:absolute;left:-5px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--hmm-pearl);border:none;transform-origin:center;animation:tlPulse 3.4s ease-in-out infinite;}
-.tl-year:nth-child(2n) .tl-node{animation-delay:.6s;}
-.tl-year:nth-child(3n) .tl-node{animation-delay:1.2s;}
-.tl-standing .tl-node{background:var(--hmm-accent);}
-.tl-future .tl-node{background:none;border:1px dashed var(--hmm-text-faint);}
-@keyframes tlPulse{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.4);opacity:1;}}
-@media(prefers-reduced-motion:reduce){.tl-node{animation:none;opacity:.8;}}
-.tl-y{font-family:var(--hmm-font-mono);font-size:14px;color:var(--hmm-pearl);letter-spacing:.06em;}
-.tl-future .tl-y{color:var(--hmm-text-muted);}
-.tl-rows{flex:1;padding:8px 0;display:flex;flex-direction:column;gap:6px;justify-content:center;}
-.tl-empty{color:var(--hmm-caption);font-family:var(--hmm-font-mono);font-size:11px;padding:2px 0;}
-.tl-row{display:grid;grid-template-columns:46px 82px 1fr auto auto;align-items:center;gap:14px;border:1px solid var(--hmm-border);padding:9px 14px;background:rgba(242,236,201,.02);}
-.tl-future .tl-row{border-style:dashed;opacity:.82;}
-.tl-c{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.08em;text-align:center;border:1px solid var(--hmm-border);padding:2px 0;color:var(--hmm-text-muted);}
-.tl-date{font-family:var(--hmm-font-mono);font-size:11px;color:var(--hmm-text-muted);letter-spacing:.04em;}
-.tl-name{font-size:13.5px;color:var(--hmm-pearl);font-weight:600;}
-.tl-org{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.08em;color:var(--hmm-caption);text-transform:uppercase;}
-.tl-status{font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--hmm-border);color:var(--hmm-text-muted);white-space:nowrap;}
-.tl-st--transitional{color:var(--hmm-thesis);border-color:var(--hmm-thesis);}
-.tl-st--expected,.tl-st--proposed{color:var(--hmm-caption);border-color:var(--hmm-text-faint);border-style:dashed;}
-.tl-framework .tl-name{font-weight:400;color:var(--hmm-text-muted);}
-.tl-standing .tl-y{color:var(--hmm-text-muted);font-size:12px;}
-.tl-stand-label{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:8px;}
-.tl-stand-wrap{display:flex;flex-wrap:wrap;gap:6px;}
-.tl-stand-item{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--hmm-text-muted);border:1px solid var(--hmm-border);padding:4px 8px;}
-.tl-stand-item .tl-c{padding:1px 5px;font-size:9px;}
-.tl-c--global{border-style:dashed;color:var(--hmm-caption);}
-.tl-global .tl-name{color:var(--hmm-text-muted);}
+/* The enacted record lives on register.html since 2026-10-21 (clarity plan phase 2); the
+   section keeps one link to it. */
+.reg-more{align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--hmm-pearl);text-decoration:none;}
+.reg-more span{border-bottom:1px solid var(--hmm-accent);padding-bottom:2px;}
+.reg-more:hover,.reg-more:focus-visible{color:var(--hmm-accent-text);}
 /* ===== mobile UX pass (UX/perf audit) ===== */
-/* The regulation split needs more room than it was asking for. .reg-left floors at
-   440px, so between 861 and 1040px the right column fell to 285-425px while a
-   .tl-row cannot render below ~420px: 46px + 82px columns, four 14px gaps, padding,
-   plus the org and status columns, which have no smaller form. The page scrolled
-   sideways by up to 171px. Measured to zero at 1041px, so the split stacks below
-   that and the timeline gets the full width. */
 /* Clearance for the compact rail above: it measures 76px on a coarse pointer, so
    the 48px these sections carry left 28px of every one of them underneath it. The
    640px block below keeps its own 66px, tuned to the 68px the rail is down there. */
 @media (hover:none),(pointer:coarse){
   .through,.ai,.reg,.nec,.scr,.ask{padding-right:78px;}
   .site-footer{padding-right:78px;}
-}
-@media(max-width:1040px){
-  .reg-split{flex-direction:column;gap:24px;}
-  .reg-left{flex:auto;}
-  .reg-right{margin-left:0;}
 }
 @media(max-width:860px){
   /* necessity sections: stack the machine over the panel (was side-by-side, unreadable sliver)
@@ -352,8 +286,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .stage .machine-wrap{min-height:44vh;}
   .stage .machine-wrap svg{max-height:56vh;}
   .reg-jobs{flex-direction:column;}
-  /* touch targets >= 44px */
-  .tl-filters button{min-height:44px;padding:11px 14px;}
 }
 @media(max-width:640px){
   .through,.ai,.reg,.nec,.scr,.ask{padding-left:20px;padding-right:66px;}
@@ -371,25 +303,10 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .hero-row .box-info{padding:14px 18px 18px 18px;}
   .hero-row .ledger{margin-top:12px;}
   .hero-row .ledger li{font-size:11.5px;padding:5px 0;}
-  .tl-axis{flex:0 0 54px;padding-left:8px;}
-  /* P0 overflow: force the timeline row to reflow. The desktop `.tl-row{display:grid}` sits later in
-     the sheet, and media queries add no specificity, so the earlier mobile rule lost. Re-assert here. */
-  .tl-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;padding:9px 12px;}
-  .tl-row .tl-name{flex:1 1 100%;order:3;}
-  .tl-row .tl-org{flex:1 1 100%;order:4;}
-  .tl-row .tl-c{order:1;} .tl-row .tl-date{order:2;} .tl-row .tl-status{order:5;}
-  .tl-body,.tl-year,.tl-rows,.reg-right,.reg-tl-head{max-width:100%;min-width:0;}
-  .tl-legend,.tl-filters,.tl-stand-wrap{max-width:100%;}
-  /* legibility: nothing that carries meaning drops below ~11px, core reading copy sits at 14-15px */
-  .tl-name{font-size:14px;}
-  .tl-date,.tl-org,.tl-c{font-size:11.5px;}
-  .tl-status,.tl-stand-label,.tl-stand-item{font-size:11px;}
   /* footer nav: real navigation (GP / Sources / Contact), give each link a 44px tap height */
   .site-footer{padding:32px 20px;}
   .footer-nav{gap:2px 22px;flex-wrap:wrap;}
   .footer-contact{display:inline-flex;align-items:center;min-height:44px;}
-  .tl-filters button{font-size:11px;}
-  .tl-org,.tl-legend,.tl-legend b{font-size:11px;}
 }
 @media(hover:none){.machine-wrap svg .callout{transform:scale(1.3);}}
 /* ===== large screens (monitors / TV): cap content so lines stay readable and layout doesn't sprawl ===== */
@@ -397,7 +314,8 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .nec{justify-content:center;}
   .nec .stage,.nec[data-flip="1"] .stage{flex:0 1 640px;max-width:640px;}
   .nec .panel,.nec[data-flip="1"] .panel{flex:0 1 740px;max-width:740px;}
-  .reg-title,.reg-split{max-width:1440px;width:100%;box-sizing:border-box;margin-left:auto;margin-right:auto;}
+  .reg>.eyebrow,.reg-title{max-width:1440px;width:100%;box-sizing:border-box;margin-left:auto;margin-right:auto;}
+  .reg-body{margin-left:max(0px,calc((100% - 1440px) / 2));}
   .through>*{max-width:1360px;margin-left:auto;margin-right:auto;}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;}}

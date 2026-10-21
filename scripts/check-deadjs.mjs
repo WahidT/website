@@ -17,7 +17,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 
 const BASE = (process.argv[2] || 'http://127.0.0.1:8791').replace(/\/$/, '');
 const EXECUTABLE = process.env.CHROMIUM_PATH || undefined;
-const ROUTES = ['index.html', 'bio.html', 'sources.html', 'for-llms.html', '404.html'];
+const ROUTES = ['index.html', 'bio.html', 'sources.html', 'register.html', 'for-llms.html', '404.html'];
 const ALLOW = new Set([
   '.blk--active',     // toggled onto one schematic block when a stage is opened
 ]);
