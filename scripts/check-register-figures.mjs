@@ -42,11 +42,9 @@ if (missingOp.length) {
    that checked its six figures went with it. A guard whose target no longer exists reports
    clean, and a clean bill from a checker that read nothing is its most dangerous output.
 
-   ⚠ The register counts are NOT unguarded. They are drawn by the market bars, which read
-   data/market_strength.js, and the block further down reconciles that snapshot against
-   data/reg_instruments.js on every deploy: per market in force, per market operative since
-   2020, and the total. The in-force predicate and the operative-year integrity check above
-   still run. What was lost is a check on one sentence, not a check on the arithmetic. */
+   No page prints a register count since 2026-10-21, when the market bars that drew them
+   left with their section. The in-force predicate and the operative-year integrity check
+   above still run on data/reg_instruments.js, which register.html renders row by row. */
 
 /* ---------------------------------------------------------------------------
    The tier-liquidity sentence on for-llms.html, against canon.
@@ -127,61 +125,10 @@ for (const k of Object.keys(homeFigs)) {
 console.log(tierBad ? `\n${tierBad} problem(s) in the tier-liquidity sentences against canon.`
                     : '\nboth tier-liquidity sentences, on the homepage and the machine page, match canon.');
 
-/* ---------------------------------------------------------------------------
-   The per-market strength snapshot, against its two owners.
-
-   Same defect a third time, and the third surface is a chart rather than a sentence.
-   data/market_strength.js carries a per-market instrument count and a per-market
-   listing share, and the two come from different owners: the counts from
-   data/reg_instruments.js, the share from canon. A chart is the easiest place for a
-   figure to go stale, because nobody re-reads a bar. So the snapshot is recomputed here
-   from the register on every build and compared, and its canon half is compared against
-   live canon wherever the estate file is reachable. Neither side is restated.
-   --------------------------------------------------------------------------- */
-const MSMOD = await import('./market-strength.mjs');
-
-let msBad = 0;
-console.log('');
-{
-  const snap = MSMOD.readSnapshot();
-  const freshReg = MSMOD.readRegister();
-  for (const c of [...MSMOD.MARKETS, 'total']) {
-    if (c === 'total') {
-      const ok = snap.register.total === freshReg.total;
-      if (!ok) msBad++;
-      console.log(`${ok ? 'ok  ' : 'FAIL'}  strength total      snapshot ${String(snap.register.total).padStart(3)}   register ${String(freshReg.total).padStart(3)}`);
-      continue;
-    }
-    for (const k of ['inForce', 'since2020']) {
-      const ok = snap.register[c][k] === freshReg[c][k];
-      if (!ok) msBad++;
-      console.log(`${ok ? 'ok  ' : 'FAIL'}  strength ${(c + ' ' + k).padEnd(17)} snapshot ${String(snap.register[c][k]).padStart(3)}   register ${String(freshReg[c][k]).padStart(3)}`);
-    }
-  }
-
-  const msLive = MSMOD.readLiveCanon();
-  if (msLive) {
-    if (msLive.listing_prob !== snap.listing_prob) {
-      console.error(`FAIL  ${MSMOD.SNAPSHOT} listing_prob is behind ${msLive.path}. Run: node scripts/market-strength.mjs --write`);
-      msBad++;
-    } else {
-      console.log(`ok    ${MSMOD.SNAPSHOT} listing_prob matches canon compiled ${msLive.compiled}`);
-    }
-  } else {
-    console.log(`note  canon.json not reachable here; ${MSMOD.SNAPSHOT} listing_prob checked for shape only.`);
-  }
-  // The parse has to keep working whether or not canon is reachable, because the chart
-  // parses the same string in the browser.
-  try {
-    const shares = MSMOD.parseListingProb(snap.listing_prob);
-    console.log(`ok    listing share parses: AU ${shares.AU}% JP ${shares.JP}% NZ ${shares.NZ}%`);
-  } catch (e) {
-    console.error(`FAIL  ${e.message}`);
-    msBad++;
-  }
-}
-console.log(msBad ? `\n${msBad} problem(s) in the market-strength snapshot against its owners.`
-                  : '\nthe market-strength snapshot matches the register and canon.');
+/* The per-market strength snapshot (data/market_strength.js) and its block here were removed
+   on 2026-10-21 with the section that drew it, "Why Australia, Japan and New Zealand." (GP).
+   No page read the snapshot after that, and a guard on an unread file reports clean on
+   nothing. */
 
 
 
@@ -215,4 +162,4 @@ console.log('');
 console.log(ccBad ? `\n${ccBad} problem(s) in the catalogue sweep.`
                   : '\nno catalogued name is served.');
 
-process.exit(tierBad || msBad || ccBad ? 1 : 0);
+process.exit(tierBad || ccBad ? 1 : 0);
