@@ -7,7 +7,7 @@ a{color:inherit;}
 .llm-logo{color:var(--hmm-pearl,var(--hmm-pearl-beige));display:inline-block;}
 .llm-logo svg{height:24px;width:auto;display:block;}
 .llm-logo:hover{color:var(--hmm-accent,var(--hmm-tomato-jam));}
-.llm-back{font-family:var(--hmm-font-mono,'Raela Grotesque',monospace);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));text-decoration:none;}
+.llm-back{font-family:var(--hmm-font-mono,'Raela Grotesque',monospace);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));text-decoration:none;}
 .llm-back:hover{color:var(--hmm-pearl,var(--hmm-pearl-beige));}
 .llm-wrap{max-width:820px;margin:0 auto;padding:14px 30px 90px;}
 h1.llm-title{font-family:var(--hmm-font-display,'Kufam',sans-serif);font-weight:700;font-size:34px;line-height:1.06;margin:0 0 18px;}

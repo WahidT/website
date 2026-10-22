@@ -15,7 +15,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .site-logo svg{height:24px;width:auto;display:block;}
 .site-logo:hover{color:var(--hmm-accent);}
 .site-footer{position:relative;z-index:8;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:40px 30px;border-top:1px solid var(--hmm-border);}
-.convert .k{font-family:var(--hmm-font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--hmm-text-muted);margin-bottom:18px;}
+.convert .k{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--hmm-text-muted);margin-bottom:18px;}
 .convert-cta a.primary{background:var(--hmm-accent);border-color:var(--hmm-accent);}
 .convert-cta a.primary:hover{color:var(--hmm-pearl);opacity:.9;}
 .footer-nav{display:flex;gap:26px;align-items:center;}
@@ -81,7 +81,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 /* The one token that means "this navigates". Nothing static on the page carries it. */
 /* Pearl label, accent arrow: the accents are the card identity, but eat green and
    heal purple measure 4.32:1 and 3.19:1 on this ground, below AA at 10.5px. */
-.box-go{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:var(--hmm-font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-pearl);white-space:nowrap;}
+.box-go{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-pearl);white-space:nowrap;}
 .box-go-arrow{width:22px;height:8px;flex:0 0 auto;fill:none;stroke:var(--accent);stroke-width:1.4;transition:transform .3s var(--hmm-ease);}
 .box:hover .box-go-arrow,.box:focus-visible .box-go-arrow{transform:translateX(4px);}
 /* --accent is the identity colour and stays on dots, ticks, arrows and borders, where the
@@ -131,7 +131,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    names every section, marks the one you are in, and is one tap from any of them. */
 .railnav{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:9;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:12px 14px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s var(--hmm-ease),visibility .35s var(--hmm-ease);}
 .railnav.is-on{opacity:1;visibility:visible;pointer-events:auto;}
-.rail-item{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-height:44px;padding:0 2px;text-decoration:none;color:var(--hmm-text-muted);font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;transition:color .25s var(--hmm-ease);}
+.rail-item{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-height:44px;padding:0 2px;text-decoration:none;color:var(--hmm-text-muted);font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;transition:color .25s var(--hmm-ease);}
 .rail-item:hover,.rail-item:focus-visible{color:var(--hmm-pearl);}
 .rail-item:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
 .rail-label,.rail-label-s{display:block;}
@@ -171,7 +171,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    the width the rail occupies. Short forms keep it inside that allowance. */
 @media(max-width:640px){
   .railnav{padding:10px 8px 10px 10px;gap:0;background:linear-gradient(to left,var(--hmm-field-dark) 62%,rgba(20,20,20,0));}
-  .rail-item{min-height:44px;font-size:9px;letter-spacing:.08em;gap:7px;}
+  .rail-item{min-height:44px;font-size:12px;letter-spacing:.08em;gap:7px;}
   .rail-label{display:none;}
   .rail-label-s{display:block;}
 }
@@ -192,7 +192,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .nec[data-flip="1"] .panel{order:1;}
 .card{border:1px solid var(--hmm-border);padding:26px 28px;position:relative;background:rgba(242,236,201,.02);}
 .card h2{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-lg);margin:0 0 10px;}
-.card p{margin:0;font-size:14px;line-height:1.6;color:var(--hmm-text-muted);}
+.card p{margin:0;font-size:16px;line-height:1.6;color:var(--hmm-pearl);}
 .card p b{color:var(--hmm-pearl);font-weight:600;}
 .schematic-wrap{margin:6px 0 14px;}
 .schematic-wrap svg{width:100%;max-width:528px;height:auto;overflow:visible;display:block;margin:0 auto;}
@@ -218,7 +218,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    both sides below 1208px and ran under the fixed rail on the right. */
 .ai>*{width:min(1160px,100%);}
 /* ---------- S5 rebuilt: flow, figures, reading key ---------- */
-.ai-pull .k{display:block;font-family:var(--hmm-font-mono);font-weight:400;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:12px;}
+.ai-pull .k{display:block;font-family:var(--hmm-font-mono);font-weight:400;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:12px;}
 .src-split{margin-top:14px;}
 .src-prose{min-width:0;}
 .src-q{font-family:var(--hmm-font-display);font-weight:700;font-size:25px;line-height:1.22;color:var(--hmm-pearl);margin:14px 0 16px;}
@@ -229,7 +229,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .src-move+.src-move{border-top:1px solid rgba(242,236,201,.07);}
 .src-move-i{font-family:var(--hmm-font-mono);font-size:22px;color:var(--hmm-accent);line-height:1;padding-left:16px;}
 .src-move-body h3{font-family:var(--hmm-font-display);font-weight:700;font-size:16px;margin:0 0 7px;line-height:1.15;color:var(--hmm-pearl);}
-.src-move-body p{font-size:13.5px;line-height:1.6;color:var(--hmm-text-muted);margin:0;}
+.src-move-body p{font-size:16px;line-height:1.6;color:var(--hmm-pearl);margin:0;}
 /* ---------- S8 density ---------- */
 .tk{position:absolute;width:9px;height:9px;pointer-events:none;}
 .tk--tl{left:6px;top:6px;border-top:1px solid;border-left:1px solid;}
@@ -251,13 +251,13 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .reg-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 8px;}
 .reg-plate{position:relative;flex:1;border:1px solid var(--hmm-border);border-top:2px solid var(--hmm-accent);padding:22px 26px 0;background:rgba(242,236,201,.02);}
 .reg-plate .tk{border-color:var(--hmm-accent);}
-.reg-plate p{margin:0;font-size:13.5px;line-height:1.62;color:var(--hmm-text-muted);}
+.reg-plate p{margin:0;font-size:16px;line-height:1.6;color:var(--hmm-pearl);}
 .reg-plate--wide{padding-bottom:18px;}
 .reg-plate p b{color:var(--hmm-pearl);font-weight:600;}
 .reg-body{display:flex;flex-direction:column;gap:16px;width:100%;max-width:760px;}
 .reg-glyph{margin:0;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);position:relative;}
 .reg-glyph canvas{display:block;width:100%;height:172px;}
-.reg-glyph figcaption{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:9px 14px;border-top:1px solid var(--hmm-border);}
+.reg-glyph figcaption{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:9px 14px;border-top:1px solid var(--hmm-border);}
 /* The two plates size to their own content since 2026-09-15. They were stretched to a
    common height while each carried a footer that anchored its base; with the footers gone
    the shorter plate read as a hollow box. */
@@ -302,13 +302,31 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .hero-row .machine{width:60%;height:100%;}
   .hero-row .box-info{padding:14px 18px 18px 18px;}
   .hero-row .ledger{margin-top:12px;}
-  .hero-row .ledger li{font-size:11.5px;padding:5px 0;}
+  .hero-row .ledger li{font-size:12px;padding:5px 0;}
   /* footer nav: real navigation (GP / Sources / Contact), give each link a 44px tap height */
   .site-footer{padding:32px 20px;}
   .footer-nav{gap:2px 22px;flex-wrap:wrap;}
   .footer-contact{display:inline-flex;align-items:center;min-height:44px;}
 }
 @media(hover:none){.machine-wrap svg .callout{transform:scale(1.3);}}
+/* Callouts as text on a phone (clarity plan phase 3, 2026-10-22). The blow-out scales with its
+   box, so below 600px its 12.5px labels render at about 5px; the boxes and their leaders hide and
+   the list sections.js builds from the same data takes their place under the drawing. */
+.callout-list{display:none;}
+@media(max-width:600px){
+  .machine-wrap svg .callout,.machine-wrap svg .callout-ld{display:none;}
+  /* With the boxes gone the drawing needs no headroom for them, so it takes its own height
+     rather than the 44vh the stacked layout reserves above 600px. */
+  .stage .machine-wrap{min-height:0;}
+  .stage .machine-wrap svg{height:auto;max-height:none;}
+  .callout-list{display:flex;flex-direction:column;gap:8px;list-style:none;margin:14px 0 0;padding:0;}
+  .callout-list li{display:flex;gap:10px;align-items:baseline;font-size:14px;line-height:1.5;color:var(--hmm-text-muted);}
+  .callout-list .cl-n{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;color:var(--hmm-caption);flex:0 0 auto;}
+  .callout-list b{color:var(--hmm-pearl);font-weight:600;}
+  .sec-power .callout-list .is-key .cl-n{color:var(--hmm-nec-power-dark);}
+  .sec-eat .callout-list .is-key .cl-n{color:var(--hmm-nec-eat-dark);}
+  .sec-heal .callout-list .is-key .cl-n{color:var(--hmm-nec-heal-dark);}
+}
 /* ===== large screens (monitors / TV): cap content so lines stay readable and layout doesn't sprawl ===== */
 @media(min-width:1440px){
   .nec{justify-content:center;}
@@ -379,7 +397,7 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    labels at 1024px. The section gives back the rail's width at those sizes, which is
    what the phone rule below 768px does for every section by hiding the rail instead. */
 @media (pointer:coarse) and (min-width:768px) and (max-width:1100px){
-  .reg{padding-right:96px;}
+  .reg{padding-right:112px;}   /* the touch rail measures 103px since its labels went to the 12px floor (2026-10-22) */
 }
 
 /* ---------- S1 the fit breaks into dots on scroll (fit.js) ----------
