@@ -41,6 +41,11 @@ export const probe = async () => {
     const el = node.parentElement;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || +cs.opacity === 0) return null;
+    /* A display:none ancestor hides the text, but over SVG text inside a hidden <g> Chromium still
+       reports a Range box, and checkVisibility() still returns true, so the hidden blow-out
+       callouts read as rendered 4 to 6px text (found 2026-10-26; the schematic's 2.9px labels
+       had masked it, because the report keeps the smallest size per place). Walk the ancestors. */
+    for (let a = el; a; a = a.parentElement) if (getComputedStyle(a).display === 'none') return null;
     const rg = document.createRange(); rg.selectNodeContents(node);
     const b = rg.getBoundingClientRect();
     if (b.width < 1 || b.height < 1) return null;
