@@ -311,7 +311,7 @@ var HMM = (function(){
   function Blowout(kind){
     var spec=MACH[kind], A=accentOf(spec), AT=accentText(spec), PEARL=PEARL_(), FN="rgba(242,236,201,.45)", vb=spec.vb, W=vb[2], BW=232, BH=84, els=[];
     spec.call.forEach(function(c,i){var left=c[4]==="L",bx=left?24:W-24-BW,by=c[5],col=c[6]?A:PEARL,txt=c[6]?AT:PEARL,p=c[3],anchor=[left?bx+BW:bx,by+BH/2],midx=(anchor[0]+p[0])/2;
-      els.push(h("polyline",{key:"ld"+i,points:anchor[0]+","+anchor[1]+" "+midx+","+anchor[1]+" "+p[0]+","+p[1],fill:"none",stroke:c[6]?A:"rgba(242,236,201,.5)",strokeWidth:1}));
+      els.push(h("polyline",{key:"ld"+i,className:"callout-ld",points:anchor[0]+","+anchor[1]+" "+midx+","+anchor[1]+" "+p[0]+","+p[1],fill:"none",stroke:c[6]?A:"rgba(242,236,201,.5)",strokeWidth:1}));
       els.push(h("circle",{key:"fd"+i,cx:p[0],cy:p[1],r:c[6]?4:3,fill:col}));
       if(c[6])els.push(h("circle",{key:"mg"+i,cx:p[0],cy:p[1],r:22,fill:"none",stroke:A,strokeWidth:1}));
       var box=[
@@ -338,5 +338,7 @@ var HMM = (function(){
   function renderBlowout(mount,kind){mountOne(mount,kind,Blowout);}
   __onTheme(function(){MOUNTED.forEach(draw);});
 
-  return {renderIcon:renderIcon, renderBlowout:renderBlowout, accent:function(k){return accentOf(MACH[k]);}, accentText:function(k){return accentText(MACH[k]);}};
+  /* callouts(k): the blow-out's part labels as data, so a page can set them as text where the
+     drawing is too small to read them (sections.js, under 600px). */
+  return {renderIcon:renderIcon, renderBlowout:renderBlowout, callouts:function(k){return MACH[k].call.map(function(c){return {n:c[0],name:c[1],note:c[2].join(' '),key:!!c[6]};});}, accent:function(k){return accentOf(MACH[k]);}, accentText:function(k){return accentText(MACH[k]);}};
 })();

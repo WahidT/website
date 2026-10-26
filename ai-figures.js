@@ -50,9 +50,9 @@
         ctx.beginPath();ctx.arc(x,y,p.s,0,6.28);ctx.fillStyle=rgba(PEARL,p.s>1.5?0.85:0.5);ctx.fill();});
       ctx.strokeStyle=ACC;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(gx,14);ctx.lineTo(gx,H-12);ctx.stroke();
       ctx.fillStyle=ACC;ctx.beginPath();ctx.moveTo(gx-5,26);ctx.lineTo(gx+5,31);ctx.lineTo(gx-5,36);ctx.closePath();ctx.fill();
-      mono(ctx,8.5);ctx.fillStyle=LBL;ctx.textAlign='left';ctx.fillText('OPEN',12,H-7);
+      mono(ctx,12);ctx.fillStyle=LBL;ctx.textAlign='left';ctx.fillText('OPEN',12,H-7);
       ctx.textAlign='right';ctx.fillStyle=rgba(PEARL,0.8);ctx.fillText('POOLS BEHIND THE GATE',W-12,H-7);
-      ctx.save();ctx.translate(gx-11,H/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.fillStyle=ACC;mono(ctx,8.5);ctx.fillText('THE GATE',0,0);ctx.restore();
+      ctx.save();ctx.translate(gx-11,H/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.fillStyle=ACC;mono(ctx,12);ctx.fillText('THE GATE',0,0);ctx.restore();
     });
   }
 })();

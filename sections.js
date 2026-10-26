@@ -118,6 +118,12 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
     +'<div class="card">'+TK+'<div class="schematic-wrap"></div></div>'
     +'</div>';
   HMM.renderBlowout(sec.querySelector('.machine-wrap'),kind);
+  /* Under 600px the drawing renders its callouts at about 5px, so index.css hides the boxes there
+     and this list carries the same labels as text (clarity plan phase 3, 2026-10-22). */
+  var cl=document.createElement('ol');cl.className='callout-list';
+  HMM.callouts(kind).forEach(function(c){var li=document.createElement('li');if(c.key)li.className='is-key';
+    li.innerHTML='<span class="cl-n">'+c.n+'</span><span class="cl-t"><b>'+c.name+'</b> '+c.note+'</span>';cl.appendChild(li);});
+  sec.querySelector('.stage').appendChild(cl);
   var smount=sec.querySelector('.schematic-wrap');hmmRender(smount,Schematic(kind));SCHEMATIC_MOUNTS.push({mount:smount,kind:kind});
 });
 /* A theme flip redraws each schematic with the accent re-read. */
