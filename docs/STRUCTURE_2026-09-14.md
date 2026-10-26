@@ -203,7 +203,7 @@ Where a figure has no owner, the sentence stands without it.**
 | Figure | Owner | How the page gets it | Guard |
 |---|---|---|---|
 | Register total, per-market split, since-2020, scheduled | `data/reg_instruments.js`, matching `count_reg_dates.py` | Sentence checked against the data file | `check-register-figures.mjs` |
-| Tier rates, odds ratio, p-value | canon `current.tier_liquidity` | `canon-figures.mjs` copies canon verbatim to `data/canon_tier_liquidity.json`; the page is parsed against it | `check-register-figures.mjs` |
+| Tier rates, odds ratio, p-value | Withdrawn from every page on 2026-10-26 (GP); the snapshot and `canon-figures.mjs` were removed | The guard fails if a withdrawn figure is served | `check-register-figures.mjs` |
 | Listing share by market | canon `current.listing_prob` | `market-strength.mjs` copies canon verbatim to `data/market_strength.json` | `check-register-figures.mjs` |
 | Specialisation index | `AU_NZ_JP_innovation_exit_catalogue_2026-08-10.md` | Held in `radars.js` with its p-values and its 2026-09-12 correction | None; it is a fixed research output |
 | 1.09 unicorns, 0.16 decacorns per USD 1B | Side Stage Ventures with Dealroom, June 2026 | Typed with the edition named, as an external publication | Sources page row |

@@ -47,106 +47,45 @@ if (missingOp.length) {
    above still run on data/reg_instruments.js, which register.html renders row by row. */
 
 /* ---------------------------------------------------------------------------
-   The tier-liquidity sentence on for-llms.html, against canon.
+   THE TIER-LIQUIDITY FIGURE IS WITHDRAWN (GP, 2026-10-26: "Pull it from the site").
 
-   Same defect, a second surface. The page states a register size, two tier rates,
-   an odds ratio and a p-value, and those belong to the engine, not to this
-   repository: they move whenever canon is recompiled on a new plate. Nothing here
-   noticed the 2026-09-13 re-strike, so the page went on printing the figures from
-   before it.
+   Until this date this block held the homepage gloss and the for-llms.html tier answer to a canon
+   snapshot (data/canon_tier_liquidity.json, written by scripts/canon-figures.mjs). Rebuilt on the
+   product's approval pathway, with changes of control as the outcome, the register showed no
+   measurable acquisition effect (workspace: Research_Library/Datasets/classifier/
+   REBUILD_MEMO_2026-10-26.md). The figure, the snapshot and its writer left the site together.
 
-   canon.json is not in this tree and the Netlify build cannot reach it, so the
-   build compares the page against data/canon_tier_liquidity.json, the canon entry
-   copied verbatim by scripts/canon-figures.mjs --write. Where the estate's canon
-   file IS reachable, which is every local run and every run on the GP's machine,
-   the snapshot is checked against it too, so a recompile fails here rather than
-   waiting to be spotted on the live site. Both sides are parsed; neither is
-   restated. --------------------------------------------------------------- */
-const { parseTierLiquidity, readLiveCanon, readSnapshot, SNAPSHOT } = await import('./canon-figures.mjs');
-
+   A guard whose target is gone must not report clean on nothing, so this block now fails if any
+   withdrawn figure, or the sentence shape that carried it, comes back to a served page. Served
+   text only: the HTML comments that record the withdrawal are history, not claims.
+   --------------------------------------------------------------------------- */
 let tierBad = 0;
-const snap = readSnapshot();
-const live = readLiveCanon();
-
-console.log('');
-if (live) {
-  if (live.tier_liquidity !== snap.tier_liquidity) {
-    console.error(`FAIL  ${SNAPSHOT} is behind ${live.path}. Run: node scripts/canon-figures.mjs --write`);
-    tierBad++;
-  } else {
-    console.log(`ok    ${SNAPSHOT} matches canon compiled ${live.compiled}`);
-  }
-} else {
-  console.log(`note  canon.json not reachable here; checking the page against ${SNAPSHOT} (compiled ${snap.compiled}).`);
-}
-
-const canonFigs = parseTierLiquidity(snap.tier_liquidity);
-const llms = fs.readFileSync('for-llms.html', 'utf8');
-const t = llms.match(/Across the companies in hmm's register in Japan, Australia and New Zealand, companies whose product requires a hard regulatory approval exit at ([\d.]+)% against ([\d.]+)% for companies facing no regulatory gate, an odds ratio of ([\d.]+) at p = ([\d.e+-]+)\. The effect sits at one tier only: companies selling into a buyer under a compliance obligation exit at ([\d.]+)%/);
-if (!t) {
-  console.error('FAIL: the tier-liquidity sentence was not found in for-llms.html.');
-  console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
-  process.exit(1);
-}
-/* Reworded 2026-10-26 (spec v1.1, 3.10): the register count left the prose (no absolute counts
-   in served text) and Japan leads the market list. Two decimals stay on this page, compared exactly. */
-const pageFigs = {
-  hardApprovalPct: t[1], noGatePct: t[2],
-  oddsRatio: t[3], yatesP: t[4], buyerObligationPct: t[5],
-};
-for (const k of Object.keys(pageFigs)) {
-  const ok = pageFigs[k] === canonFigs[k];
-  if (!ok) tierBad++;
-  console.log(`${ok ? 'ok  ' : 'FAIL'}  ${k.padEnd(20)} page says ${String(pageFigs[k]).padStart(9)}   canon says ${String(canonFigs[k]).padStart(9)}`);
-}
-/* THE SECOND COPY, on the homepage, added 2026-09-14 with plate 06.D.
-   The tier finding prints on a human page as well as on the machine page, and two copies
-   of one canon figure drift the moment one is edited alone, with the stale copy being the one
-   that loads first. So both are parsed against the same snapshot, and either disagreeing
-   fails the deploy. Neither is restated here. */
 const home = fs.readFileSync('index.html', 'utf8');
-const h = home.match(/Those that needed one reached a liquidity event at nearly three times the rate, ([\d.]+)% against ([\d.]+)%, an odds ratio of ([\d.]+)\./);
-if (!h) {
-  console.error('FAIL: the gate gloss sentence was not found in index.html.');
-  console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
-  process.exit(1);
+function servedText(html) {
+  let s = html;
+  for (const tag of ['script', 'style', 'svg', 'noscript']) s = s.replace(new RegExp(`<${tag}\\b[\\s\\S]*?</${tag}>`, 'gi'), ' ');
+  return s.replace(/<!--[\s\S]*?-->/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;|&#\d+;/gi, ' ').replace(/\s+/g, ' ');
 }
-/* Reworded 2026-10-26 (spec v1.1, 3.4): no register count on the homepage, one decimal,
-   and the buyer-obligation tier moved to for-llms.html only. Compared to canon rounded
-   to one decimal, so a canon re-strike that moves the first decimal still fails here. */
-const r1 = v => Number(v).toFixed(1);
-const homeFigs = { hardApprovalPct: h[1], noGatePct: h[2], oddsRatio: h[3] };
+const WITHDRAWN = [
+  [/\b17\.7\d?\s*%/, 'the hard-approval rate (17.7%)'],
+  [/\b6\.0?8\s*%|\b6\.1\s*%\s*(?:where|for|against|with no)/, 'the no-gate rate (6.08% / 6.1%)'],
+  [/\b5\.82\s*%/, 'the buyer-obligation rate (5.82%)'],
+  [/odds ratio (?:of )?3\.3\d?\b/i, 'the odds ratio (3.33)'],
+  [/9\.39e-75/, 'the p-value'],
+  [/nearly three times the rate/i, 'the "nearly three times" gloss'],
+  [/reach(?:ed)? a liquidity event at/i, 'the tier-liquidity sentence'],
+];
 console.log('');
-for (const k of Object.keys(homeFigs)) {
-  const ok = homeFigs[k] === r1(canonFigs[k]);
-  if (!ok) tierBad++;
-  console.log(`${ok ? 'ok  ' : 'FAIL'}  gate ${k.padEnd(19)} page says ${homeFigs[k].padStart(9)}   canon (1dp) says ${r1(canonFigs[k]).padStart(9)}`);
+for (const page of ['index.html', 'for-llms.html', 'sources.html', 'bio.html', 'register.html', 'instruments.html', '404.html', 'llms.txt']) {
+  const raw = fs.readFileSync(page, 'utf8');
+  const text = page.endsWith('.txt') ? raw : servedText(raw);
+  const hits = WITHDRAWN.filter(([rx]) => rx.test(text)).map(([, what]) => what);
+  if (hits.length) { tierBad += hits.length; console.error(`FAIL  ${page} serves a withdrawn tier-liquidity figure: ${hits.join('; ')}`); }
 }
-/* "nearly three times the rate" is the rate ratio, not the odds ratio. Hold the words to the
-   numbers, so a re-strike that moves the ratio out of [2.5, 3) fails here rather than misleading. */
-{
-  const rr = Number(canonFigs.hardApprovalPct) / Number(canonFigs.noGatePct);
-  const ok = rr >= 2.5 && rr < 3;
-  if (!ok) tierBad++;
-  console.log(`${ok ? 'ok  ' : 'FAIL'}  gate rate ratio ${rr.toFixed(2)} ${ok ? 'reads as "nearly three times"' : 'no longer reads as "nearly three times"; reword the gloss'}`);
-}
-
-/* THE HEADLINE FIGURE above that sentence (clarity plan phase 4, 2026-10-22). Its three numbers
-   are written at render by sections.js from the sentence, so the only way to make them drift is to
-   type one into the markup. Fail on that, and on a slot keyed to a figure canon does not state.
-   check-clarity.mjs compares the rendered numbers with canon, at one decimal, in a browser. */
-{
-  const slots = [...home.matchAll(/<span class="rf-v" data-fig="([A-Za-z]+)">([^<]*)<\/span>/g)];
-  if (slots.length !== 3) { tierBad++; console.error(`FAIL  06 headline: expected 3 figure slots in index.html, found ${slots.length}`); }
-  for (const [, key, typed] of slots) {
-    const ok = key in canonFigs && typed.trim() === '';
-    if (!ok) tierBad++;
-    console.log(`${ok ? 'ok  ' : 'FAIL'}  06 headline ${key.padEnd(17)} ${typed.trim() ? `typed "${typed.trim()}" in the markup` : (key in canonFigs ? 'empty in markup, written from the sentence' : 'is not a canon figure')}`);
-  }
-}
-
-console.log(tierBad ? `\n${tierBad} problem(s) in the tier-liquidity sentences against canon.`
-                    : '\nboth tier-liquidity sentences, on the homepage and the machine page, match canon.');
+if (fs.existsSync('data/canon_tier_liquidity.json')) { tierBad++; console.error('FAIL  data/canon_tier_liquidity.json is back in the published root'); }
+if (/id="regFig"|class="reg-note"/.test(home)) { tierBad++; console.error('FAIL  index.html carries the withdrawn figure block or its footnote'); }
+console.log(tierBad ? `\n${tierBad} withdrawn tier-liquidity item(s) served.`
+                    : 'ok    the withdrawn tier-liquidity figure appears on no served page, and its snapshot is gone');
 
 /* The per-market strength snapshot (data/market_strength.js) and its block here were removed
    on 2026-10-21 with the section that drew it, "Why Australia, Japan and New Zealand." (GP).
