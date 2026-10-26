@@ -129,6 +129,16 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
 /* A theme flip redraws each schematic with the accent re-read. */
 __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){hmmRender(m.mount,Schematic(m.kind));});});
 
+/* ---------- S6 the headline figure (clarity plan phase 4, 2026-10-22) ----------
+   The three numbers are read out of the gloss sentence, never typed. The pattern is the one
+   scripts/check-register-figures.mjs holds to canon, so a reworded sentence leaves the slots
+   empty rather than wrong, and check-clarity.mjs fails on an empty slot. */
+(function(){var fig=document.getElementById('regFig');if(!fig)return;
+  var m=fig.querySelector('.rf-gloss').textContent.replace(/\s+/g,' ').match(/reach a liquidity event at ([\d.]+)%, against ([\d.]+)% where no approval gates the sale, an odds ratio of ([\d.]+)\./);
+  if(!m)return;
+  var v={hardApprovalPct:m[1]+'%',noGatePct:m[2]+'%',oddsRatio:m[3]};
+  fig.querySelectorAll('[data-fig]').forEach(function(el){var k=el.getAttribute('data-fig');if(v[k])el.textContent=v[k];});
+})();
 /* ---------- section rail: active marking + reveal ---------- */
 (function(){
   var rail=document.getElementById('railnav'); if(!rail) return;

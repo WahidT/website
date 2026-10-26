@@ -137,6 +137,21 @@
     <div class="eyebrow">The gate</div>
     <h2 class="reg-title">Regulation locates the company, then protects it.</h2>
     <div class="reg-body">
+      <!-- The headline figure (clarity plan phase 4, 2026-10-22). The three numbers are not typed:
+           sections.js reads them out of the sentence beneath, which check-register-figures.mjs holds
+           to canon, so the headline cannot drift from the sentence or the sentence from canon.
+           The slots are aria-hidden because the sentence already says each figure in full. -->
+      <figure class="reg-fig u-panel" id="regFig">
+        <span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>
+        <div class="rf-nums" aria-hidden="true">
+          <div class="rf-or"><span class="rf-v" data-fig="oddsRatio"></span><span class="rf-k">odds ratio</span></div>
+          <div class="rf-rates">
+            <div class="rf-rate rf-rate--gate"><span class="rf-v" data-fig="hardApprovalPct"></span><span class="rf-k">cannot be sold without an approval</span></div>
+            <div class="rf-rate"><span class="rf-v" data-fig="noGatePct"></span><span class="rf-k">no approval gates the sale</span></div>
+          </div>
+        </div>
+        <figcaption class="rf-gloss">Across 12,664 companies in Australia, Japan and New Zealand, those whose product cannot be sold without an approval reach a liquidity event at 17.73%, against 6.08% where no approval gates the sale, an odds ratio of 3.33. The tier between them, where a buyer sits under a compliance obligation, reaches 5.82% and sits with the unregulated rate.</figcaption>
+      </figure>
       <div class="reg-jobs">
         <div class="reg-plate u-panel">
           <span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>
@@ -146,10 +161,6 @@
           <span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>
           <p>An approval is issued against a named site and the process running on it. Buying the company costs less than replicating it, because an acquirer who wants the product and rebuilds the manufacturing restarts the qualification clock.</p>
         </div>
-      </div>
-      <div class="reg-plate reg-plate--wide u-panel">
-        <span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>
-        <p>Across 12,664 companies in Australia, Japan and New Zealand, those whose product cannot be sold without an approval reach a liquidity event at 17.73%, against 6.08% where no approval gates the sale, an odds ratio of 3.33. The tier between them, where a buyer sits under a compliance obligation, reaches 5.82% and sits with the unregulated rate.</p>
       </div>
       <div class="reg-plate reg-plate--wide u-panel">
         <span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>

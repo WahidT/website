@@ -122,6 +122,20 @@ for (const k of Object.keys(homeFigs)) {
   console.log(`${ok ? 'ok  ' : 'FAIL'}  06.D ${k.padEnd(19)} page says ${String(homeFigs[k]).padStart(9)}   canon says ${String(canonFigs[k]).padStart(9)}`);
 }
 
+/* THE HEADLINE FIGURE above that sentence (clarity plan phase 4, 2026-10-22). Its three numbers
+   are written at render by sections.js from the sentence, so the only way to make them drift is to
+   type one into the markup. Fail on that, and on a slot keyed to a figure canon does not state.
+   check-clarity.mjs compares the rendered numbers with canon in a browser. */
+{
+  const slots = [...home.matchAll(/<span class="rf-v" data-fig="([A-Za-z]+)">([^<]*)<\/span>/g)];
+  if (slots.length !== 3) { tierBad++; console.error(`FAIL  06 headline: expected 3 figure slots in index.html, found ${slots.length}`); }
+  for (const [, key, typed] of slots) {
+    const ok = key in canonFigs && typed.trim() === '';
+    if (!ok) tierBad++;
+    console.log(`${ok ? 'ok  ' : 'FAIL'}  06 headline ${key.padEnd(17)} ${typed.trim() ? `typed "${typed.trim()}" in the markup` : (key in canonFigs ? 'empty in markup, written from the sentence' : 'is not a canon figure')}`);
+  }
+}
+
 console.log(tierBad ? `\n${tierBad} problem(s) in the tier-liquidity sentences against canon.`
                     : '\nboth tier-liquidity sentences, on the homepage and the machine page, match canon.');
 

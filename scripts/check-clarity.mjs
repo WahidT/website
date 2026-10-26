@@ -44,6 +44,23 @@ for (const [name, m] of Object.entries(r)) {
   for (const [where, px] of m.under12) problems.push(`${name}: ${where} text at ${px}px, under ${FLOOR}px`);
 }
 
+/* The gate's headline figure, rendered, against the canon snapshot (clarity plan phase 4). */
+{
+  const { chromium } = await import('playwright');
+  const { parseTierLiquidity, readSnapshot } = await import('./canon-figures.mjs');
+  const canon = parseTierLiquidity(readSnapshot().tier_liquidity);
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+  const page = await browser.newPage();
+  await page.goto(`${BASE}/index.html`, { waitUntil: 'networkidle' });
+  const shown = await page.$$eval('#regFig [data-fig]', els => els.map(e => [e.dataset.fig, e.textContent.trim()]));
+  await browser.close();
+  if (shown.length !== 3) problems.push(`headline: ${shown.length} figure slots rendered, expected 3`);
+  for (const [k, v] of shown) {
+    const want = k === 'oddsRatio' ? canon[k] : `${canon[k]}%`;
+    if (v !== want) problems.push(`headline: ${k} renders "${v}", canon says "${want}"`);
+  }
+}
+
 for (const p of problems) console.log('FAIL ' + p);
 console.log(problems.length ? `\n${problems.length} clarity findings` : 'clarity: all checks pass');
 process.exit(problems.length ? 1 : 0);
