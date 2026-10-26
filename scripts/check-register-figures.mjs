@@ -82,15 +82,17 @@ if (live) {
 
 const canonFigs = parseTierLiquidity(snap.tier_liquidity);
 const llms = fs.readFileSync('for-llms.html', 'utf8');
-const t = llms.match(/Across ([\d,]+) companies in Australia, Japan and New Zealand, companies whose product requires a hard regulatory approval exit at ([\d.]+)% against ([\d.]+)% for companies facing no regulatory gate, an odds ratio of ([\d.]+) at p = ([\d.e+-]+)\. The effect sits at one tier only: companies selling into a buyer under a compliance obligation exit at ([\d.]+)%/);
+const t = llms.match(/Across the companies in hmm's register in Japan, Australia and New Zealand, companies whose product requires a hard regulatory approval exit at ([\d.]+)% against ([\d.]+)% for companies facing no regulatory gate, an odds ratio of ([\d.]+) at p = ([\d.e+-]+)\. The effect sits at one tier only: companies selling into a buyer under a compliance obligation exit at ([\d.]+)%/);
 if (!t) {
   console.error('FAIL: the tier-liquidity sentence was not found in for-llms.html.');
   console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
   process.exit(1);
 }
+/* Reworded 2026-10-26 (spec v1.1, 3.10): the register count left the prose (no absolute counts
+   in served text) and Japan leads the market list. Two decimals stay on this page, compared exactly. */
 const pageFigs = {
-  registerCount: t[1], hardApprovalPct: t[2], noGatePct: t[3],
-  oddsRatio: t[4], yatesP: t[5], buyerObligationPct: t[6],
+  hardApprovalPct: t[1], noGatePct: t[2],
+  oddsRatio: t[3], yatesP: t[4], buyerObligationPct: t[5],
 };
 for (const k of Object.keys(pageFigs)) {
   const ok = pageFigs[k] === canonFigs[k];
@@ -98,34 +100,41 @@ for (const k of Object.keys(pageFigs)) {
   console.log(`${ok ? 'ok  ' : 'FAIL'}  ${k.padEnd(20)} page says ${String(pageFigs[k]).padStart(9)}   canon says ${String(canonFigs[k]).padStart(9)}`);
 }
 /* THE SECOND COPY, on the homepage, added 2026-09-14 with plate 06.D.
-   The tier finding now prints on a human page as well as on the machine page, and two copies
+   The tier finding prints on a human page as well as on the machine page, and two copies
    of one canon figure drift the moment one is edited alone, with the stale copy being the one
    that loads first. So both are parsed against the same snapshot, and either disagreeing
    fails the deploy. Neither is restated here. */
 const home = fs.readFileSync('index.html', 'utf8');
-const h = home.match(/Across ([\d,]+) companies in Australia, Japan and New Zealand, those whose product cannot be sold without an approval reach a liquidity event at ([\d.]+)%, against ([\d.]+)% where no approval gates the sale, an odds ratio of ([\d.]+)\. The tier between them, where a buyer sits under a compliance obligation, reaches ([\d.]+)%/);
+const h = home.match(/Those that needed one reached a liquidity event at nearly three times the rate, ([\d.]+)% against ([\d.]+)%, an odds ratio of ([\d.]+)\./);
 if (!h) {
-  console.error('FAIL: plate 06.D\'s measured sentence was not found in index.html.');
+  console.error('FAIL: the gate gloss sentence was not found in index.html.');
   console.error('If it was reworded, update the pattern in this file so the guard keeps working.');
   process.exit(1);
 }
-/* Reworded 2026-10-07 (the plates cut down at the GP's instruction): the register count now
-   leads the sentence, so it is the first group. */
-const homeFigs = {
-  registerCount: h[1], hardApprovalPct: h[2], noGatePct: h[3],
-  oddsRatio: h[4], buyerObligationPct: h[5],
-};
+/* Reworded 2026-10-26 (spec v1.1, 3.4): no register count on the homepage, one decimal,
+   and the buyer-obligation tier moved to for-llms.html only. Compared to canon rounded
+   to one decimal, so a canon re-strike that moves the first decimal still fails here. */
+const r1 = v => Number(v).toFixed(1);
+const homeFigs = { hardApprovalPct: h[1], noGatePct: h[2], oddsRatio: h[3] };
 console.log('');
 for (const k of Object.keys(homeFigs)) {
-  const ok = homeFigs[k] === canonFigs[k];
+  const ok = homeFigs[k] === r1(canonFigs[k]);
   if (!ok) tierBad++;
-  console.log(`${ok ? 'ok  ' : 'FAIL'}  06.D ${k.padEnd(19)} page says ${String(homeFigs[k]).padStart(9)}   canon says ${String(canonFigs[k]).padStart(9)}`);
+  console.log(`${ok ? 'ok  ' : 'FAIL'}  gate ${k.padEnd(19)} page says ${homeFigs[k].padStart(9)}   canon (1dp) says ${r1(canonFigs[k]).padStart(9)}`);
+}
+/* "nearly three times the rate" is the rate ratio, not the odds ratio. Hold the words to the
+   numbers, so a re-strike that moves the ratio out of [2.5, 3) fails here rather than misleading. */
+{
+  const rr = Number(canonFigs.hardApprovalPct) / Number(canonFigs.noGatePct);
+  const ok = rr >= 2.5 && rr < 3;
+  if (!ok) tierBad++;
+  console.log(`${ok ? 'ok  ' : 'FAIL'}  gate rate ratio ${rr.toFixed(2)} ${ok ? 'reads as "nearly three times"' : 'no longer reads as "nearly three times"; reword the gloss'}`);
 }
 
 /* THE HEADLINE FIGURE above that sentence (clarity plan phase 4, 2026-10-22). Its three numbers
    are written at render by sections.js from the sentence, so the only way to make them drift is to
    type one into the markup. Fail on that, and on a slot keyed to a figure canon does not state.
-   check-clarity.mjs compares the rendered numbers with canon in a browser. */
+   check-clarity.mjs compares the rendered numbers with canon, at one decimal, in a browser. */
 {
   const slots = [...home.matchAll(/<span class="rf-v" data-fig="([A-Za-z]+)">([^<]*)<\/span>/g)];
   if (slots.length !== 3) { tierBad++; console.error(`FAIL  06 headline: expected 3 figure slots in index.html, found ${slots.length}`); }

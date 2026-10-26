@@ -44,6 +44,20 @@ for (const [name, m] of Object.entries(r)) {
   for (const [where, px] of m.under12) problems.push(`${name}: ${where} text at ${px}px, under ${FLOOR}px`);
 }
 
+/* One h1 on the thesis page, and it is the R-D49 self-description (GP 2026-10-26, spec v1.1, 3.2).
+   "Necessity is the thesis" is an h2 since then. */
+{
+  const { chromium } = await import('playwright');
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+  const page = await browser.newPage();
+  await page.goto(`${BASE}/index.html`, { waitUntil: 'networkidle' });
+  const h1s = await page.$$eval('h1', els => els.map(e => e.textContent.replace(/\s+/g, ' ').trim()));
+  await browser.close();
+  const H1 = 'A pre-permission fund.';
+  if (h1s.length !== 1) problems.push(`h1: ${h1s.length} h1 elements on index.html, expected 1`);
+  else if (h1s[0] !== H1) problems.push(`h1: reads "${h1s[0]}", expected "${H1}"`);
+}
+
 /* The gate's headline figure, rendered, against the canon snapshot (clarity plan phase 4). */
 {
   const { chromium } = await import('playwright');
@@ -56,7 +70,9 @@ for (const [name, m] of Object.entries(r)) {
   await browser.close();
   if (shown.length !== 3) problems.push(`headline: ${shown.length} figure slots rendered, expected 3`);
   for (const [k, v] of shown) {
-    const want = k === 'oddsRatio' ? canon[k] : `${canon[k]}%`;
+    /* One decimal since 2026-10-26 (spec v1.1, 3.4), the precision the gloss sentence prints. */
+    const v1 = Number(canon[k]).toFixed(1);
+    const want = k === 'oddsRatio' ? v1 : `${v1}%`;
     if (v !== want) problems.push(`headline: ${k} renders "${v}", canon says "${want}"`);
   }
 }

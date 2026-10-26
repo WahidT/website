@@ -17,7 +17,9 @@ Object.keys(LEDGERS).forEach(function(nec){var ul=document.querySelector('.ledge
 /* ---------- necessity section content ----------
    The card heading is the system's name, Power, Eat or Heal (GP 2026-09-15), because that is
    the name the memorandum and every other page use; the definition sentence under it still
-   says which physical system the name stands for. */
+   says which physical system the name stands for. The definition under it is the
+   plain-language line set after stepMap() below (GP 2026-10-26: keep the plain lines); the
+   institutional definitions that sat here, never rendered, left on the same date. */
 /* Token names, read at each render rather than captured here, so a data-theme flip reaches the next paint. */
 var ACCENT_TOKEN={power:["--hmm-nec-power","#FF730B"],eat:["--hmm-nec-eat","#4F8A5B"],heal:["--hmm-nec-heal","#8752A5"]};
 function accentOf(kind){return __T(ACCENT_TOKEN[kind][0],ACCENT_TOKEN[kind][1]);}
@@ -25,13 +27,13 @@ var SCHEMATIC_MOUNTS=[];
 var SECCFG={
   power:{title:'The transformer, in <em>blow-out</em>',
     exTitle:"Power",
-    exHTML:"The energy system is the process chain, or a subset of it, from the extraction of primary energy to the use of final energy to supply services and goods. hmm's mandate extends it to the critical-minerals layer that constrains that chain, because that is where the returnable innovation in energy materials sits.",},
+    exHTML:"",},
   eat:{title:'The reel, in <em>blow-out</em>',
     exTitle:"Eat",
-    exHTML:"The food system gathers all the elements and activities relating to the production, processing, distribution, preparation and consumption of food, and the outputs of those activities. Its three constituent elements are <b>food supply chains, food environments and consumer behaviour</b>.",},
+    exHTML:"",},
   heal:{title:'The needle, in <em>blow-out</em>',
     exTitle:"Heal",
-    exHTML:"The health system is all <b>organizations, people and actions whose primary intent is to promote, restore or maintain health</b>. It is defined by intent rather than by chain, so it sits downstream of its determinants rather than containing them.",}
+    exHTML:"",}
 };
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
@@ -55,7 +57,7 @@ if(SECCFG.eat) SECCFG.eat.unitHTML="The instance is a paddock, and its input is 
 if(SECCFG.heal) SECCFG.heal.unitHTML="The instance is a clinic, and it earns per test run and interpreted at a central node, being a laboratory or a hospital department with the instruments, the accreditation and the staff to operate them. A device or a diagnostic reaches that node through the regulator's register, which is what an approval is here: supply is unlawful without an entry, a sponsor in the market holds it, and for a higher-class device or in-vitro diagnostic the entry rests on conformity-assessment evidence naming the manufacturer.";
 
 function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
-  var LAB="rgba(242,236,201,.85)",LINE="rgba(242,236,201,.4)",BRD="rgba(242,236,201,.22)";
+  var LINE="rgba(242,236,201,.4)",BRD="rgba(242,236,201,.22)";
   var N=S.length,M=14,BW,BH,vbW,vbH,ctr=[],e=[],kc=0,RING=(kind==='eat');
   if(RING){
     // Eat is a closed cycle (seed to mouth to soil): boxes ride a ring, flow runs clockwise
@@ -91,10 +93,10 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
   }
   function xy(i){return {x:ctr[i].x-BW/2,y:ctr[i].y-BH/2};}
   S.forEach(function(s,i){var q=xy(i);
-    var g=[h("rect",{key:"b",x:q.x,y:q.y,width:BW,height:BH,fill:"rgba(20,20,20,"+(RING?".92":".5")+")",stroke:BRD,strokeWidth:1}),h("text",{key:"num",x:q.x+7,y:q.y+12,fontFamily:"var(--hmm-font-mono)",fontSize:7,letterSpacing:.5,fill:"rgba(242,236,201,.42)",style:{pointerEvents:"none"}},(i+1<10?"0":"")+(i+1))];
-    var ln=s.n,ly=q.y+BH/2-(ln.length-1)*6+3;
-    ln.forEach(function(t,k){g.push(h("text",{key:"t"+k,x:q.x+BW/2,y:ly+k*12,textAnchor:"middle",fontFamily:"var(--hmm-font-mono)",fontSize:9,letterSpacing:.5,fill:LAB,style:{textTransform:"uppercase",pointerEvents:"none"}},t));});
-    if(s.note)g.push(h("text",{key:"n",x:q.x+BW/2,y:q.y+BH+12,textAnchor:"middle",fontFamily:"var(--hmm-font-mono)",fontSize:7,letterSpacing:.4,fill:acc,style:{pointerEvents:"none"}},s.note));
+    /* No text in the drawing (2026-10-26, the 12px floor): scaled into its card the labels rendered at
+       3 to 7px. The drawing keeps the flow; the stage names are set as text in the line under it
+       (stepsLine below), in the same order the arrows run. */
+    var g=[h("rect",{key:"b",x:q.x,y:q.y,width:BW,height:BH,fill:"rgba(20,20,20,"+(RING?".92":".5")+")",stroke:BRD,strokeWidth:1})];
     e.push(h("g",{key:"g"+i,className:"blk","data-key":s.key},g));});
   var fw=vbW-4;
   e.unshift(h("rect",{key:"frame",x:2,y:2,width:fw,height:vbH-4,fill:"none",stroke:"rgba(242,236,201,.1)",strokeWidth:1}));
@@ -106,6 +108,8 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
    the public page on 2026-09-24: the stage chain is the
    model's own instrument, and the drawing stays as the drawing it is. The *_steps.js files
    still feed the stage names and the schematic geometry. */
+/* the stage names as one line of text under the schematic, numbered in flow order */
+function stepsLine(cfg){return '<ol class="schem-steps">'+cfg.stages.map(function(s,i){return '<li><span class="ss-n">'+(i+1<10?'0':'')+(i+1)+'</span>'+esc(s.n.join(' '))+'</li>';}).join('')+'</ol>';}
 /* build each necessity section */
 ["power","eat","heal"].forEach(function(kind){var cfg=SECCFG[kind],sec=document.getElementById(kind);
   var TK='<span class="tk tk--tl"></span><span class="tk tk--tr"></span><span class="tk tk--bl"></span><span class="tk tk--br"></span>';
@@ -114,7 +118,10 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
     +'<div class="stage">'
     +'<div class="machine-wrap"></div></div>'
     +'<div class="panel">'
-    +'<div class="card">'+TK+'<h2>'+cfg.exTitle+'</h2><p>'+cfg.exHTML+'</p><p class="card-unit">'+(cfg.unitHTML||'')+'</p></div>'
+    +'<div class="card">'+TK+'<h2>'+cfg.exTitle+'</h2><p>'+cfg.exHTML+'</p>'
+    /* The instance paragraph is a disclosure (2026-10-26, the 9,000px page ceiling at 390px): open on a
+       wide screen, one tap away on a phone, where it was the longest block in each section. */
+    +'<details class="card-unit"'+(window.innerWidth>=768?' open':'')+'><summary>The instance</summary><p>'+(cfg.unitHTML||'')+'</p></details></div>'
     +'<div class="card">'+TK+'<div class="schematic-wrap"></div></div>'
     +'</div>';
   HMM.renderBlowout(sec.querySelector('.machine-wrap'),kind);
@@ -125,6 +132,7 @@ function Schematic(kind){var cfg=SECCFG[kind],S=cfg.stages,acc=accentOf(kind);
     li.innerHTML='<span class="cl-n">'+c.n+'</span><span class="cl-t"><b>'+c.name+'</b> '+c.note+'</span>';cl.appendChild(li);});
   sec.querySelector('.stage').appendChild(cl);
   var smount=sec.querySelector('.schematic-wrap');hmmRender(smount,Schematic(kind));SCHEMATIC_MOUNTS.push({mount:smount,kind:kind});
+  smount.insertAdjacentHTML('afterend',stepsLine(cfg));
 });
 /* A theme flip redraws each schematic with the accent re-read. */
 __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){hmmRender(m.mount,Schematic(m.kind));});});
@@ -134,7 +142,7 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){hmmRender(m.mount,Sche
    scripts/check-register-figures.mjs holds to canon, so a reworded sentence leaves the slots
    empty rather than wrong, and check-clarity.mjs fails on an empty slot. */
 (function(){var fig=document.getElementById('regFig');if(!fig)return;
-  var m=fig.querySelector('.rf-gloss').textContent.replace(/\s+/g,' ').match(/reach a liquidity event at ([\d.]+)%, against ([\d.]+)% where no approval gates the sale, an odds ratio of ([\d.]+)\./);
+  var m=fig.querySelector('.rf-gloss').textContent.replace(/\s+/g,' ').match(/reached a liquidity event at nearly three times the rate, ([\d.]+)% against ([\d.]+)%, an odds ratio of ([\d.]+)\./);
   if(!m)return;
   var v={hardApprovalPct:m[1]+'%',noGatePct:m[2]+'%',oddsRatio:m[3]};
   fig.querySelectorAll('[data-fig]').forEach(function(el){var k=el.getAttribute('data-fig');if(v[k])el.textContent=v[k];});

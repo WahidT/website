@@ -54,6 +54,8 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    Caption token, not the accent: small accent text fails the floor on dark ground. */
 .eyebrow{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.22em;font-size:12px;line-height:1.4;font-weight:400;margin:0;color:var(--hmm-caption);}
 .hero-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-3xl);line-height:1.04;margin:-24px 0 0;color:var(--hmm-pearl);text-align:center;}
+/* The page h1 (R-D49, spec v1.1, 3.2): the display tokens the hero title carries, set left in the opener. */
+.through-h1{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-3xl);line-height:1.04;margin:14px 0 0;color:var(--hmm-pearl);}
 .hero-title .hk-nec{color:var(--hmm-accent-text);}
 /* The necessity sections are a two-column flex row, so their eyebrow sits over the top-left
    corner on a wide screen and takes its own row once the columns stack. */
@@ -179,7 +181,8 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 /* ---------- necessity sections ---------- */
 .nec{min-height:100vh;display:flex;align-items:stretch;color:var(--hmm-pearl);font-family:var(--hmm-font-body);}
 .stage{flex:0.8;position:relative;display:flex;flex-direction:column;padding:40px 28px 28px 44px;border-right:1px solid var(--hmm-border);min-width:0;order:1;}
-.nec[data-flip="1"] .stage{order:2;border-right:none;border-left:1px solid var(--hmm-border);padding:40px 44px 28px 28px;}
+/* 64px on the right clears the 51px section rail now that the callout list sits in this column (2026-10-26). */
+.nec[data-flip="1"] .stage{order:2;border-right:none;border-left:1px solid var(--hmm-border);padding:40px 64px 28px 28px;}
 .stage .machine-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;}
 .stage .machine-wrap svg{width:100%;height:100%;max-height:82vh;overflow:visible;}
 .machine-wrap svg .callout{transition:transform .28s var(--hmm-ease);cursor:zoom-in;}
@@ -228,7 +231,9 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .src-move{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:20px 0;align-items:start;}
 .src-move+.src-move{border-top:1px solid rgba(242,236,201,.07);}
 .src-move-i{font-family:var(--hmm-font-mono);font-size:22px;color:var(--hmm-accent);line-height:1;padding-left:16px;}
-.src-move-body h3{font-family:var(--hmm-font-display);font-weight:700;font-size:16px;margin:0 0 7px;line-height:1.15;color:var(--hmm-pearl);}
+/* The heading takes the paragraph's measure: as a full-width block it ran under the section rail on an
+   iPad in landscape (1024px), which audit:mobile caught whenever the rail had switched on before its probe. */
+.src-move-body h3{font-family:var(--hmm-font-display);font-weight:700;font-size:16px;margin:0 0 7px;line-height:1.15;color:var(--hmm-pearl);max-width:62ch;}
 .src-move-body p{font-size:16px;line-height:1.6;color:var(--hmm-pearl);margin:0;}
 /* ---------- S8 density ---------- */
 .tk{position:absolute;width:9px;height:9px;pointer-events:none;}
@@ -273,12 +278,13 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
    section fills the width the single column left empty. DOM order is unchanged, which is the
    reading order a phone and a screen reader get. */
 @media(min-width:1041px){
-  .reg-body{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:"fig jobs" "fig ai" "glyph ai" "more more";column-gap:22px;row-gap:16px;max-width:1440px;align-items:start;}
+  .reg-body{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:"fig jobs" "fig ai" "glyph ai" "note note" "more more";column-gap:22px;row-gap:16px;max-width:1440px;align-items:start;}
   .reg-fig{grid-area:fig;}
   .reg-body>.reg-jobs{grid-area:jobs;flex-direction:column;}
   .reg-body>.reg-plate--wide{grid-area:ai;}
   .reg-glyph{grid-area:glyph;}
   .reg-more{grid-area:more;}
+  .reg-note{grid-area:note;}
 }
 /* Phones: the two rates share a row under the odds ratio. */
 @media(max-width:640px){
@@ -290,6 +296,10 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .reg-glyph{margin:0;border:1px solid var(--hmm-border);background:rgba(242,236,201,.02);position:relative;}
 .reg-glyph canvas{display:block;width:100%;height:172px;}
 .reg-glyph figcaption{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);padding:9px 14px;border-top:1px solid var(--hmm-border);}
+/* The gate gloss footnote (spec v1.1, 3.4): caption face, held at the 12px floor. */
+.reg-note{font-size:12px;line-height:1.5;color:var(--hmm-caption);margin:0;max-width:80ch;}
+.reg-note a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.rf-gloss sup,.reg-note sup{font-size:12px;line-height:0;}
 /* The two plates size to their own content since 2026-09-15. They were stretched to a
    common height while each carried a footer that anchored its base; with the footers gone
    the shorter plate read as a hollow box. */
@@ -341,23 +351,45 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .footer-contact{display:inline-flex;align-items:center;min-height:44px;}
 }
 @media(hover:none){.machine-wrap svg .callout{transform:scale(1.3);}}
-/* Callouts as text on a phone (clarity plan phase 3, 2026-10-22). The blow-out scales with its
-   box, so below 600px its 12.5px labels render at about 5px; the boxes and their leaders hide and
-   the list sections.js builds from the same data takes their place under the drawing. */
-.callout-list{display:none;}
+/* Callouts as text (clarity plan phase 3, 2026-10-22, on a phone; at every width since 2026-10-26).
+   The blow-out scales with its box, so its 12.5px labels render at about 5px below 600px and at
+   about 6px on a desktop; the boxes and their leaders hide and the list sections.js builds from
+   the same data takes their place under the drawing. */
+.machine-wrap svg .callout,.machine-wrap svg .callout-ld{display:none;}
+.callout-list{display:flex;flex-direction:column;gap:8px;list-style:none;margin:14px 0 0;padding:0;}
 @media(max-width:600px){
-  .machine-wrap svg .callout,.machine-wrap svg .callout-ld{display:none;}
   /* With the boxes gone the drawing needs no headroom for them, so it takes its own height
      rather than the 44vh the stacked layout reserves above 600px. */
   .stage .machine-wrap{min-height:0;}
   .stage .machine-wrap svg{height:auto;max-height:none;}
-  .callout-list{display:flex;flex-direction:column;gap:8px;list-style:none;margin:14px 0 0;padding:0;}
-  .callout-list li{display:flex;gap:10px;align-items:baseline;font-size:14px;line-height:1.5;color:var(--hmm-text-muted);}
-  .callout-list .cl-n{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;color:var(--hmm-caption);flex:0 0 auto;}
-  .callout-list b{color:var(--hmm-pearl);font-weight:600;}
-  .sec-power .callout-list .is-key .cl-n{color:var(--hmm-nec-power-dark);}
-  .sec-eat .callout-list .is-key .cl-n{color:var(--hmm-nec-eat-dark);}
-  .sec-heal .callout-list .is-key .cl-n{color:var(--hmm-nec-heal-dark);}
+}
+.callout-list li{display:flex;gap:10px;align-items:baseline;font-size:14px;line-height:1.5;color:var(--hmm-text-muted);}
+.callout-list .cl-n{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;color:var(--hmm-caption);flex:0 0 auto;}
+.callout-list b{color:var(--hmm-pearl);font-weight:600;}
+.sec-power .callout-list .is-key .cl-n{color:var(--hmm-nec-power-dark);}
+.sec-eat .callout-list .is-key .cl-n{color:var(--hmm-nec-eat-dark);}
+.sec-heal .callout-list .is-key .cl-n{color:var(--hmm-nec-heal-dark);}
+/* The schematic's stage names, as text under the drawing in flow order (2026-10-26, the 12px floor). */
+.schem-steps{display:flex;flex-wrap:wrap;gap:4px 14px;list-style:none;margin:2px 0 0;padding:0;font-family:var(--hmm-font-mono);font-size:12px;line-height:1.5;letter-spacing:.06em;text-transform:uppercase;color:var(--hmm-text-muted);}
+.schem-steps .ss-n{color:var(--hmm-caption);margin-right:6px;}
+/* The instance paragraph as a disclosure (2026-10-26): open on a wide screen, closed on a phone. */
+details.card-unit>summary{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-caption);cursor:pointer;min-height:44px;display:flex;align-items:center;list-style:none;}
+details.card-unit>summary::-webkit-details-marker{display:none;}
+details.card-unit>summary::after{content:"+";margin-left:10px;color:var(--hmm-accent-text);}
+details.card-unit[open]>summary::after{content:"\2212";}
+details.card-unit>p{margin-top:4px;}
+@media(max-width:640px){
+  /* Phones: the three system cards swipe in one row instead of stacking (2026-10-26, the 9,000px
+     page ceiling at 390px: stacked they were 1,330px). Each card still links to its section. */
+  .hero-row{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:12px;padding-bottom:6px;}
+  .hero-row .box{flex:0 0 84%;scroll-snap-align:start;}
+  /* The system sections: tighter panel air and list rhythm on a phone, for the page ceiling. */
+  .nec .panel,.nec[data-flip="1"] .panel{padding:24px 20px 28px;gap:12px;}
+  .callout-list{gap:5px;}
+  .schem-steps{gap:2px 12px;}
+  /* The gate: a shorter figure and less air, under its 1,700px ceiling. */
+  .reg{padding-top:56px;padding-bottom:56px;}
+  .reg-glyph canvas{height:112px;}
 }
 /* ===== large screens (monitors / TV): cap content so lines stay readable and layout doesn't sprawl ===== */
 @media(min-width:1440px){
