@@ -261,12 +261,14 @@
       </tbody>
     </table></div>
 
-    <!-- The method behind the homepage gate figure (spec v1.1, 3.9.4). The two [CONFIRM] items
-         are for the GP to fill from the model before merge; they are not guessed here. -->
+    <!-- The method behind the homepage gate figure (spec v1.1, 3.9.4), stated from its source on
+         2026-10-26: classifier_three_market.py over the Crunchbase snapshot, output in
+         reference_dataset_headline_stats_three_market_2026-09-12.json, which hmmfund.parameters
+         reads as EXIT_RATE_TIERS. Change this text only with that script. -->
     <h3 class="sub" id="liquidity-method">Liquidity-rate method</h3>
-    <p class="src-intro">Universe: the companies in hmm's reference dataset, drawn from Crunchbase and classified by hmm. [CONFIRM: defined by founder origin or by headquarters, and over what founding period.]</p>
-    <p class="src-intro">Classification: a classifier reads each company's own description of what it sells against keyword lists built per instrument, and assigns one of three tiers: the product cannot be sold without a licence, clearance or certification; the buyer sits under a compliance obligation; or no approval gates the sale. One rule runs over every company, and no company is judged on its own. No precision or recall against a hand-checked sample has been measured.</p>
-    <p class="src-intro">Outcome: a liquidity event is a change of control, or a listing that delivers real liquidity, recorded in hmm's primary-sourced exit cohort. [CONFIRM: value threshold, if any.]</p>
+    <p class="src-intro">Universe: venture-funded companies in a Crunchbase snapshot whose listed country is Japan, Australia or New Zealand, after the mandate exclusions (financial services, defence, cannabis, measurement and tracking, and other industries outside the three systems). Market is the company's listed location, not the founders' origin. The snapshot is not a founding cohort: founding years run from before 2000 into the 2020s, with a median of 2020.</p>
+    <p class="src-intro">Classification: a keyword classifier reads each company's Crunchbase industry tags and assigns one of three tiers: an industry whose products cannot be sold without a licence, clearance or certification; an industry selling to a buyer under a compliance obligation; or neither. The first tier takes precedence. One rule runs over every company, and no company is judged on its own. No precision or recall against a hand-checked sample has been measured.</p>
+    <p class="src-intro">Outcome: a liquidity event is any acquisition, or a listing recorded as public or since delisted, as Crunchbase records it. No value threshold applies.</p>
     <p class="src-intro">Measure: the share of each tier that reached a liquidity event. The result is an association across the sample, not a causal estimate or a forecast. The register, the classifier and the tier logic are available to any investor at diligence.</p>
 
     <h2 class="cat"><span class="n">06</span><span class="cat-sep" aria-hidden="true">·</span>Books, essays &amp; named frameworks</h2>
@@ -275,19 +277,6 @@
       <tbody>
         <tr><td class="src-name">Engel's law (food-demand share falls with income)</td><td>Ernst Engel</td><td class="yr">1857</td><td class="juris">Economics</td><td class="supports">Necessity-demand inescapability (Eat)</td></tr>
         <tr><td class="src-name">Wright's law (learning curve)</td><td>T. P. Wright</td><td class="yr">1936</td><td class="juris">Aeronautics / econ</td><td class="supports">Forecastable hardware cost decline (Power)</td></tr>
-      </tbody>
-    </table></div>
-
-    <!-- The three institutional definitions quoted or paraphrased, with attribution, in sections.js
-         (spec v1.1, 3.7). Wording checked against secondary citations only on 2026-10-26: the
-         issuers' PDFs were not reachable from the build session. Verify against each document. -->
-    <h3 class="sub">Definitions</h3>
-    <div class="tbl-scroll"><table aria-label="Definitions">
-      <thead><tr><th>Source</th><th>Issuer</th><th>In force</th><th>Field</th><th>Supports</th></tr></thead>
-      <tbody>
-        <tr><td class="src-name"><a href="https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-i.pdf" target="_blank" rel="noopener noreferrer">Climate Change 2014: Mitigation of Climate Change, Annex I, Glossary</a></td><td>IPCC Working Group III, Fifth Assessment Report</td><td class="yr">2014</td><td class="juris">Energy</td><td class="supports">Definition of the energy system (Power)</td></tr>
-        <tr><td class="src-name"><a href="https://www.fao.org/3/i7846e/i7846e.pdf" target="_blank" rel="noopener noreferrer">Nutrition and food systems, Report 12</a></td><td>HLPE, UN Committee on World Food Security</td><td class="yr">2017</td><td class="juris">Food</td><td class="supports">Definition of the food system and its three constituent elements (Eat)</td></tr>
-        <tr><td class="src-name"><a href="https://iris.who.int/handle/10665/43918" target="_blank" rel="noopener noreferrer">Everybody's business: strengthening health systems to improve health outcomes</a></td><td>World Health Organization</td><td class="yr">2007</td><td class="juris">Health</td><td class="supports">Definition of a health system (Heal)</td></tr>
       </tbody>
     </table></div>
 
