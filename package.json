@@ -17,7 +17,8 @@
     "check:openers": "node scripts/check-opener-patterns.mjs",
     "dump:served": "node scripts/dump-served-text.mjs",
     "check:clarity": "node scripts/check-clarity.mjs",
-    "measure:clarity": "node scripts/measure-clarity.mjs"
+    "measure:clarity": "node scripts/measure-clarity.mjs",
+    "check:market": "node scripts/check-market-order.mjs"
   },
   "devDependencies": {
     "playwright": "^1.62.1"

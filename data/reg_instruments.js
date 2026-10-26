@@ -1,5 +1,5 @@
-/* S7 regulatory timeline - the AU/JP/NZ in-mandate register. 31 enforceable in force
-   + 4 scheduled to 2030 + 9 frameworks, being 13 Australia, 11 Japan and 7 New Zealand.
+/* S7 regulatory timeline - the JP/AU/NZ in-mandate register. 31 enforceable in force
+   + 4 scheduled to 2030 + 9 frameworks, being 11 Japan, 13 Australia and 7 New Zealand.
    SOURCED 2026-07-20/21 to primary legislation (research agent), from:
      internal regulatory source pass,JP,NZ}_2026-07-20.md + Frameworks_and_Guidelines_2026-07-21.md.
     Names shortened for display; full titles + primary-source URLs in the source files.
@@ -74,7 +74,7 @@ var REG_INSTRUMENTS = [
   {c:"JP",name:"AI Promotion Act",body:"Cabinet Office (AI Strategy HQ)",date:"Sep 2025",yr:2025,op:2025,type:"enforceable",status:"effective"},
   {c:"AU",name:"Medical-device adverse-event reporting (ASDER)",body:"TGA",date:"Mar 2026",yr:2026,op:2026,type:"enforceable",status:"effective",src:"https://www.tga.gov.au/resources/guidance/reporting-medical-device-adverse-events-healthcare-facilities",src_title:"Medical-device adverse-event reporting (ASDER)"},
   // ---- global instruments + recognition pathways re-pricing / multiplying reach across exit markets
-  //      (internal canon/§3 net-new + line 62 reliance pathways; CONTEXT, NOT part of the AU/JP/NZ 33) ----
+  //      (internal canon/§3 net-new + line 62 reliance pathways; CONTEXT, NOT part of the JP/AU/NZ 33) ----
   {c:"AMER",name:"CMS hospital-at-home reimbursement waiver",body:"CMS",date:"2020",yr:2020,type:"enforceable",status:"effective",global:true},
   {c:"AMER",name:"IRA Section 45X (domestic-content)",body:"US Treasury / IRS",date:"2022",yr:2022,type:"enforceable",status:"effective",global:true},
   {c:"AMER",name:"FDA AI-enabled device authorisations",body:"FDA",date:"to Dec 2024",yr:2024,type:"enforceable",status:"effective",global:true},
