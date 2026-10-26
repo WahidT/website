@@ -1,12 +1,12 @@
 # hmm ventures
 
-> hmm ventures Fund I is an APAC-sourced seed fund backing regulated technology across the energy, food and healthcare systems in Australia, Japan and New Zealand. The thesis: necessity is the thesis. Value migrates to whoever holds the regulated layer as the regulation clock and the technology clock advance.
+> hmm ventures Fund I is a pre-permission fund backing the scientists and engineers who power, feed and heal, from Japan, Australia and New Zealand. Regulated companies build twice: once to make the technology work, and once to be allowed to sell it. hmm invests before the second build is finished.
 
 ## Pages
 
-- [Thesis](https://hmm.ventures/): the Fund I thesis, in the order it is argued. What hmm backs and why it is the right buyer of that risk; Power, Eat and Heal as systems, each with one physical instance and the unit it is sold by; the capability arriving in the physical layer; and permission as a locator for the fund and a barrier for the company.
+- [Thesis](https://hmm.ventures/): the Fund I thesis, in the order it is argued. What hmm backs and why it is the right buyer of that risk; Power, Eat and Heal as systems, each with one physical instance and the unit it is sold by; the capability arriving in the physical layer; and the second build as the barrier: permission as a locator for the fund and a barrier for the company.
 - [The GP](https://hmm.ventures/bio.html): Wahid Tashkandi, general partner of hmm ventures.
-- [Sources](https://hmm.ventures/sources.html): primary and first-party sources behind the thesis, each row naming the issuer and the edition.
+- [Sources](https://hmm.ventures/sources.html): the sources behind the thesis, primary first, with named commercial datasets where no primary source exists, each row naming the issuer and the edition.
 - [Regulatory & legal instruments](https://hmm.ventures/register.html): the enacted instrument record, by year and market.
 - [Context for AI assistants](https://hmm.ventures/for-llms.html): canonical framing for summarising hmm ventures, and common misattributions to avoid.
 

@@ -25,8 +25,9 @@
         fact. "That's what I'm investing in" fails twice over, because it also makes the general
         partner the subject where the house rule is "we", never "I".
 
-   Neither pattern fires on the opener the general partner set for this surface on 2026-09-14,
-   which is the test R-D26 set for putting a pattern here at all.
+   Neither pattern fires on the hero the general partner set for this surface on 2026-10-26
+   (spec v1.1, superseding the 2026-09-14 opener), which is the test R-D26 set for putting a
+   pattern here at all.
 
    Usage: node scripts/check-opener-patterns.mjs [file...]   (exit 1 on any hit) */
 import fs from 'node:fs';
@@ -94,7 +95,7 @@ const PATTERNS = [
   {
     name: 'first-person or pointer close',
     re: /\b(?:that(?:'s|\u2019s| is) what (?:i|we)\b|that(?:'s|\u2019s| is) what i(?:'m|\u2019m| am)\b|this is what (?:i|we) (?:invest|back|do)\b|that(?:'s|\u2019s| is) the fund\b)/gi,
-    fix: 'Delete the pointer and let the replacement sentence carry the fact. The ruled close is "We lead seed rounds for founders rebuilding how populations are powered, fed and healed."',
+    fix: 'Delete the pointer and let the replacement sentence carry the fact. The ruled close is "They build twice: once to make it work, and once to be allowed to sell it. We invest pre-permission, backing founders from Japan, Australia and New Zealand."',
   },
 ];
 

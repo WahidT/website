@@ -17,7 +17,10 @@ Object.keys(LEDGERS).forEach(function(nec){var ul=document.querySelector('.ledge
 /* ---------- necessity section content ----------
    The card heading is the system's name, Power, Eat or Heal (GP 2026-09-15), because that is
    the name the memorandum and every other page use; the definition sentence under it still
-   says which physical system the name stands for. */
+   says which physical system the name stands for.
+   The three institutional definitions below carry their issuer (spec v1.1, 3.7; sources.html,
+   "Definitions"). They are not what renders: the *_STEPS definition and then the plain-language
+   lines after stepMap() replace exHTML before the card is drawn. */
 /* Token names, read at each render rather than captured here, so a data-theme flip reaches the next paint. */
 var ACCENT_TOKEN={power:["--hmm-nec-power","#FF730B"],eat:["--hmm-nec-eat","#4F8A5B"],heal:["--hmm-nec-heal","#8752A5"]};
 function accentOf(kind){return __T(ACCENT_TOKEN[kind][0],ACCENT_TOKEN[kind][1]);}
@@ -25,13 +28,13 @@ var SCHEMATIC_MOUNTS=[];
 var SECCFG={
   power:{title:'The transformer, in <em>blow-out</em>',
     exTitle:"Power",
-    exHTML:"The energy system is the process chain, or a subset of it, from the extraction of primary energy to the use of final energy to supply services and goods. hmm's mandate extends it to the critical-minerals layer that constrains that chain, because that is where the returnable innovation in energy materials sits.",},
+    exHTML:"The IPCC defines the energy system as &ldquo;all components related to the production, conversion, delivery, and use of energy&rdquo;. hmm's mandate extends it to the critical-minerals layer that constrains that system, because that is where the returnable innovation in energy materials sits.",},
   eat:{title:'The reel, in <em>blow-out</em>',
     exTitle:"Eat",
-    exHTML:"The food system gathers all the elements and activities relating to the production, processing, distribution, preparation and consumption of food, and the outputs of those activities. Its three constituent elements are <b>food supply chains, food environments and consumer behaviour</b>.",},
+    exHTML:"The High Level Panel of Experts of the UN Committee on World Food Security defines the food system as all the elements and activities relating to the production, processing, distribution, preparation and consumption of food, and their outputs. Its three constituent elements are <b>food supply chains, food environments and consumer behaviour</b>.",},
   heal:{title:'The needle, in <em>blow-out</em>',
     exTitle:"Heal",
-    exHTML:"The health system is all <b>organizations, people and actions whose primary intent is to promote, restore or maintain health</b>. It is defined by intent rather than by chain, so it sits downstream of its determinants rather than containing them.",}
+    exHTML:"The World Health Organization defines a health system as all &ldquo;<b>organizations, people and actions whose primary intent is to promote, restore or maintain health</b>&rdquo;. It is defined by intent rather than by chain, so it sits downstream of its determinants rather than containing them.",}
 };
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
@@ -134,7 +137,7 @@ __onTheme(function(){SCHEMATIC_MOUNTS.forEach(function(m){hmmRender(m.mount,Sche
    scripts/check-register-figures.mjs holds to canon, so a reworded sentence leaves the slots
    empty rather than wrong, and check-clarity.mjs fails on an empty slot. */
 (function(){var fig=document.getElementById('regFig');if(!fig)return;
-  var m=fig.querySelector('.rf-gloss').textContent.replace(/\s+/g,' ').match(/reach a liquidity event at ([\d.]+)%, against ([\d.]+)% where no approval gates the sale, an odds ratio of ([\d.]+)\./);
+  var m=fig.querySelector('.rf-gloss').textContent.replace(/\s+/g,' ').match(/reached a liquidity event at nearly three times the rate, ([\d.]+)% against ([\d.]+)%, an odds ratio of ([\d.]+)\./);
   if(!m)return;
   var v={hardApprovalPct:m[1]+'%',noGatePct:m[2]+'%',oddsRatio:m[3]};
   fig.querySelectorAll('[data-fig]').forEach(function(el){var k=el.getAttribute('data-fig');if(v[k])el.textContent=v[k];});
