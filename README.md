@@ -16,6 +16,7 @@ permission from hmm Ventures; the fonts in `fonts/` are under their own licences
 - `index.html`. The thesis (single scroll)
 - `bio.html`. The GP
 - `sources.html`. Primary and first-party sources
+- `register.html`. The enacted instrument record, the timeline that sat in the gate section until 2026-10-21
 - `for-llms.html`. Canonical framing for language models, and the misattributions to avoid
 - `404.html`. Not found
 

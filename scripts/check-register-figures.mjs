@@ -202,7 +202,7 @@ console.log('');
   /* sources.html is a bibliography: a company named there is the issuer or subject of a
      cited source (a regulator's approval notice, a listed company's filing), which is a
      citation and never the catalogue. It is reported, never failed. */
-  for (const page of ['index.html', 'bio.html', 'for-llms.html', 'instruments.html', '404.html', 'llms.txt', 'sources.html']) {
+  for (const page of ['index.html', 'bio.html', 'for-llms.html', 'instruments.html', '404.html', 'llms.txt', 'sources.html', 'register.html']) {
     const text = fs.readFileSync(page, 'utf8').replace(/<script\b[\s\S]*?<\/script>/gi, ' ');
     const hit = names.filter(n => new RegExp('(?<![\\w-])' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])').test(text));
     if (!hit.length) continue;

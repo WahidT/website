@@ -1,0 +1,86 @@
+/* hmm site - the register page (register.html). The timeline rules moved here from
+   index.css on 2026-10-21 with the timeline itself (clarity build plan, phase 2), unchanged
+   apart from dropping the .reg-right column they sat in. The page chrome is
+   copied from sources.css rather than linked, so this page does not load the sources
+   table rules it never uses (check:deadcss). */
+html{background:var(--hmm-field-dark);color-scheme:dark;}
+body{margin:0;padding:0;font-family:var(--hmm-font-body,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-pearl,var(--hmm-pearl-beige));}
+a{color:inherit;}
+.src-top{padding:26px 30px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
+.src-logo{color:var(--hmm-pearl,var(--hmm-pearl-beige));display:inline-block;}
+.src-logo svg{height:24px;width:auto;display:block;}
+.src-logo:hover{color:var(--hmm-accent,var(--hmm-tomato-jam));}
+.src-back{font-family:var(--hmm-font-mono,'Raela Grotesque',monospace);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));text-decoration:none;}
+.src-back:hover{color:var(--hmm-pearl,var(--hmm-pearl-beige));}
+.src-wrap{max-width:1080px;margin:0 auto;padding:14px 30px 90px;}
+.src-title{font-family:var(--hmm-font-display,'Kufam',sans-serif);font-weight:700;font-size:34px;line-height:1.06;margin:0 0 18px;}
+@media(max-width:560px){.src-title{font-size:27px;}.src-wrap{padding:14px 18px 70px;}}
+.tl-filter-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 16px;}
+.tl-filter-label{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-text-muted);}
+.tl-filters{display:flex;flex-wrap:wrap;gap:6px;}
+/* Resting border sits at border-hover, not border: at .12 alpha these read as
+   labels rather than controls. The selected chip carries fill + border, and
+   keeps a pearl label. Accent-on-dark measured 3.58:1, below AA at this size. */
+.tl-filters button{font-family:var(--hmm-font-mono);text-transform:uppercase;letter-spacing:.1em;font-size:9.5px;background:rgba(242,236,201,.03);border:1px solid var(--hmm-border-hover);color:var(--hmm-text-muted);padding:5px 10px;cursor:pointer;transition:var(--hmm-transition);}
+.tl-filters button:hover{border-color:var(--hmm-accent);color:var(--hmm-pearl);background:rgba(242,236,201,.07);}
+.tl-filters button:focus-visible{outline:2px solid var(--hmm-accent);outline-offset:2px;}
+.tl-filters button.on{border-color:var(--hmm-accent);color:var(--hmm-pearl);background:rgba(196,69,57,.22);}
+.tl-hidden{display:none!important;}
+.tl-legend{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 28px;font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hmm-caption);}
+.tl-legend b{color:var(--hmm-text-muted);font-weight:400;}
+.tl-body{width:100%;position:relative;}
+.tl-spine{position:absolute;left:calc(-1 * (var(--spine-w) + 4px));top:0;pointer-events:none;z-index:0;--spine-w:14px;}
+.tl-year{display:flex;position:relative;transition:opacity .75s ease, transform .75s cubic-bezier(.2,.7,.2,1);}
+.tl-year.pre{opacity:0;transform:translateY(30px);}
+.tl-year.show{opacity:1;transform:none;}
+@media (prefers-reduced-motion: reduce){.tl-year.pre{opacity:1;transform:none;}}
+.tl-axis{flex:0 0 84px;position:relative;padding:12px 0 12px 20px;}
+.tl-node{position:absolute;left:-5px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--hmm-pearl);border:none;transform-origin:center;animation:tlPulse 3.4s ease-in-out infinite;}
+.tl-year:nth-child(2n) .tl-node{animation-delay:.6s;}
+.tl-year:nth-child(3n) .tl-node{animation-delay:1.2s;}
+.tl-standing .tl-node{background:var(--hmm-accent);}
+.tl-future .tl-node{background:none;border:1px dashed var(--hmm-text-faint);}
+@keyframes tlPulse{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.4);opacity:1;}}
+@media(prefers-reduced-motion:reduce){.tl-node{animation:none;opacity:.8;}}
+.tl-y{font-family:var(--hmm-font-mono);font-size:14px;color:var(--hmm-pearl);letter-spacing:.06em;}
+.tl-future .tl-y{color:var(--hmm-text-muted);}
+.tl-rows{flex:1;padding:8px 0;display:flex;flex-direction:column;gap:6px;justify-content:center;}
+.tl-empty{color:var(--hmm-caption);font-family:var(--hmm-font-mono);font-size:11px;padding:2px 0;}
+.tl-row{display:grid;grid-template-columns:46px 82px 1fr auto auto;align-items:center;gap:14px;border:1px solid var(--hmm-border);padding:9px 14px;background:rgba(242,236,201,.02);}
+.tl-future .tl-row{border-style:dashed;opacity:.82;}
+.tl-c{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.08em;text-align:center;border:1px solid var(--hmm-border);padding:2px 0;color:var(--hmm-text-muted);}
+.tl-date{font-family:var(--hmm-font-mono);font-size:11px;color:var(--hmm-text-muted);letter-spacing:.04em;}
+.tl-name{font-size:13.5px;color:var(--hmm-pearl);font-weight:600;}
+.tl-org{font-family:var(--hmm-font-mono);font-size:10px;letter-spacing:.08em;color:var(--hmm-caption);text-transform:uppercase;}
+.tl-status{font-family:var(--hmm-font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--hmm-border);color:var(--hmm-text-muted);white-space:nowrap;}
+.tl-st--transitional{color:var(--hmm-thesis);border-color:var(--hmm-thesis);}
+.tl-st--expected,.tl-st--proposed{color:var(--hmm-caption);border-color:var(--hmm-text-faint);border-style:dashed;}
+.tl-framework .tl-name{font-weight:400;color:var(--hmm-text-muted);}
+.tl-standing .tl-y{color:var(--hmm-text-muted);font-size:12px;}
+.tl-stand-label{font-family:var(--hmm-font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hmm-caption);margin-bottom:8px;}
+.tl-stand-wrap{display:flex;flex-wrap:wrap;gap:6px;}
+.tl-stand-item{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--hmm-text-muted);border:1px solid var(--hmm-border);padding:4px 8px;}
+.tl-stand-item .tl-c{padding:1px 5px;font-size:9px;}
+.tl-c--global{border-style:dashed;color:var(--hmm-caption);}
+.tl-global .tl-name{color:var(--hmm-text-muted);}
+@media(max-width:860px){
+  /* touch targets >= 44px */
+  .tl-filters button{min-height:44px;padding:11px 14px;}
+}
+@media(max-width:640px){
+  .tl-axis{flex:0 0 54px;padding-left:8px;}
+  /* P0 overflow: force the timeline row to reflow. The desktop `.tl-row{display:grid}` sits later in
+     the sheet, and media queries add no specificity, so the earlier mobile rule lost. Re-assert here. */
+  .tl-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;padding:9px 12px;}
+  .tl-row .tl-name{flex:1 1 100%;order:3;}
+  .tl-row .tl-org{flex:1 1 100%;order:4;}
+  .tl-row .tl-c{order:1;} .tl-row .tl-date{order:2;} .tl-row .tl-status{order:5;}
+  .tl-body,.tl-year,.tl-rows{max-width:100%;min-width:0;}
+  .tl-legend,.tl-filters,.tl-stand-wrap{max-width:100%;}
+  /* legibility: nothing that carries meaning drops below ~11px, core reading copy sits at 14-15px */
+  .tl-name{font-size:14px;}
+  .tl-date,.tl-org,.tl-c{font-size:11.5px;}
+  .tl-status,.tl-stand-label,.tl-stand-item{font-size:11px;}
+  .tl-filters button{font-size:11px;}
+  .tl-org,.tl-legend,.tl-legend b{font-size:11px;}
+}

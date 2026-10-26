@@ -31,7 +31,7 @@
    Usage: node scripts/check-opener-patterns.mjs [file...]   (exit 1 on any hit) */
 import fs from 'node:fs';
 
-const DEFAULT_FILES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'instruments.html'];
+const DEFAULT_FILES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'register.html', 'instruments.html'];
 
 /* Served text, not source. An attribute value, a class name or an SVG path is not prose, and a
    guard that reads them reports on things no reader can see. */

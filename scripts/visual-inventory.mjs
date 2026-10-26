@@ -21,7 +21,7 @@ import path from 'node:path';
 const BASE = process.env.BASE || 'http://localhost:4321';
 const OUT = '.visuals';
 const SHOOT = process.argv.includes('--shoot');
-const PAGES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'instruments.html'];
+const PAGES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'register.html', 'instruments.html'];
 
 /* Selectors the site uses for a figure. Kept broad, then narrowed by the containment and
    size passes, because a missed figure is the failure here and a spurious one is cheap. */
