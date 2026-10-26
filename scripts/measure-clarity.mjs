@@ -64,7 +64,8 @@ export const probe = async () => {
       id: s.id || s.className.split(' ')[0],
       height: Math.round(s.getBoundingClientRect().height),
       words,
-      eyebrow: !!(first && first.classList.contains('eyebrow') && first.getBoundingClientRect().height > 0),
+      /* the page's h1 is its own label (GP 2026-10-26), so a section opening on the h1 counts as labelled */
+      eyebrow: !!(first && (first.classList.contains('eyebrow') || first.tagName === 'H1') && first.getBoundingClientRect().height > 0),
     };
   });
 
