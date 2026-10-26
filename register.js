@@ -12,9 +12,7 @@
   /* The enacted-record sentence was removed on 2026-09-15 (GP). The block that wrote it
      from the live register went with it, and so did its build guard, because a checker
      pointed at a target that no longer exists reports clean and that is its worst output.
-     The counts are still drawn and still guarded: the market bars print 13, 11 and 7 over
-     a denominator of 31, from data/market_strength.js, which check-register-figures.mjs
-     reconciles against data/reg_instruments.js on every deploy. */
+     The market bars that drew the per-market counts left with their section on 2026-10-21. */
   var byYear={};REG_INSTRUMENTS.forEach(function(r){(byYear[r.yr]=byYear[r.yr]||[]).push(r);});
   function cTag(r){return '<span class="tl-c'+(r.global?' tl-c--global':'')+'">'+e2(r.c)+'</span>';}
   function row(r){return '<div class="tl-row u-panel tl-'+r.type+(r.global?' tl-global':'')+'" data-c="'+e2(r.c)+'">'+cTag(r)+'<span class="tl-date">'+e2(r.date)+'</span><span class="tl-name">'+e2(r.name)+'</span><span class="tl-org">'+e2(r.body)+'</span><span class="tl-status tl-st--'+r.status+'">'+e2(r.status)+'</span></div>';}
