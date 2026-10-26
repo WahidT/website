@@ -54,3 +54,9 @@ jobs:
       - run: npm run check:deadcss
       - run: npm run check:deadjs
       - run: npm run audit:mobile
+
+      # Clarity guard (clarity build plan phase 7, 2026-10-21). It fails on main by design until
+      # the register leaves the thesis page and the type scale lands (plan phases 2 to 4), so it
+      # reports without blocking until then. Remove continue-on-error in the PR that turns it green.
+      - run: npm run check:clarity
+        continue-on-error: true
