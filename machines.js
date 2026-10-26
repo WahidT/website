@@ -331,7 +331,7 @@ var HMM = (function(){
      on the old <svg> is stopped first and a new one is attached to the new one;
      otherwise the old loop would keep animating detached nodes. */
   var MOUNTED=[];
-  function breathe(m){m.timer=setTimeout(function(){var svg=m.mount.querySelector('svg');if(svg&&window.hmmAnimateDots)m.ctl=window.hmmAnimateDots(svg,{motion:"breath"});},300);}
+  function breathe(m){m.timer=setTimeout(function(){var svg=m.mount.querySelector('svg');if(svg&&window.hmmAnimateDots)m.ctl=window.hmmAnimateDots(svg,{mode:"breath"});},300);}
   function draw(m){if(m.ctl){m.ctl.stop();m.ctl=null;}clearTimeout(m.timer);hmmRender(m.mount,m.fn(m.kind));breathe(m);}
   function mountOne(mount,kind,fn){var m={mount:mount,kind:kind,fn:fn,ctl:null,timer:0};MOUNTED.push(m);draw(m);}
   function renderIcon(mount,kind){mountOne(mount,kind,Icon);}

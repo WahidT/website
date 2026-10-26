@@ -21,7 +21,7 @@
    schedules one frame through requestAnimationFrame, the way morph.js does. That frame reads
    the section's position once, then writes a transform and a fill-opacity on each dot whose
    own progress has moved: a dot leaves its glyph home on the engine's ease-in-out cubic (the
-   easeWeight curve in hmm-motion.js, reproduced below because the engine does not export it),
+   easeWeight curve in hmm-motion.js, read from window.HMM_MOTION),
    at a moment staggered by its phase the way morph.js staggers the flock, downward and to one
    side the way the flock leaves the hero, and thins to nothing as it goes. Scrolling back
    reverses it, because every position is a function of scroll and of nothing else. The
@@ -68,8 +68,8 @@
   function seededRnd(s) { return function () { s = (Math.imul(s, 1103515245) + 12345) & 0x7fffffff; return s / 0x7fffffff; }; }
   function cl01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function ss(a, b, x) { var t = cl01((x - a) / (b - a)); return t * t * (3 - 2 * t); }
-  /* the engine's easeWeight, cubic-bezier(0.65,0,0.35,1) approximated as ease-in-out cubic */
-  function easeWeight(t) { t = cl01(t); return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  /* the engine's easeWeight, exported by hmm-motion.js since 2026-10-26 rather than copied here */
+  var easeWeight = window.HMM_MOTION ? window.HMM_MOTION.easeWeight : function (t) { t = cl01(t); return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
   function paras() { return [].slice.call(sec.querySelectorAll('p')); }
   function fillOf() { var lead = sec.querySelector('.through-lead') || paras()[0]; return lead ? getComputedStyle(lead).color : ''; }
 
