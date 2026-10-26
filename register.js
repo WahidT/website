@@ -18,11 +18,13 @@
   function row(r){return '<div class="tl-row u-panel tl-'+r.type+(r.global?' tl-global':'')+'" data-c="'+e2(r.c)+'">'+cTag(r)+'<span class="tl-date">'+e2(r.date)+'</span><span class="tl-name">'+e2(r.name)+'</span><span class="tl-org">'+e2(r.body)+'</span><span class="tl-status tl-st--'+r.status+'">'+e2(r.status)+'</span></div>';}
   var html='';
   // standing base (pre-2020), compact
-  var standing=REG_INSTRUMENTS.filter(function(r){return r.yr<2020;}).sort(function(a,b){return a.yr-b.yr;});
+  /* Market order is Japan, Australia, New Zealand on every surface (GP 2026-10-26), then the global rows. */
+  var MKT={JP:0,AU:1,NZ:2};function mk(r){return r.global?9:(r.c in MKT?MKT[r.c]:5);}
+  var standing=REG_INSTRUMENTS.filter(function(r){return r.yr<2020;}).sort(function(a,b){return a.yr-b.yr||mk(a)-mk(b);});
   if(standing.length){var items=standing.map(function(r){return '<span class="tl-stand-item u-panel tl-'+r.type+(r.global?' tl-global':'')+'" data-c="'+e2(r.c)+'">'+cTag(r)+e2(r.name)+'</span>';}).join('');
     html+='<div class="tl-year tl-standing"><div class="tl-axis"><span class="tl-node"></span><span class="tl-y">pre-2020</span></div><div class="tl-rows"><div class="tl-stand-label">Standing · the established base</div><div class="tl-stand-wrap">'+items+'</div></div></div>';}
   // the net-new tick, 2020-2030
-  for(var y=2020;y<=2030;y++){var future=y>=2027,rows=(byYear[y]||[]).slice().sort(function(a,b){return (a.global?1:0)-(b.global?1:0);});
+  for(var y=2020;y<=2030;y++){var future=y>=2027,rows=(byYear[y]||[]).slice().sort(function(a,b){return mk(a)-mk(b);});
     html+='<div class="tl-year'+(future?' tl-future':'')+'"><div class="tl-axis"><span class="tl-node"></span><span class="tl-y">'+y+'</span></div><div class="tl-rows">'+(rows.length?rows.map(row).join(''):'<div class="tl-empty">·</div>')+'</div></div>';}
   body.innerHTML=html;
   /* click-to-scatter on the timeline. ONE ENGINE (2026-10-26): the year nodes are pushed by the
@@ -85,11 +87,11 @@
   /* R-D29, 2026-09-14: the Gulf entry left this list with its register row. The `present`
    gate below would already hide the button, and the name goes too, so the list cannot
    carry a banned geography waiting for a row to come back. */
-  var FILTERS=[['all','All'],['inmarket','In-market'],['AU','AU'],['JP','JP'],['NZ','NZ'],['AMER','AMER'],['CA','Canada'],['EU','EU'],['UKI','UKI'],['GL','Global']];
+  var FILTERS=[['all','All'],['inmarket','In-market'],['JP','JP'],['AU','AU'],['NZ','NZ'],['AMER','AMER'],['CA','Canada'],['EU','EU'],['UKI','UKI'],['GL','Global']];
   var present={};REG_INSTRUMENTS.forEach(function(r){present[r.c]=1;});
   var fbar=document.getElementById('tlFilters');
   function applyFilter(f){
-    document.querySelectorAll('#register .tl-row, #register .tl-stand-item').forEach(function(el){var c=el.getAttribute('data-c');var show=f==='all'||(f==='inmarket'?(c==='AU'||c==='JP'||c==='NZ'):c===f);el.classList.toggle('tl-hidden',!show);});
+    document.querySelectorAll('#register .tl-row, #register .tl-stand-item').forEach(function(el){var c=el.getAttribute('data-c');var show=f==='all'||(f==='inmarket'?(c==='JP'||c==='AU'||c==='NZ'):c===f);el.classList.toggle('tl-hidden',!show);});
     document.querySelectorAll('#register .tl-year').forEach(function(y){var vis=y.querySelectorAll('.tl-row:not(.tl-hidden), .tl-stand-item:not(.tl-hidden)').length;y.classList.toggle('tl-hidden',f!=='all'&&vis===0);});
     fbar.querySelectorAll('button').forEach(function(b){var on=b.getAttribute('data-f')===f;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');});
     if(window.__layoutSpine)window.__layoutSpine();
