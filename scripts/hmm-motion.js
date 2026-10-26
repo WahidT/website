@@ -15,7 +15,21 @@
      ctl.stop()
 
    Cadence + weight come from tokens.json: breath 4s, transition 3s, impulse 3s,
-   easing.weight cubic-bezier(0.65,0,0.35,1). Nothing snaps. */
+   easing.weight cubic-bezier(0.65,0,0.35,1). Nothing snaps.
+
+   ONE PHYSICS FOR THE WHOLE SITE (2026-10-26, GP: "100% of visuals should be linked together").
+   window.HMM_MOTION is the only place breath, drift, impulse, easing and the necessity colours
+   are defined. Every moving dot on every page reads them from here: hmmAnimateDots below, the
+   page-wide field (transitions.js), the flock (morph.js), the hero dissolve (fit.js), the gate
+   (ai-figures.js) and the register timeline (register.js). A click anywhere is broadcast as one
+   "hmm:impulse" event, so the field behind a drawing ripples with the drawing.
+
+     HMM_MOTION.breath(ms, ph)              -1..1, the 4s breath at phase ph (0..1)
+     HMM_MOTION.drift(ms, x, y, ph, amp)    [dx, dy], the school: superposed 4s + 3s waves
+     HMM_MOTION.push(dist, reach, ageFrac)  0..1, an impulse's radial weight at a distance and age
+     HMM_MOTION.easeWeight(t)               the house ease-in-out
+     HMM_MOTION.nec(key)                    [r,g,b] of power, eat, heal, reg or pearl, read off the tokens
+     HMM_MOTION.onImpulse(fn)               fn(clientX, clientY) on every page click */
 (function () {
   var TAU = 6.283185307;
   var GOLDEN = 0.6180339887;              // low-discrepancy phase spread
@@ -33,6 +47,37 @@
     catch (e) { return false; }
   }
 
+  var BREATH = 4000, TRANS = 3000, IMPULSE = 3000;   // the 3s/4s cadence
+  function breath(ms, ph) { var u = ((ms / BREATH) + ph) % 1; if (u < 0) u += 1; return Math.sin(u * TAU); }
+  function drift(ms, x, y, ph, amp) {
+    var kx = x * 0.012, ky = y * 0.012;
+    return [amp * (0.6 * Math.sin(ms / 4000 * TAU + kx + ph * TAU) + 0.4 * Math.sin(ms / 3000 * TAU + ky)),
+            amp * (0.6 * Math.cos(ms / 4000 * TAU + ky + ph * TAU) + 0.4 * Math.cos(ms / 3000 * TAU - kx))];
+  }
+  // an impulse pushes hardest at its centre, nothing past reach, and decays on the weighted ease over 3s
+  function push(dist, reach, age) { if (age >= 1 || dist >= reach) return 0; return (1 - dist / reach) * (1 - easeWeight(age)); }
+  /* Necessity colours from the tokens, so the field, the flock and the drawings carry one value each.
+     Read at call time: a data-theme flip is picked up on the next read. */
+  var NEC_TOKEN = { power: ["--hmm-nec-power", "#FF730B"], eat: ["--hmm-nec-eat", "#4F8A5B"], heal: ["--hmm-nec-heal", "#8752A5"],
+                    reg: ["--hmm-tomato-jam", "#C44539"], pearl: ["--hmm-pearl-beige", "#F2ECC9"], thesis: ["--hmm-thesis", "#B8863A"] };
+  function nec(key) {
+    var t = NEC_TOKEN[key] || NEC_TOKEN.reg, v = "";
+    try { v = getComputedStyle(document.documentElement).getPropertyValue(t[0]).trim(); } catch (e) {}
+    var m = /^#?([0-9a-f]{6})$/i.exec(v) || /^#?([0-9a-f]{6})$/i.exec(t[1]);
+    var h = m[1]; return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+  /* One click, every field. A pointerdown anywhere is re-broadcast as hmm:impulse with its client
+     coordinates; each canvas or drawing that listens maps it into its own space. No cursor is set:
+     the ripple is decoration, not a destination. */
+  var listeners = [];
+  function onImpulse(fn) { listeners.push(fn); }
+  if (typeof document !== "undefined") document.addEventListener("pointerdown", function (e) {
+    for (var i = 0; i < listeners.length; i++) listeners[i](e.clientX, e.clientY);
+  }, { passive: true });
+  window.HMM_MOTION = { TAU: TAU, GOLDEN: GOLDEN, BREATH: BREATH, TRANS: TRANS, IMPULSE: IMPULSE,
+    now: now, clamp: clamp, easeWeight: easeWeight, heartbeat: heartbeat, prefersReduced: prefersReduced,
+    breath: breath, drift: drift, push: push, nec: nec, onImpulse: onImpulse };
+
   window.hmmAnimateDots = function (target, opts) {
     opts = opts || {};
     var root = (target && target.tagName && target.tagName.toLowerCase() === "svg") ? target
@@ -46,7 +91,7 @@
     var PULSE = opts.pulse != null ? opts.pulse : 0.12;
     var PULSE_O = opts.pulseOpacity != null ? opts.pulseOpacity : 0.12;
     var DRIFT = opts.driftAmp != null ? opts.driftAmp : 3;
-    var BREATH = 4000, TRANS = 3000, IMPULSE = 3000;   // the 3s/4s cadence
+    var step = typeof opts.step === "function" ? opts.step : null;   // per-frame hook on base positions (the gate's stream)
 
     var circles = root.querySelectorAll("circle");
     var N = circles.length;
@@ -75,6 +120,7 @@
       last = t;
       var el = t - t0;
       var mp = morph ? easeWeight((t - morph.t0) / TRANS) : 0;
+      if (step) step(D, el);
       for (var i = 0; i < N; i++) {
         var d = D[i];
         // reconfigure: lerp base position from old -> target with weight
@@ -84,31 +130,27 @@
         }
         var bx = morph ? d.x : d.bx, by = morph ? d.y : d.by;
         // breath / heartbeat pulse (per-dot phase -> a wave through the field)
-        var u = ((el / BREATH) + d.ph) % 1; if (u < 0) u += 1;
-        var b = mode === "heartbeat" ? heartbeat(u) : Math.sin(u * TAU);
+        var b;
+        if (mode === "heartbeat") { var u = ((el / BREATH) + d.ph) % 1; if (u < 0) u += 1; b = heartbeat(u); }
+        else b = breath(el, d.ph);
         var rr = d.r0 * (1 + PULSE * b * scrollAmp);
         var oo = clamp(d.op0 * (1 + PULSE_O * b), 0.15, 1);
         // school: coherent heavy drift (superposed 4s + 3s waves keyed to position)
         var dx = 0, dy = 0;
-        if (doDrift) {
-          var kx = bx * 0.012, ky = by * 0.012, amp = DRIFT * scrollAmp;
-          dx = amp * (0.6 * Math.sin(el / 4000 * TAU + kx + d.ph * TAU) + 0.4 * Math.sin(el / 3000 * TAU + ky));
-          dy = amp * (0.6 * Math.cos(el / 4000 * TAU + ky + d.ph * TAU) + 0.4 * Math.cos(el / 3000 * TAU - kx));
-        }
+        if (doDrift) { var dv = drift(el, bx, by, d.ph, DRIFT * scrollAmp); dx = dv[0]; dy = dv[1]; }
         // impulse: heavy ripple from each recent click, decaying over 3s
         var ix = 0, iy = 0;
         for (var k = 0; k < impulses.length; k++) {
           var imp = impulses[k], age = (t - imp.t0) / IMPULSE;
           if (age >= 1) continue;
           var vx = bx - imp.x, vy = by - imp.y, dist = Math.hypot(vx, vy) || 0.001;
-          var fall = Math.max(0, 1 - dist / (span * 0.45));
-          var push = (span * 0.10) * fall * (1 - easeWeight(age));
-          ix += vx / dist * push; iy += vy / dist * push;
+          var pw = (span * 0.10) * push(dist, span * 0.45, age);
+          ix += vx / dist * pw; iy += vy / dist * pw;
         }
         d.el.setAttribute("cx", (bx + dx + ix).toFixed(2));
         d.el.setAttribute("cy", (by + dy + iy).toFixed(2));
         d.el.setAttribute("r", rr.toFixed(2));
-        d.el.setAttribute("opacity", oo.toFixed(3));
+        d.el.setAttribute("opacity", (d.vis == null ? oo : oo * d.vis).toFixed(3));
       }
       while (impulses.length && (t - impulses[0].t0) > IMPULSE) impulses.shift();
       if (morph && mp >= 1) morph = null;
@@ -134,9 +176,19 @@
       return [ox + (evt.clientX - rect.left) / rect.width * vw, oy + (evt.clientY - rect.top) / rect.height * vh];
     }
     function onDown(evt) { var p = svgPoint(evt); impulses.push({ x: p[0], y: p[1], t0: now() }); if (!running) start(); }
+    /* A click outside the drawing still reaches it when it lands within half the drawing's size of
+       its edge, so a ripple in the page field carries on into the drawing beside it. */
+    function onPage(cx, cy) {
+      var rect = root.getBoundingClientRect(); if (!rect.width) return;
+      if (cx >= rect.left && cx <= rect.right && cy >= rect.top && cy <= rect.bottom) return;   // its own handler took it
+      var mx = rect.width / 2, my = rect.height / 2;
+      if (cx < rect.left - mx || cx > rect.right + mx || cy < rect.top - my || cy > rect.bottom + my) return;
+      onDown({ clientX: cx, clientY: cy });
+    }
     // No cursor:pointer here. The impulse is a decorative ripple, not a
     // destination: setting the cursor made the whole diagram claim it was a link.
-    if (doClick) { root.addEventListener("pointerdown", onDown); }
+    if (doClick) { root.addEventListener("pointerdown", onDown); onImpulse(function (x, y) { if (alive) onPage(x, y); }); }
+    var alive = true;
 
     if (prefersReduced()) { /* leave static resting frame */ }
 
@@ -149,7 +201,7 @@
       setMode: function (m) { mode = m; },
       setScroll: function (v) { scrollAmp = 0.4 + clamp(v, 0, 1) * 1.0; },
       impulseAt: function (x, y) { impulses.push({ x: x, y: y, t0: now() }); if (!running) start(); },
-      stop: function () { stop(); if (io) io.disconnect(); if (doClick) root.removeEventListener("pointerdown", onDown); }
+      stop: function () { stop(); alive = false; if (io) io.disconnect(); if (doClick) root.removeEventListener("pointerdown", onDown); }
     };
   };
 })();

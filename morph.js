@@ -3,27 +3,32 @@
    breathing, like a flock crossing - to land in Eat's, then Heal's, then AI. It does not fade out and
    fade in; it flows, location to location. Each section keeps a DWELL zone at centre where the real
    interactive schematic stands crisp; the flock takes the air only between them, and crossfades under
-   the diagram at each end so there is no snap. Begins at the hero. Honours prefers-reduced-motion. */
-(function(){
-  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce) return;
+   the diagram at each end so there is no snap. Begins at the hero. Honours prefers-reduced-motion.
 
-  var K=(typeof innerWidth!=='undefined'&&innerWidth<700)?240:460, PEARL=[242,236,201];   // fewer flock particles on phones
+   ONE ENGINE (2026-10-26). The flight eases on HMM_MOTION.easeWeight, the dots in the air keep
+   the engine's breath and drift (scripts/hmm-motion.js), and the colours are the necessity
+   tokens, so a dot leaving the Heal machine is the Heal machine's colour. The gate figure is an
+   engine SVG since the same date, so the flock lands on it between Heal and the footer. */
+(function(){
+  var M=window.HMM_MOTION;
+  if(!M||M.prefersReduced()) return;
+
+  var K=(typeof innerWidth!=='undefined'&&innerWidth<700)?240:460, PEARL=M.nec('pearl');   // fewer flock particles on phones
   var DWELL=0.13;    // each object (incl. the DWG-NEC machines) holds crisp around its centre before the flock breaks it apart
   var STAG=0.62;     // per-dot departure spread - higher = more staged, dots peel off in waves over the scroll
   var SMOOTH=0.045;  // temporal lag on the rendered position - low = dots ease into place, never snap even on fast scroll
   var ARC=1.0;       // curvature of the flight path (0 = straight)
   var CHAIN=[
-    {id:'power',col:[224,129,46]},
-    {id:'eat',  col:[79,138,91]},
-    {id:'heal', col:[62,121,166]},
-    {id:'s6',   col:[196,69,57], spine:true},    // dots transition in, then load straight top-to-bottom
+    {id:'power',nec:'power'},
+    {id:'eat',  nec:'eat'},
+    {id:'heal', nec:'heal'},
+    {id:'s6',   nec:'reg'},                      // the gate figure (ai-figures.js), an engine SVG since 2026-10-26
     /* 2026-09-14: the radar panels became nine dotted bars, so the selectors this row
        sampled no longer exist. It now samples the bar dots themselves, which are the
        drawing, and hides nothing: the bars ARE the data, and the group labels and the
        slot outlines are the grid this morph keeps. */
-    {id:'s9',   col:[242,236,201]},              // sourcing figures (settles on whatever dot-field is present)
-    {id:'sfoot',col:[242,236,201], geom:'.site-footer', sample:'.site-logo svg path', hide:'.site-logo'}   // the flock gathers into the wordmark at the very bottom
+    {id:'s9',   nec:'pearl'},                    // sourcing figures (settles on whatever dot-field is present)
+    {id:'sfoot',nec:'pearl', geom:'.site-footer', sample:'.site-logo svg path', hide:'.site-logo'}   // the flock gathers into the wordmark at the very bottom
   ];
 
   var cv=document.createElement('canvas'); cv.id='morphfield'; cv.setAttribute('aria-hidden','true');
@@ -74,13 +79,14 @@
     // (the top-left logo is a plain static mark, deliberately NOT part of the flock.)
     var heroRow=document.getElementById('heroRow');
     if(heroRow){var hc=heroRow.querySelectorAll('circle');if(hc.length>20){var hp=sampleFrom(hc,heroRow);if(hp)NODES.push(mk(PEARL,heroRow,heroRow.querySelectorAll('svg'),hp));}}
-    CHAIN.forEach(function(n){var sec=document.getElementById(n.id);if(!sec)return;
+    PEARL=M.nec('pearl');
+    CHAIN.forEach(function(n){n.col=M.nec(n.nec);var sec=document.getElementById(n.id);if(!sec)return;
       if(n.geom){var cont=document.querySelector(n.geom);if(!cont)return;var els=cont.querySelectorAll(n.sample||'circle,path,polygon,polyline,line');var gp=sampleGeom(els,cont);if(!gp)return;var hideEls=n.hide?cont.querySelectorAll(n.hide):[cont];var gd=mk(n.col,cont,hideEls,gp);gd.spine=false;NODES.push(gd);return;}
       var svg=primarySvg(sec);if(!svg)return;var pts=sampleFrom(svg.querySelectorAll('circle'),svg);if(!pts)return;var nd=mk(n.col,svg,[svg],pts);nd.spine=!!n.spine;NODES.push(nd);});
   }
 
   function ss(a,b,x){var t=x<a?0:x>b?1:(x-a)/(b-a);return t*t*(3-2*t);}
-  function eio(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  var eio=M.easeWeight;
   function L(a,b,e){return a+(b-a)*e;}
   function cl01(x){return x<0?0:x>1?1:x;}
   function setOp(list,v){for(var i=0;i<list.length;i++)list[i].style.opacity=(v>=0.999?'':v.toFixed(3));}
@@ -94,9 +100,9 @@
      documents draw nothing; visibilitychange schedules the first frame back. */
   var queued=false;
   function schedule(){if(queued||document.hidden)return;queued=true;requestAnimationFrame(function(){queued=false;frame();});}
-  var t0=0;
+  var tStart=M.now();
   function frame(){
-    t0+=0.011;
+    var ms=M.now()-tStart;
     ctx.clearRect(0,0,W,H);
     if(NODES.length<2)return;
     var vc=innerHeight/2, rects=[], mids=[];
@@ -134,7 +140,7 @@
       var dx=bx-ax, dy=by-ay, len=Math.sqrt(dx*dx+dy*dy)||1;
       var bow=toSpine?0:Math.sin(Math.PI*e)*pa.arc*ARC*(24+len*0.10);   // no curve into the spine - straight
       px += (-dy/len)*bow; py += (dx/len)*bow;
-      px += Math.cos(t0*0.6+pa.k*6.283)*2.4; py += Math.sin(t0*0.7+pa.k*6.283)*2.4;  // breath
+      var dv=M.drift(ms,px,py,pa.k,2.4); px+=dv[0]; py+=dv[1];         // the engine's school, in flight
       if(!primed){CX[i]=px;CY[i]=py;}
       CX[i]+=(px-CX[i])*SMOOTH; CY[i]+=(py-CY[i])*SMOOTH;              // calm lag
       var base=[L(acol[0],bcol[0],t),L(acol[1],bcol[1],t),L(acol[2],bcol[2],t)];
@@ -153,5 +159,6 @@
   var rt=null; addEventListener('resize',function(){resize();clearTimeout(rt);rt=setTimeout(rebuild,180);});
   addEventListener('scroll',schedule,{passive:true});
   document.addEventListener('visibilitychange',function(){if(!document.hidden)schedule();});
+  if(window.__onTheme)__onTheme(rebuild);
   if(document.readyState==='complete')boot(); else addEventListener('load',boot);
 })();

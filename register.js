@@ -25,36 +25,32 @@
   for(var y=2020;y<=2030;y++){var future=y>=2027,rows=(byYear[y]||[]).slice().sort(function(a,b){return (a.global?1:0)-(b.global?1:0);});
     html+='<div class="tl-year'+(future?' tl-future':'')+'"><div class="tl-axis"><span class="tl-node"></span><span class="tl-y">'+y+'</span></div><div class="tl-rows">'+(rows.length?rows.map(row).join(''):'<div class="tl-empty">·</div>')+'</div></div>';}
   body.innerHTML=html;
-  // click-to-explode on the timeline spine: nodes scatter from the click point, then spring home
+  /* click-to-scatter on the timeline. ONE ENGINE (2026-10-26): the year nodes are pushed by the
+     same impulse that ripples the page field and the drawings, HMM_MOTION.push over the engine's
+     3s weighted decay, from any click on the page within reach of the timeline. The spring this
+     replaced was the register's own physics. */
   (function(){
-    var reduceM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches; if(reduceM) return;
-    var nodes=[].slice.call(body.querySelectorAll('.tl-node')).map(function(n){return {n:n,x:0,y:0,vx:0,vy:0};});
+    var M=window.HMM_MOTION; if(!M||M.prefersReduced()) return;
+    var nodes=[].slice.call(body.querySelectorAll('.tl-node')).map(function(n){return {n:n,cx:0,cy:0};});
     if(!nodes.length) return;
-    var running=false;
+    var impulses=[], running=false, REACH=420, STRENGTH=60;
     function frame(){
-      var active=false;
-      for(var i=0;i<nodes.length;i++){var d=nodes[i];
-        d.vx=(d.vx - d.x*0.13)*0.83; d.vy=(d.vy - d.y*0.13)*0.83;
-        d.x+=d.vx; d.y+=d.vy;
-        d.n.style.transform='translate('+d.x.toFixed(1)+'px,'+d.y.toFixed(1)+'px)';
-        if(Math.abs(d.vx)+Math.abs(d.vy)>0.06||Math.abs(d.x)+Math.abs(d.y)>0.5) active=true;
+      var t=M.now();
+      while(impulses.length&&(t-impulses[0].t0)>M.IMPULSE)impulses.shift();
+      for(var i=0;i<nodes.length;i++){var d=nodes[i],ox=0,oy=0;
+        for(var k=0;k<impulses.length;k++){var im=impulses[k],ux=d.cx-im.x,uy=d.cy-im.y,dist=Math.hypot(ux,uy)||0.001;
+          var pw=STRENGTH*M.push(dist,REACH,(t-im.t0)/M.IMPULSE);ox+=ux/dist*pw;oy+=uy/dist*pw;}
+        d.n.style.transform=(ox||oy)?'translate('+ox.toFixed(1)+'px,'+oy.toFixed(1)+'px)':'';
       }
-      if(active){ requestAnimationFrame(frame); }
-      else { for(var j=0;j<nodes.length;j++){var e=nodes[j];e.n.style.transform='';e.n.style.animation='';e.x=e.y=e.vx=e.vy=0;} running=false; }
+      if(impulses.length){requestAnimationFrame(frame);}
+      else{for(var j=0;j<nodes.length;j++)nodes[j].n.style.animation='';running=false;}
     }
-    // Deliberately no cursor:pointer on the body. This handler scatters the
-    // year nodes for delight; it is not a promise the 58 rows inside can be
-    // clicked, and setting the cursor here told every one of them otherwise.
-    body.addEventListener('click',function(ev){
+    M.onImpulse(function(x,y){
+      var br=body.getBoundingClientRect(); if(y<br.top-REACH||y>br.bottom+REACH) return;
       for(var i=0;i<nodes.length;i++){var d=nodes[i];
-        d.n.style.animation='none';                       // CSS pulse would override our transform; pause it
-        var r=d.n.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
-        var dx=cx-ev.clientX, dy=cy-ev.clientY, dist=Math.sqrt(dx*dx+dy*dy), ux, uy;
-        if(dist<2){var a=Math.random()*6.283;ux=Math.cos(a);uy=Math.sin(a);dist=2;}else{ux=dx/dist;uy=dy/dist;}
-        var force=9+420/(dist+34);
-        d.vx+=ux*force*(0.6+Math.random()*0.8)+(Math.random()-0.5)*8;
-        d.vy+=uy*force*(0.6+Math.random()*0.8)+(Math.random()-0.5)*8;
-      }
+        d.n.style.animation='none';                       // the CSS pulse would override the transform; pause it
+        d.n.style.transform='';var r=d.n.getBoundingClientRect();d.cx=r.left+r.width/2;d.cy=r.top+r.height/2;}
+      impulses.push({x:x,y:y,t0:M.now()});
       if(!running){running=true;requestAnimationFrame(frame);}
     });
   })();
@@ -73,8 +69,14 @@
   // offsetHeight, not scrollHeight: scrollHeight counts the spine's own box and the
   // translateY(30px) that .tl-year.pre carries before it reveals, so measuring it
   // left the rail hanging past the end of the timeline it annotates.
-  function layoutSpine(){var h=body.offsetHeight,w=14,g=15,s='';for(var y=7;y<h;y+=g){s+='<circle cx="'+(w/2)+'" cy="'+y+'" r="1.4" fill="rgba(242,236,201,0.5)"/>';}
-    spine.setAttribute('width',w);spine.setAttribute('height',h);spine.setAttribute('viewBox','0 0 '+w+' '+h);spine.style.width=w+'px';spine.style.height=h+'px';spine.innerHTML=s;}
+  /* the spine's dots breathe on the engine (scripts/hmm-motion.js) like every other dot on the site;
+     a relayout redraws them, so the old controller is stopped and a new one attached */
+  var spineCtl=null;
+  function layoutSpine(){var h=body.offsetHeight,w=14,g=15,s='',P=window.HMM_MOTION?window.HMM_MOTION.nec('pearl'):[242,236,201];
+    for(var y=7;y<h;y+=g){s+='<circle cx="'+(w/2)+'" cy="'+y+'" r="1.4" fill="rgb('+P.join(',')+')" opacity="0.5"/>';}
+    if(spineCtl){spineCtl.stop();spineCtl=null;}
+    spine.setAttribute('width',w);spine.setAttribute('height',h);spine.setAttribute('viewBox','0 0 '+w+' '+h);spine.style.width=w+'px';spine.style.height=h+'px';spine.innerHTML=s;
+    if(window.hmmAnimateDots)spineCtl=window.hmmAnimateDots(spine,{mode:'breath',click:false,driftAmp:1});}
   window.__layoutSpine=layoutSpine;
   layoutSpine();
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layoutSpine);

@@ -35,7 +35,7 @@ a{color:inherit;}
 .tl-year.show{opacity:1;transform:none;}
 @media (prefers-reduced-motion: reduce){.tl-year.pre{opacity:1;transform:none;}}
 .tl-axis{flex:0 0 84px;position:relative;padding:12px 0 12px 20px;}
-.tl-node{position:absolute;left:-5px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--hmm-pearl);border:none;transform-origin:center;animation:tlPulse 3.4s ease-in-out infinite;}
+.tl-node{position:absolute;left:-5px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--hmm-pearl);border:none;transform-origin:center;animation:tlPulse 4s ease-in-out infinite;}
 .tl-year:nth-child(2n) .tl-node{animation-delay:.6s;}
 .tl-year:nth-child(3n) .tl-node{animation-delay:1.2s;}
 .tl-standing .tl-node{background:var(--hmm-accent);}
