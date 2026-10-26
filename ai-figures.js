@@ -18,10 +18,14 @@
   function el(tag,attrs,text){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;return e;}
   function seeded(s){return function(){s=(Math.imul(s,1103515245)+12345)&0x7fffffff;return s/0x7fffffff;};}
 
+  /* The SVG's own width: the figure's content box, floored. The figure has a 1px border each side,
+     and a viewBox even a fraction wider than the box scales the 12px labels under the floor
+     (2026-10-26, found at 0.994 on a phone and 0.998 on a desktop). */
+  function boxW(){return Math.floor(fig.getBoundingClientRect().width-(fig.offsetWidth-fig.clientWidth));}
   function build(){
     if(ctl){ctl.stop();ctl=null;}
     if(svg&&svg.parentNode)svg.parentNode.removeChild(svg);
-    var W=Math.round(fig.clientWidth||600); builtW=W; if(W<40) return;
+    var W=boxW()||600; builtW=W; if(W<40) return;
     H=innerWidth<=640?112:172;                                   // index.css holds the same two heights
     var gx=W*0.62, rnd=seeded(61), PEARL=M.nec('pearl'), THESIS=M.nec('thesis'), ACC=rgba(M.nec('reg'),0.9);
     svg=el('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,'aria-hidden':'true',focusable:'false','class':'reg-gate'});
@@ -53,7 +57,11 @@
     }});
   }
   var rt=0;
-  addEventListener('resize',function(){if(Math.round(fig.clientWidth)===builtW)return;clearTimeout(rt);rt=setTimeout(build,180);});
+  /* Rebuild when the figure's own box changes width, not only the window's: a grid column that
+     settles after first paint left the drawing scaled a hair below 1:1, and its 12px labels under
+     the floor (2026-10-26). */
+  function onSize(){if(boxW()===builtW)return;clearTimeout(rt);rt=setTimeout(build,120);}
+  if(window.ResizeObserver)new ResizeObserver(onSize).observe(fig); else addEventListener('resize',onSize);
   if(window.__onTheme)__onTheme(build);
-  build(); setTimeout(function(){if(Math.round(fig.clientWidth)!==builtW)build();},300);   // re-read once layout settles
+  build(); setTimeout(function(){if(boxW()!==builtW)build();},300);   // re-read once layout settles
 })();

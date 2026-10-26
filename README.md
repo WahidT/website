@@ -39,11 +39,8 @@ All Playwright, all against a local server (`npm run serve`, then in another she
 - `npm run check:affordances`. Every `cursor:pointer` responds to a click, and every click handler shows one
 - `npm run check:deadcss`. No rule without an element or a reference that can create one
 - `npm run check:deadjs`. No `getElementById` or `querySelector` literal in the root scripts that matches nothing on any rendered page
-- `npm run check:figures`. The enacted-record figures in the copy match
-  `data/reg_instruments.js`, and the tier-liquidity sentence on the language-model page matches the
-  canon snapshot in `data/canon_tier_liquidity.json`. Where the estate's `canon.json`
-  is reachable, the snapshot is checked against it too, so a canon recompile fails the build
-  rather than being outrun by the site
+- `npm run check:figures`. The register's in-force rows all carry an operative year, no served page
+  prints the tier-liquidity figure withdrawn on 2026-10-26 (GP), and no catalogue company name is served
 - `npm run check:openers`. The two lexical patterns of R-D26 over the served text of every page:
   a regulator cast as an actor, and a first-person or pointer close. Both are in the Netlify build
 - `npm run canon:figures -- --write` refreshes the canon

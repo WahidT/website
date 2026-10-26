@@ -58,24 +58,8 @@ for (const [name, m] of Object.entries(r)) {
   else if (h1s[0] !== H1) problems.push(`h1: reads "${h1s[0]}", expected "${H1}"`);
 }
 
-/* The gate's headline figure, rendered, against the canon snapshot (clarity plan phase 4). */
-{
-  const { chromium } = await import('playwright');
-  const { parseTierLiquidity, readSnapshot } = await import('./canon-figures.mjs');
-  const canon = parseTierLiquidity(readSnapshot().tier_liquidity);
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
-  const page = await browser.newPage();
-  await page.goto(`${BASE}/index.html`, { waitUntil: 'networkidle' });
-  const shown = await page.$$eval('#regFig [data-fig]', els => els.map(e => [e.dataset.fig, e.textContent.trim()]));
-  await browser.close();
-  if (shown.length !== 3) problems.push(`headline: ${shown.length} figure slots rendered, expected 3`);
-  for (const [k, v] of shown) {
-    /* One decimal since 2026-10-26 (spec v1.1, 3.4), the precision the gloss sentence prints. */
-    const v1 = Number(canon[k]).toFixed(1);
-    const want = k === 'oddsRatio' ? v1 : `${v1}%`;
-    if (v !== want) problems.push(`headline: ${k} renders "${v}", canon says "${want}"`);
-  }
-}
+/* The gate's headline figure and its rendered check left on 2026-10-26 with the figure (GP: "Pull it
+   from the site"); check-register-figures.mjs now fails if it returns. */
 
 for (const p of problems) console.log('FAIL ' + p);
 console.log(problems.length ? `\n${problems.length} clarity findings` : 'clarity: all checks pass');
