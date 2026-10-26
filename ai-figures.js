@@ -13,7 +13,7 @@
 (function(){
   var fig=document.getElementById('regGate'), M=window.HMM_MOTION;
   if(!fig||!window.hmmAnimateDots||!M) return;
-  var NS='http://www.w3.org/2000/svg', H=172, svg=null, ctl=null, builtW=0;
+  var NS='http://www.w3.org/2000/svg', H=172, svg=null, ctl=null, builtW=0;   // 112 on a phone, set in build()
   function rgba(c,a){return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
   function el(tag,attrs,text){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;return e;}
   function seeded(s){return function(){s=(Math.imul(s,1103515245)+12345)&0x7fffffff;return s/0x7fffffff;};}
@@ -22,6 +22,7 @@
     if(ctl){ctl.stop();ctl=null;}
     if(svg&&svg.parentNode)svg.parentNode.removeChild(svg);
     var W=Math.round(fig.clientWidth||600); builtW=W; if(W<40) return;
+    H=innerWidth<=640?112:172;                                   // index.css holds the same two heights
     var gx=W*0.62, rnd=seeded(61), PEARL=M.nec('pearl'), THESIS=M.nec('thesis'), ACC=rgba(M.nec('reg'),0.9);
     svg=el('svg',{viewBox:'0 0 '+W+' '+H,width:W,height:H,'aria-hidden':'true',focusable:'false','class':'reg-gate'});
     // the stream: 15 dots that cross from the open side and fade as they pass the gate

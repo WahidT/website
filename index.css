@@ -388,7 +388,7 @@ details.card-unit>p{margin-top:4px;}
   .schem-steps{gap:2px 12px;}
   /* The gate: a shorter figure and less air, under its 1,700px ceiling. */
   .reg{padding-top:56px;padding-bottom:56px;}
-  .reg-glyph canvas{height:112px;}
+  .reg-glyph svg{height:112px;}
 }
 /* ===== large screens (monitors / TV): cap content so lines stay readable and layout doesn't sprawl ===== */
 @media(min-width:1440px){
