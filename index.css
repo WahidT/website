@@ -197,8 +197,34 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .card p{margin:0;font-size:16px;line-height:1.6;color:var(--hmm-pearl);}
 .card p b{color:var(--hmm-pearl);font-weight:600;}
 .schematic-wrap{margin:6px 0 14px;}
-.schematic-wrap svg{width:100%;max-width:528px;height:auto;overflow:visible;display:block;margin:0 auto;}
-.blk rect{transition:stroke .18s var(--hmm-ease),stroke-width .18s var(--hmm-ease),fill .18s var(--hmm-ease);}
+/* The system diagrams (diagrams.js, 2026-10-27): the stages are an ordered list on a grid, so
+   their names are text at 12px and up; the wires are an SVG under the list at 1:1. The marked
+   layer is the section's accent, and the caption says what the mark means. */
+.sd{position:relative;margin:0;}
+.sd-wires{position:absolute;left:0;top:0;overflow:visible;pointer-events:none;}
+.sd-w{fill:none;stroke:rgba(242,236,201,.42);stroke-width:1;}
+.sd-w--dash{stroke-dasharray:3 3;}
+.sd-tick{fill:rgba(242,236,201,.55);}
+.sd-nodes{position:relative;display:grid;list-style:none;margin:0;padding:0;}
+.sd-n{position:relative;display:flex;gap:7px;align-items:baseline;min-width:0;padding:5px 7px;border:1px solid rgba(242,236,201,.24);background:var(--hmm-field-dark);font-size:12px;line-height:1.3;color:var(--hmm-pearl);}
+.sd-num{flex:none;font-family:var(--hmm-font-mono);letter-spacing:.04em;color:var(--hmm-caption);}
+.sd-name{min-width:0;hyphens:manual;overflow-wrap:break-word;}
+.sd-sub{display:block;margin-top:2px;color:var(--hmm-text-muted);}
+.sd-n--band{padding:8px 12px;}
+/* Wide: the number sits over the name, so a six-across row keeps whole words. */
+.sd[data-layout="wide"] .sd-n:not(.sd-n--band){display:block;}
+.sd[data-layout="wide"] .sd-num{display:block;margin-bottom:2px;}
+.sd-lab{position:absolute;font-family:var(--hmm-font-mono);font-size:12px;line-height:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--hmm-caption);white-space:nowrap;pointer-events:none;}
+.sd-key{margin:16px 0 0;display:flex;flex-direction:column;gap:6px;}
+.card .sd-key p{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.5;color:var(--hmm-text-muted);}
+.sd-sw{flex:none;width:10px;height:10px;margin-top:5px;border:1px solid;}
+.sd-sw--dash{width:14px;height:0;margin-top:10px;border-width:1px 0 0;border-style:dashed;border-color:rgba(242,236,201,.6);}
+.sec-power .sd-n.is-acc,.sec-power .sd-sw--acc{border-color:var(--hmm-nec-power);}
+.sec-eat .sd-n.is-acc,.sec-eat .sd-sw--acc{border-color:var(--hmm-nec-eat);}
+.sec-heal .sd-n.is-acc,.sec-heal .sd-sw--acc{border-color:var(--hmm-nec-heal);}
+.sec-power .sd-n.is-acc .sd-num{color:var(--hmm-nec-power-dark);}
+.sec-eat .sd-n.is-acc .sd-num{color:var(--hmm-nec-eat-dark);}
+.sec-heal .sd-n.is-acc .sd-num{color:var(--hmm-nec-heal-dark);}
 @keyframes spIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 /* per-necessity accent */
 .sec-power .stage-eyebrow,.sec-power .sp-name{color:var(--hmm-nec-power-dark);}
@@ -341,9 +367,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .sec-power .callout-list .is-key .cl-n{color:var(--hmm-nec-power-dark);}
 .sec-eat .callout-list .is-key .cl-n{color:var(--hmm-nec-eat-dark);}
 .sec-heal .callout-list .is-key .cl-n{color:var(--hmm-nec-heal-dark);}
-/* The schematic's stage names, as text under the drawing in flow order (2026-10-26, the 12px floor). */
-.schem-steps{display:flex;flex-wrap:wrap;gap:4px 14px;list-style:none;margin:2px 0 0;padding:0;font-family:var(--hmm-font-mono);font-size:12px;line-height:1.5;letter-spacing:.06em;text-transform:uppercase;color:var(--hmm-text-muted);}
-.schem-steps .ss-n{color:var(--hmm-caption);margin-right:6px;}
 /* The instance paragraph as a disclosure (2026-10-26): open on a wide screen, closed on a phone. */
 details.card-unit>summary{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-caption);cursor:pointer;min-height:44px;display:flex;align-items:center;list-style:none;}
 details.card-unit>summary::-webkit-details-marker{display:none;}
@@ -358,7 +381,10 @@ details.card-unit>p{margin-top:4px;}
   /* The system sections: tighter panel air and list rhythm on a phone, for the page ceiling. */
   .nec .panel,.nec[data-flip="1"] .panel{padding:24px 20px 28px;gap:12px;}
   .callout-list{gap:5px;}
-  .schem-steps{gap:2px 12px;}
+  .card .sd-key p{font-size:12px;line-height:1.45;}
+  .sd-key{margin-top:10px;gap:4px;}
+  .sd-n{padding:4px 7px;}
+  .sd-n--band{padding:6px 10px;}
   /* The gate: a shorter figure and less air, under its 1,700px ceiling. */
   .reg{padding-top:56px;padding-bottom:56px;}
   .reg-glyph svg{height:112px;}
