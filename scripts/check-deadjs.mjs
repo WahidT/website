@@ -18,9 +18,9 @@ import { readFileSync, readdirSync } from 'node:fs';
 const BASE = (process.argv[2] || 'http://127.0.0.1:8791').replace(/\/$/, '');
 const EXECUTABLE = process.env.CHROMIUM_PATH || undefined;
 const ROUTES = ['index.html', 'bio.html', 'sources.html', 'register.html', 'for-llms.html', '404.html'];
-const ALLOW = new Set([
-  '.blk--active',     // toggled onto one schematic block when a stage is opened
-]);
+/* Selectors a script may name before anything carries them. Empty since the block schematic
+   (and its .blk--active stage toggle) gave way to the system diagrams on 2026-10-27. */
+const ALLOW = new Set([]);
 
 // selector literal -> files that carry it
 const CALL = /\.(getElementById|querySelector|querySelectorAll)\(\s*(['"])((?:(?!\2)[^\\]|\\.)*)\2\s*\)/g;
