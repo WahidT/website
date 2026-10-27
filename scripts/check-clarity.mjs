@@ -53,7 +53,7 @@ for (const [name, m] of Object.entries(r)) {
   await page.goto(`${BASE}/index.html`, { waitUntil: 'networkidle' });
   const h1s = await page.$$eval('h1', els => els.map(e => e.textContent.replace(/\s+/g, ' ').trim()));
   await browser.close();
-  const H1 = 'A pre-permission fund.';
+  const H1 = 'Funding Pre-Permission';   // R-D53, GP 2026-10-27
   if (h1s.length !== 1) problems.push(`h1: ${h1s.length} h1 elements on index.html, expected 1`);
   else if (h1s[0] !== H1) problems.push(`h1: reads "${h1s[0]}", expected "${H1}"`);
 }
