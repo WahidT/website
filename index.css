@@ -308,12 +308,28 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .reg-more{align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--hmm-pearl);text-decoration:none;}
 .reg-more span{border-bottom:1px solid var(--hmm-accent);padding-bottom:2px;}
 .reg-more:hover,.reg-more:focus-visible{color:var(--hmm-accent-text);}
+/* The evidence (proposal 2026-10-29): figure, claim, source, in that order on every card. */
+.evd{padding:80px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
+.evd-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 22px;}
+.evd-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;max-width:1240px;}
+.evd-card{position:relative;border:1px solid var(--hmm-border);border-top:2px solid var(--hmm-accent);padding:22px 24px 20px;background:rgba(242,236,201,.02);display:flex;flex-direction:column;gap:12px;}
+.evd-card .tk{border-color:var(--hmm-accent);}
+.evd-fig{margin:0;font-family:var(--hmm-font-display);font-weight:700;font-size:56px;line-height:1;color:var(--hmm-pearl);}
+.evd-fig span{font-size:24px;color:var(--hmm-text-muted);font-weight:600;}
+.evd-claim{margin:0;font-size:16px;line-height:1.55;color:var(--hmm-pearl);}
+.evd-src{margin:auto 0 0;padding-top:12px;border-top:1px solid var(--hmm-border);font-size:12px;line-height:1.5;color:var(--hmm-caption);}
+.evd-funnel{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:1.4;color:var(--hmm-text-muted);}
+.evd-funnel li{display:grid;grid-template-columns:62px minmax(0,1fr);column-gap:10px;}
+.evd-funnel span{font-family:var(--hmm-font-mono);color:var(--hmm-pearl);text-align:right;}
+.evd-card--pending{border-top-style:dashed;opacity:.7;}
+@media(max-width:900px){.evd-grid{grid-template-columns:minmax(0,1fr);}}
+@media(max-width:640px){.evd{padding:56px 20px;}.evd-fig{font-size:44px;}}
 /* ===== mobile UX pass (UX/perf audit) ===== */
 /* Clearance for the compact rail above: it measures 76px on a coarse pointer, so
    the 48px these sections carry left 28px of every one of them underneath it. The
    640px block below keeps its own 66px, tuned to the 68px the rail is down there. */
 @media (hover:none),(pointer:coarse){
-  .through,.ai,.reg,.nec,.ask{padding-right:78px;}
+  .through,.ai,.reg,.evd,.nec,.ask{padding-right:78px;}
   .site-footer{padding-right:78px;}
 }
 @media(max-width:860px){
@@ -446,12 +462,12 @@ details.card-unit>p{margin-top:4px;}
    clearance blocks above. */
 @media(max-width:767px){
   .railnav{display:none;}
-  .through,.ai,.reg,.ask{padding-right:48px;}
+  .through,.ai,.reg,.evd,.ask{padding-right:48px;}
   .nec{padding-right:0;}
   .site-footer{padding-right:0;}
 }
 @media(max-width:640px){
-  .through,.ai,.reg,.ask{padding-right:20px;}
+  .through,.ai,.reg,.evd,.ask{padding-right:20px;}
 }
 
 /* Touch viewports from 768px to 1100px (an iPad held landscape) keep the rail, because the
@@ -459,7 +475,7 @@ details.card-unit>p{margin-top:4px;}
    labels at 1024px. The section gives back the rail's width at those sizes, which is
    what the phone rule below 768px does for every section by hiding the rail instead. */
 @media (pointer:coarse) and (min-width:768px) and (max-width:1100px){
-  .reg{padding-right:112px;}   /* the touch rail measures 103px since its labels went to the 12px floor (2026-10-22) */
+  .reg,.evd{padding-right:112px;}   /* the touch rail measures 103px since its labels went to the 12px floor (2026-10-22) */
 }
 
 /* ---------- S1 the fit breaks into dots on scroll (fit.js) ----------
@@ -479,19 +495,3 @@ details.card-unit>p{margin-top:4px;}
 #mandate .fit-dots{position:absolute;inset:0;width:100%;height:100%;max-width:none;margin:0;overflow:visible;pointer-events:none;}
 #mandate .fit-dots.fit-rest{display:none;}
 
-/* The evidence (proposal 2026-10-29): figure, claim, source, in that order on every card. */
-.evd{padding:80px 48px;border-top:1px solid var(--hmm-border);color:var(--hmm-pearl);}
-.evd-title{font-family:var(--hmm-font-display);font-weight:700;font-size:var(--hmm-text-2xl);margin:10px 0 22px;}
-.evd-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;max-width:1240px;}
-.evd-card{position:relative;border:1px solid var(--hmm-border);border-top:2px solid var(--hmm-accent);padding:22px 24px 20px;background:rgba(242,236,201,.02);display:flex;flex-direction:column;gap:12px;}
-.evd-card .tk{border-color:var(--hmm-accent);}
-.evd-fig{margin:0;font-family:var(--hmm-font-display);font-weight:700;font-size:56px;line-height:1;color:var(--hmm-pearl);}
-.evd-fig span{font-size:24px;color:var(--hmm-text-muted);font-weight:600;}
-.evd-claim{margin:0;font-size:16px;line-height:1.55;color:var(--hmm-pearl);}
-.evd-src{margin:auto 0 0;padding-top:12px;border-top:1px solid var(--hmm-border);font-size:12px;line-height:1.5;color:var(--hmm-caption);}
-.evd-funnel{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:1.4;color:var(--hmm-text-muted);}
-.evd-funnel li{display:grid;grid-template-columns:62px minmax(0,1fr);column-gap:10px;}
-.evd-funnel span{font-family:var(--hmm-font-mono);color:var(--hmm-pearl);text-align:right;}
-.evd-card--pending{border-top-style:dashed;opacity:.7;}
-@media(max-width:900px){.evd-grid{grid-template-columns:minmax(0,1fr);}}
-@media(max-width:640px){.evd{padding:56px 20px;}.evd-fig{font-size:44px;}}
