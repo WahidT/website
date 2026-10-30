@@ -34,7 +34,7 @@ const PROFILES = [
   ['squeeze 1040',  { width: 1040, height: 900 }, false],
   ['laptop 1280',   { width: 1280, height: 800 }, false],
 ];
-const ROUTES = ['index.html', 'bio.html', 'sources.html', 'register.html', 'for-llms.html'];
+const ROUTES = ['index.html', 'bio.html', 'japan.html', 'australia.html', 'new-zealand.html', 'sources.html', 'register.html', 'for-llms.html'];
 
 /* Probes at every scroll step, not just the end. The overlap this guards
    against appears only where a vw-sized block happens to sit beside the rail,

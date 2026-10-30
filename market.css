@@ -1,0 +1,45 @@
+/* hmm site - market pages (japan.html, australia.html, new-zealand.html), 2026-10-30.
+   The page shell, logo, title and back link repeat bio.css, so the four standalone pages read as
+   one set. This file adds what a market page has and the bio does not: numbered sections, a
+   figure with its claim and source, a model-input tag, and the source list. Every figure prints
+   its source beside it (handover protocol, item 5), so .mk-src is never optional. */
+/* The shell: these rules are copied from bio.css rather than linked, so a market page loads no
+   rule it does not use (check:deadcss). Keep them in step with bio.css. */
+html{background:var(--hmm-field-dark);color-scheme:dark;}
+body{margin:0;padding:0;font-family:var(--hmm-font-body,'Raela Grotesque','Helvetica Neue',sans-serif);color:var(--hmm-pearl,var(--hmm-pearl-beige));
+     min-height:100vh;display:flex;flex-direction:column;}
+a{color:inherit;}
+.bio-top{padding:26px 30px;}
+.bio-logo{color:var(--hmm-pearl,var(--hmm-pearl-beige));display:inline-block;}
+.bio-logo svg{height:26px;width:auto;display:block;}
+.bio-logo:hover{color:var(--hmm-accent,var(--hmm-tomato-jam));}
+.bio-main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px 30px 60px;}
+.bio-card{width:100%;max-width:620px;}
+.bio-name{font-family:var(--hmm-font-display,'Kufam',sans-serif);font-weight:700;font-size:34px;line-height:1.05;margin:0 0 22px;}
+.bio-role{font-family:var(--hmm-font-mono,'Raela Grotesque',monospace);font-size:12px;letter-spacing:.06em;color:var(--hmm-caption,rgba(242,236,201,.72));margin:-12px 0 22px;}
+.bio-contact{font-family:var(--hmm-font-mono,'Raela Grotesque',monospace);font-size:12px;letter-spacing:.06em;color:var(--hmm-text-muted,rgba(242,236,201,.6));}
+.bio-contact a{color:var(--hmm-accent-text,#A5382C);text-decoration:none;}
+.bio-contact a:hover{text-decoration:underline;text-underline-offset:3px;}
+.bio-back{font-family:var(--hmm-font-mono,'Raela Grotesque',monospace);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--hmm-caption,rgba(242,236,201,.72));text-decoration:none;}
+.bio-back:hover{color:var(--hmm-pearl,var(--hmm-pearl-beige));}
+@media(max-width:560px){.bio-name{font-size:27px;}}
+
+.mk-lede{font-size:17px;line-height:1.55;color:var(--hmm-pearl,var(--hmm-pearl-beige));margin:0 0 30px;max-width:60ch;}
+.mk-sec{margin:0 0 34px;}
+.mk-sec h2{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;
+           color:var(--hmm-caption,rgba(242,236,201,.72));margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid var(--hmm-border,rgba(242,236,201,.14));}
+.mk-fact{margin:0 0 20px;}
+.mk-fig{font-family:var(--hmm-font-figures);font-weight:700;font-size:28px;line-height:1.1;margin:0 0 6px;color:var(--hmm-pearl,var(--hmm-pearl-beige));}
+.mk-fig span{font-size:15px;font-weight:600;color:var(--hmm-caption,rgba(242,236,201,.72));margin-left:6px;}
+.mk-claim{font-size:15px;line-height:1.62;color:var(--hmm-text-muted,rgba(242,236,201,.72));margin:0 0 6px;max-width:60ch;}
+.mk-src{font-family:var(--hmm-font-mono);font-size:12px;line-height:1.5;letter-spacing:.02em;color:var(--hmm-caption,rgba(242,236,201,.72));margin:0;max-width:62ch;}
+.mk-model{display:inline-block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-accent-text);
+          border:1px solid var(--hmm-accent);padding:0 6px;margin-right:8px;line-height:18px;}
+.mk-notes{margin:38px 0 26px;padding-top:16px;border-top:1px solid var(--hmm-border,rgba(242,236,201,.14));}
+.mk-notes p{font-family:var(--hmm-font-mono);font-size:12px;line-height:1.55;color:var(--hmm-caption,rgba(242,236,201,.72));margin:0 0 10px;max-width:66ch;}
+.mk-nav{display:flex;flex-wrap:wrap;gap:4px 24px;margin:0 0 20px;padding:0;list-style:none;}
+.mk-nav a{display:inline-flex;align-items:center;min-height:44px;font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.16em;
+          text-transform:uppercase;color:var(--hmm-text-muted);text-decoration:none;}
+.mk-nav a:hover,.mk-nav a:focus-visible{color:var(--hmm-accent-text);}
+.mk-nav a[aria-current="page"]{color:var(--hmm-pearl,var(--hmm-pearl-beige));border-bottom:1px solid var(--hmm-accent);}
+@media(max-width:560px){.mk-fig{font-size:24px;}.mk-lede{font-size:16px;}}

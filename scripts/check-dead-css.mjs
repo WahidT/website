@@ -24,7 +24,7 @@ import { join } from 'node:path';
 const BASE = (process.argv[2] || 'http://127.0.0.1:8791').replace(/\/$/, '');
 /* Playwright resolves its own Chromium (installed by the postinstall script); CHROMIUM_PATH overrides it. */
 const EXECUTABLE = process.env.CHROMIUM_PATH || undefined;
-const ROUTES = ['index.html', 'bio.html', 'sources.html', 'register.html', 'for-llms.html', '404.html'];
+const ROUTES = ['index.html', 'bio.html', 'japan.html', 'australia.html', 'new-zealand.html', 'sources.html', 'register.html', 'for-llms.html', '404.html'];
 
 const ALLOW = new Set([
   // the box tiers are a contract: a panel that ever gains a link must show a pointer

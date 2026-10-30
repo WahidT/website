@@ -12,7 +12,7 @@
    Usage: node scripts/check-market-order.mjs        (exit 1 on any hit) */
 import fs from 'node:fs';
 
-const PAGES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'register.html', 'instruments.html', '404.html'];
+const PAGES = ['index.html', 'bio.html', 'japan.html', 'australia.html', 'new-zealand.html', 'for-llms.html', 'sources.html', 'register.html', 'instruments.html', '404.html'];
 const RAW = ['llms.txt', 'register.js'];
 const EXCEPTIONS = [/He grew up between New Zealand, Australia and Saudi Arabia/];   // GP spec v1.1, 2026-10-26: biography life order
 
