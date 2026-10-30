@@ -19,10 +19,10 @@
   var SMOOTH=0.045;  // temporal lag on the rendered position - low = dots ease into place, never snap even on fast scroll
   var ARC=1.0;       // curvature of the flight path (0 = straight)
   var CHAIN=[
+    {id:'s6',   nec:'reg'},                      // the gate figure (ai-figures.js), an engine SVG since 2026-10-26; first since 2026-10-30, when the gate moved up to follow the hero
     {id:'power',nec:'power'},
     {id:'eat',  nec:'eat'},
     {id:'heal', nec:'heal'},
-    {id:'s6',   nec:'reg'},                      // the gate figure (ai-figures.js), an engine SVG since 2026-10-26
     /* 2026-09-14: the radar panels became nine dotted bars, so the selectors this row
        sampled no longer exist. It now samples the bar dots themselves, which are the
        drawing, and hides nothing: the bars ARE the data, and the group labels and the

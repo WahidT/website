@@ -36,10 +36,10 @@
   <nav class="railnav" id="railnav" aria-label="Section navigation">
     <a class="rail-item u-nav rail-top" href="#top" data-sec="top"><span class="rail-label">Top</span><span class="rail-label-s">Top</span><span class="rail-mark"><svg viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M5 9V2M2 5l3-3 3 3"/></svg></span></a>
     <a class="rail-item u-nav" href="#mandate" data-sec="mandate"><span class="rail-label">The thesis</span><span class="rail-label-s">Thesis</span><span class="rail-mark"></span></a>
+    <a class="rail-item u-nav" href="#s6" data-sec="s6"><span class="rail-label">The gate</span><span class="rail-label-s">Gate</span><span class="rail-mark"></span></a>
     <a class="rail-item u-nav" href="#power" data-sec="power"><span class="rail-label">Power</span><span class="rail-label-s">Power</span><span class="rail-mark"></span></a>
     <a class="rail-item u-nav" href="#eat" data-sec="eat"><span class="rail-label">Eat</span><span class="rail-label-s">Eat</span><span class="rail-mark"></span></a>
     <a class="rail-item u-nav" href="#heal" data-sec="heal"><span class="rail-label">Heal</span><span class="rail-label-s">Heal</span><span class="rail-mark"></span></a>
-    <a class="rail-item u-nav" href="#s6" data-sec="s6"><span class="rail-label">The gate</span><span class="rail-label-s">Gate</span><span class="rail-mark"></span></a>
     <a class="rail-item u-nav" href="#s9" data-sec="s9"><span class="rail-label">How we find them</span><span class="rail-label-s">Find</span><span class="rail-mark"></span></a>
     <a class="rail-item u-nav" href="#s10" data-sec="s10"><span class="rail-label">Contact</span><span class="rail-label-s">Contact</span><span class="rail-mark"></span></a>
   </nav>
@@ -67,49 +67,11 @@
     <p>They build twice: once to make it work, and once to earn permission to sell it. We invest pre-permission, backing founders from Japan, Australia and New Zealand.</p>
   </section>
 
-  <!-- S1b hero: the kicker and the three system cards, below the fit since 2026-09-15 -->
-  <section class="hero">
-    <div class="eyebrow">Power · Eat · Heal</div>
-    <h2 class="hero-title"><span class="hk-nec">Necessity</span> is the thesis</h2>
-    <!-- Thesis paragraphs, GP 2026-10-26 (spec v1.1, 3.3). -->
-    <div class="hero-lede">
-      <p class="hero-id">Energy, food and care reach us through systems built for another technological era. Their physical foundations are now being rebuilt. In the power plant, the paddock and the clinic, founders are applying advances in intelligence, biology and engineering inside markets whose rules predate those capabilities.</p>
-      <p>These are systems society cannot afford to fail, so technology enters them by earning permission. Our thesis: value in a necessity moves towards whoever holds its regulated layer, and we invest where that movement is already underway.</p>
-      <p>Three systems qualify on two conditions: demand that holds through every cycle, and failure counted in blackouts, shortages and untreated disease. We back the companies that need permission to sell into them, not the software that checks compliance.</p>
-    </div>
-    <div class="hero-row" id="heroRow">
-      <a class="box box--power u-nav" data-nec="power" href="#power">
-        <div class="box-stage"><div class="machine" data-machine="power"></div></div>
-        <div class="box-info"><div class="box-label">Power</div>
-          <div class="commentary">Fuel and critical minerals, generation, storage, and the grid to end use. Demand is universal and rising, and a failure stops industry and daily life.</div>
-          <ul class="ledger" data-ledger="power"></ul>
-          <span class="box-go">Read the Power system<svg class="box-go-arrow" viewBox="0 0 22 8" aria-hidden="true" focusable="false"><path d="M0 4h18M15 1l3 3-3 3"/></svg></span></div>
-      </a>
-      <a class="box box--eat u-nav" data-nec="eat" href="#eat">
-        <div class="box-stage"><div class="machine" data-machine="eat"></div></div>
-        <div class="box-info"><div class="box-label">Eat</div>
-          <div class="commentary">Crops and livestock, from field inputs through processing to distribution. Demand is daily and land is fixed, so a shortfall shows up quickly in price.</div>
-          <ul class="ledger" data-ledger="eat"></ul>
-          <span class="box-go">Read the Eat system<svg class="box-go-arrow" viewBox="0 0 22 8" aria-hidden="true" focusable="false"><path d="M0 4h18M15 1l3 3-3 3"/></svg></span></div>
-      </a>
-      <a class="box box--heal u-nav" data-nec="heal" href="#heal">
-        <div class="box-stage"><div class="machine" data-machine="heal"></div></div>
-        <div class="box-info"><div class="box-label">Heal</div>
-          <div class="commentary">Prevention, diagnosis, treatment, and care to end of life. Demand is universal and rises with age, and capacity limits how much care a system delivers.</div>
-          <ul class="ledger" data-ledger="heal"></ul>
-          <span class="box-go">Read the Heal system<svg class="box-go-arrow" viewBox="0 0 22 8" aria-hidden="true" focusable="false"><path d="M0 4h18M15 1l3 3-3 3"/></svg></span></div>
-      </a>
-    </div>
-  </section>
-
-
-  <!-- S2/S3/S4 necessity sections (composed by script) -->
-  <section class="nec sec-power" id="power" data-flip="0" data-kind="power"></section>
-  <section class="nec sec-eat"   id="eat"   data-flip="1" data-kind="eat"></section>
-  <section class="nec sec-heal"  id="heal"  data-flip="0" data-kind="heal"></section>
-
-
-<!-- S6 the gate: sections 05 and 06 as one, 2026-09-24.
+  <!-- 2026-10-30 (GP): the gate moved from after Heal to straight after the hero. It carries the
+       belief a reader can reject ("A model can shorten the first build. It cannot shorten an
+       inspection"), so a reader who disagrees meets it in two scrolls and one who agrees
+       recognises it before the systems. Nothing in it was reworded. -->
+  <!-- S6 the gate: sections 05 and 06 as one, 2026-09-24.
        The heading is lifted from for-llms.html. Four plates: the locator and the barrier
        side by side, the tier finding, the AI clock. The enacted record that sat beside them
        moved to register.html on 2026-10-21 (clarity build plan, phase 2) and the section
@@ -153,6 +115,47 @@
       <a class="reg-more" href="register.html"><span>Regulatory &amp; legal instruments</span></a>
     </div>
   </section>
+
+  <!-- S1b hero: the kicker and the three system cards, below the fit since 2026-09-15 -->
+  <section class="hero">
+    <div class="eyebrow">Power · Eat · Heal</div>
+    <h2 class="hero-title"><span class="hk-nec">Necessity</span> is the thesis</h2>
+    <!-- Thesis paragraphs, GP 2026-10-26 (spec v1.1, 3.3). -->
+    <div class="hero-lede">
+      <p class="hero-id">Energy, food and care reach us through systems built for another technological era. Their physical foundations are now being rebuilt. In the power plant, the paddock and the clinic, founders are applying advances in intelligence, biology and engineering inside markets whose rules predate those capabilities.</p>
+      <p>These are systems society cannot afford to fail, so technology enters them by earning permission. Our thesis: value in a necessity moves towards whoever holds its regulated layer, and we invest where that movement is already underway.</p>
+      <p>Three systems qualify on two conditions: demand that holds through every cycle, and failure counted in blackouts, shortages and untreated disease. We back the companies that need permission to sell into them, not the software that checks compliance.</p>
+    </div>
+    <div class="hero-row" id="heroRow">
+      <a class="box box--power u-nav" data-nec="power" href="#power">
+        <div class="box-stage"><div class="machine" data-machine="power"></div></div>
+        <div class="box-info"><div class="box-label">Power</div>
+          <div class="commentary">Fuel and critical minerals, generation, storage, and the grid to end use. Demand is universal and rising, and a failure stops industry and daily life.</div>
+          <ul class="ledger" data-ledger="power"></ul>
+          <span class="box-go">Read the Power system<svg class="box-go-arrow" viewBox="0 0 22 8" aria-hidden="true" focusable="false"><path d="M0 4h18M15 1l3 3-3 3"/></svg></span></div>
+      </a>
+      <a class="box box--eat u-nav" data-nec="eat" href="#eat">
+        <div class="box-stage"><div class="machine" data-machine="eat"></div></div>
+        <div class="box-info"><div class="box-label">Eat</div>
+          <div class="commentary">Crops and livestock, from field inputs through processing to distribution. Demand is daily and land is fixed, so a shortfall shows up quickly in price.</div>
+          <ul class="ledger" data-ledger="eat"></ul>
+          <span class="box-go">Read the Eat system<svg class="box-go-arrow" viewBox="0 0 22 8" aria-hidden="true" focusable="false"><path d="M0 4h18M15 1l3 3-3 3"/></svg></span></div>
+      </a>
+      <a class="box box--heal u-nav" data-nec="heal" href="#heal">
+        <div class="box-stage"><div class="machine" data-machine="heal"></div></div>
+        <div class="box-info"><div class="box-label">Heal</div>
+          <div class="commentary">Prevention, diagnosis, treatment, and care to end of life. Demand is universal and rises with age, and capacity limits how much care a system delivers.</div>
+          <ul class="ledger" data-ledger="heal"></ul>
+          <span class="box-go">Read the Heal system<svg class="box-go-arrow" viewBox="0 0 22 8" aria-hidden="true" focusable="false"><path d="M0 4h18M15 1l3 3-3 3"/></svg></span></div>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- S2/S3/S4 necessity sections (composed by script) -->
+  <section class="nec sec-power" id="power" data-flip="0" data-kind="power"></section>
+  <section class="nec sec-eat"   id="eat"   data-flip="1" data-kind="eat"></section>
+  <section class="nec sec-heal"  id="heal"  data-flip="0" data-kind="heal"></section>
 
   <!-- S9 how we find them: the sourcing thesis. -->
   <section class="ai src" id="s9">
