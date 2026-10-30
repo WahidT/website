@@ -39,3 +39,6 @@ tbody td.supports{font-size:12.5px;color:var(--hmm-text-muted,rgba(242,236,201,.
 /* A note under a category heading, where the list's relationship to a count stated elsewhere
    needs saying. Added 2026-09-14 after two simulated readers counted the regulatory rows
    against the thesis page's stated instrument count and found no explanation of the gap. */
+/* The IM tag (2026-10-30, GP): marks a source the Information Memorandum relies on, cited in its text or
+   counted in its 31-instrument count. Mapped row by row against the IM, not by issuer name. */
+.src-im{display:inline-block;margin-left:6px;padding:0 5px;font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;line-height:16px;color:var(--hmm-accent-text);border:1px solid var(--hmm-accent);vertical-align:1px;}
