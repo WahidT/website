@@ -21,7 +21,7 @@ import { chromium } from 'playwright';
 const BASE = (process.argv[2] || 'http://127.0.0.1:8791').replace(/\/$/, '');
 /* Playwright resolves its own Chromium (installed by the postinstall script); CHROMIUM_PATH overrides it. */
 const EXECUTABLE = process.env.CHROMIUM_PATH || undefined;
-const ROUTES = ['index.html', 'bio.html', 'japan.html', 'australia.html', 'new-zealand.html', 'sources.html', 'register.html', 'for-llms.html', '404.html'];
+const ROUTES = ['index.html', 'bio.html', 'japan.html', 'australia.html', 'new-zealand.html', 'ja.html', 'sources.html', 'register.html', 'for-llms.html', '404.html'];
 
 /* selector -> cursor deliberately not `pointer`, because the effect is not activation */
 const ALLOW = [
