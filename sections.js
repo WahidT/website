@@ -66,7 +66,7 @@ if(SECCFG.heal) SECCFG.heal.unitHTML="The instance is a clinic, and it earns per
   HMM.renderBlowout(sec.querySelector('.machine-wrap'),kind);
   /* The part-name list under each drawing was removed on 2026-10-30 (GP: cut what does not add).
      It named the parts of an illustration and carried no part of the argument, and it cost about
-     500px of a phone page held to 9,000px. The drawing's own callouts stay hidden by index.css. */
+     500px of a phone page held to a ceiling (check:clarity). The drawing's own callouts stay hidden by index.css. */
   window.hmmSystemDiagram(sec.querySelector('.schematic-wrap'),kind);
 });
 

@@ -20,7 +20,12 @@ import { measure } from './measure-clarity.mjs';
 
 const BASE = (process.argv[2] || 'http://127.0.0.1:8791').replace(/\/$/, '');
 const FLOOR = 12;
-const PAGE_CEILING = 9000;
+/* PAGE_CEILING was 9,000 from 2026-10-21. Raised to 9,650 on 2026-10-30 (GP), measured: the page is
+   9,605px at 390 after this branch added the evidence section (1,284) and the market and register
+   work, and paid back 566px by cutting the machine parts lists and a duplicate caption. The GP chose
+   to keep the value-chain diagrams over the last 605px. The 45px of headroom is one wrapped line,
+   not room for a new block: a new block pays for itself or comes with its own measured reason. */
+const PAGE_CEILING = 9650;
 /* section id -> ceiling in px at 390. Audit heights: mandate 844, hero 2031, power 1224,
    eat 1238, heal 1258, s6 6633, s8 1115, s9 973, s10 234. #s8 was removed on 2026-10-21.
    #evidence was added on 2026-10-30 and measured at 1284 with its three cards filled. It came after
