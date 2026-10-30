@@ -5,28 +5,15 @@
    thesis page. The block is unchanged apart from its filter scope, which was #s6 and is
    now #register. It reads window.REG_INSTRUMENTS from data/reg_instruments.js, which
    loads before it on this page and no longer loads on the thesis page. */
-(function(){var body=document.getElementById('tlBody');if(!body||!window.REG_INSTRUMENTS)return;
-  function e2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
-  // lead sentence counts derive from the register. In force is REG_IN_FORCE, defined once in data/reg_instruments.js and shared with scripts/check-register-figures.mjs.
-  // The since-2020 count reads op, the operative year, never yr, which is a timeline position (see the field note in data/reg_instruments.js).
-  /* The enacted-record sentence was removed on 2026-09-15 (GP). The block that wrote it
-     from the live register went with it, and so did its build guard, because a checker
-     pointed at a target that no longer exists reports clean and that is its worst output.
-     The market bars that drew the per-market counts left with their section on 2026-10-21. */
-  var byYear={};REG_INSTRUMENTS.forEach(function(r){(byYear[r.yr]=byYear[r.yr]||[]).push(r);});
-  function cTag(r){return '<span class="tl-c'+(r.global?' tl-c--global':'')+'">'+e2(r.c)+'</span>';}
-  function row(r){return '<div class="tl-row u-panel tl-'+r.type+(r.global?' tl-global':'')+'" data-c="'+e2(r.c)+'">'+cTag(r)+'<span class="tl-date">'+e2(r.date)+'</span><span class="tl-name">'+e2(r.name)+'</span><span class="tl-org">'+e2(r.body)+'</span><span class="tl-status tl-st--'+r.status+'">'+e2(r.status)+'</span></div>';}
-  var html='';
-  // standing base (pre-2020), compact
-  /* Market order is Japan, Australia, New Zealand on every surface (GP 2026-10-26), then the global rows. */
-  var MKT={JP:0,AU:1,NZ:2};function mk(r){return r.global?9:(r.c in MKT?MKT[r.c]:5);}
-  var standing=REG_INSTRUMENTS.filter(function(r){return r.yr<2020;}).sort(function(a,b){return a.yr-b.yr||mk(a)-mk(b);});
-  if(standing.length){var items=standing.map(function(r){return '<span class="tl-stand-item u-panel tl-'+r.type+(r.global?' tl-global':'')+'" data-c="'+e2(r.c)+'">'+cTag(r)+e2(r.name)+'</span>';}).join('');
-    html+='<div class="tl-year tl-standing"><div class="tl-axis"><span class="tl-node"></span><span class="tl-y">pre-2020</span></div><div class="tl-rows"><div class="tl-stand-label">Standing · the established base</div><div class="tl-stand-wrap">'+items+'</div></div></div>';}
-  // the net-new tick, 2020-2030
-  for(var y=2020;y<=2030;y++){var future=y>=2027,rows=(byYear[y]||[]).slice().sort(function(a,b){return mk(a)-mk(b);});
-    html+='<div class="tl-year'+(future?' tl-future':'')+'"><div class="tl-axis"><span class="tl-node"></span><span class="tl-y">'+y+'</span></div><div class="tl-rows">'+(rows.length?rows.map(row).join(''):'<div class="tl-empty">·</div>')+'</div></div>';}
-  body.innerHTML=html;
+(function(){var body=document.getElementById('tlBody');if(!body||!window.REG_INSTRUMENTS||!window.REG_RENDER)return;
+  /* The markup comes from scripts/reg-render.js, which build-register.mjs also runs to write the
+     same rows into register.html for readers without JavaScript (2026-10-30). Rebuilding here is
+     idempotent: it replaces the static rows with identical ones and gives the reveal and the
+     filter below fresh nodes to bind to. In force is REG_IN_FORCE, defined once in
+     data/reg_instruments.js and shared with scripts/check-register-figures.mjs. The
+     enacted-record sentence that this block once wrote was removed on 2026-09-15 (GP), with its
+     guard, and the market bars left with their section on 2026-10-21. */
+  body.innerHTML=window.REG_RENDER(REG_INSTRUMENTS);
   /* click-to-scatter on the timeline. ONE ENGINE (2026-10-26): the year nodes are pushed by the
      same impulse that ripples the page field and the drawings, HMM_MOTION.push over the engine's
      3s weighted decay, from any click on the page within reach of the timeline. The spring this

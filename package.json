@@ -17,7 +17,9 @@
     "dump:served": "node scripts/dump-served-text.mjs",
     "check:clarity": "node scripts/check-clarity.mjs",
     "measure:clarity": "node scripts/measure-clarity.mjs",
-    "check:market": "node scripts/check-market-order.mjs"
+    "check:market": "node scripts/check-market-order.mjs",
+    "build:register": "node scripts/build-register.mjs",
+    "check:register": "node scripts/build-register.mjs --check"
   },
   "devDependencies": {
     "playwright": "^1.62.1"
