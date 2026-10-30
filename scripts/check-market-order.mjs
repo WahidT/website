@@ -12,13 +12,18 @@
    Usage: node scripts/check-market-order.mjs        (exit 1 on any hit) */
 import fs from 'node:fs';
 
-const PAGES = ['index.html', 'bio.html', 'for-llms.html', 'sources.html', 'register.html', 'instruments.html', '404.html'];
+const PAGES = ['index.html', 'bio.html', 'japan.html', 'australia.html', 'new-zealand.html', 'ja.html', 'for-llms.html', 'sources.html', 'register.html', 'instruments.html', '404.html'];
 const RAW = ['llms.txt', 'register.js'];
 const EXCEPTIONS = [/He grew up between New Zealand, Australia and Saudi Arabia/];   // GP spec v1.1, 2026-10-26: biography life order
 
 function served(html) {
   let s = html;
   for (const tag of ['script', 'style', 'svg', 'noscript']) s = s.replace(new RegExp(`<${tag}\\b[\\s\\S]*?</${tag}>`, 'gi'), ' ');
+  /* Each pre-2020 chip on the register is one instrument, a unit of its own like a table cell, so
+     it is split here. The chips run in date order (New Zealand's 1981 Act before Australia's 1988
+     Act), which is a timeline and names no market list. Read as one run-on sentence they failed
+     this check once register.html carried them as static markup (2026-10-30). */
+  s = s.replace(/<span class="tl-stand-item/g, ' . $&');
   s = s.replace(/<!--[\s\S]*?-->/g, ' ').replace(/<\/(td|th|li|p|div|h\d)>/gi, ' . ').replace(/<[^>]+>/g, ' ');
   return s.replace(/&[a-z]+;|&#\d+;/gi, ' ').replace(/\s+/g, ' ');
 }

@@ -20,6 +20,8 @@ import { measure } from './measure-clarity.mjs';
 
 const BASE = (process.argv[2] || 'http://127.0.0.1:8791').replace(/\/$/, '');
 const FLOOR = 12;
+/* PAGE_CEILING is 9,000 (2026-10-21). It was raised to 9,650 on 2026-10-30 to carry the evidence
+   section, and restored the same day when the GP cut that section, so no raise stands. */
 const PAGE_CEILING = 9000;
 /* section id -> ceiling in px at 390. Audit heights: mandate 844, hero 2031, power 1224,
    eat 1238, heal 1258, s6 6633, s8 1115, s9 973, s10 234. #s8 was removed on 2026-10-21. */

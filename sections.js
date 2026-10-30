@@ -64,12 +64,9 @@ if(SECCFG.heal) SECCFG.heal.unitHTML="The instance is a clinic, and it earns per
     +'<div class="card">'+TK+'<div class="schematic-wrap"></div></div>'
     +'</div>';
   HMM.renderBlowout(sec.querySelector('.machine-wrap'),kind);
-  /* Under 600px the drawing renders its callouts at about 5px, so index.css hides the boxes there
-     and this list carries the same labels as text (clarity plan phase 3, 2026-10-22). */
-  var cl=document.createElement('ol');cl.className='callout-list';
-  HMM.callouts(kind).forEach(function(c){var li=document.createElement('li');if(c.key)li.className='is-key';
-    li.innerHTML='<span class="cl-n">'+c.n+'</span><span class="cl-t"><b>'+c.name+'</b> '+c.note+'</span>';cl.appendChild(li);});
-  sec.querySelector('.stage').appendChild(cl);
+  /* The part-name list under each drawing was removed on 2026-10-30 (GP: cut what does not add).
+     It named the parts of an illustration and carried no part of the argument, and it cost about
+     500px of a phone page held to a ceiling (check:clarity). The drawing's own callouts stay hidden by index.css. */
   window.hmmSystemDiagram(sec.querySelector('.schematic-wrap'),kind);
 });
 

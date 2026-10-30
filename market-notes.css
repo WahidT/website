@@ -1,0 +1,12 @@
+/* hmm site - the figure blocks, the Model tag and the closing notes on the three English market
+   pages, 2026-10-30. Split from market.css so ja.html, which carries none of them, loads no dead
+   rule (check:deadcss). */
+.mk-model{display:inline-block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-accent-text);
+          border:1px solid var(--hmm-accent);padding:0 6px;margin-right:8px;line-height:18px;}
+.mk-notes{margin:38px 0 26px;padding-top:16px;border-top:1px solid var(--hmm-border,rgba(242,236,201,.14));}
+.mk-notes p{font-family:var(--hmm-font-mono);font-size:12px;line-height:1.55;color:var(--hmm-caption,rgba(242,236,201,.72));margin:0 0 10px;max-width:66ch;}
+.mk-fact{margin:0 0 20px;}
+.mk-fig{font-family:var(--hmm-font-figures);font-weight:700;font-size:28px;line-height:1.1;margin:0 0 6px;color:var(--hmm-pearl,var(--hmm-pearl-beige));}
+.mk-fig span{font-size:15px;font-weight:600;color:var(--hmm-caption,rgba(242,236,201,.72));margin-left:6px;}
+.mk-src{font-family:var(--hmm-font-mono);font-size:12px;line-height:1.5;letter-spacing:.02em;color:var(--hmm-caption,rgba(242,236,201,.72));margin:0;max-width:62ch;}
+@media(max-width:560px){.mk-fig{font-size:24px;}}

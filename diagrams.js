@@ -84,8 +84,10 @@
       chain(plant);chain(animal);
       edges.push({a:'06',b:'07'},{a:'A5',b:'07',route:'conv'});chain(shared);
       edges.push({a:'mouth',b:'10'},{a:'10',b:'base',dash:true,route:'ret'});
-      /* The note's second sentence (the chains converge at processing) is what the drawing shows, so the caption keeps the other three. */
-      var note=C.note.match(/[^.]+\./g).map(function(s){return s.trim();}), last=note.pop(); note.splice(1,1);
+      /* The note's second sentence (the chains converge at processing) is what the drawing shows, so the caption drops it.
+         Its third ("Field autonomy already pays in the middle of both") restates the card's own last sentence, so the
+         caption drops that too (GP 2026-10-30: cut what does not add). The data keeps the GP's text verbatim. */
+      var note=C.note.match(/[^.]+\./g).map(function(s){return s.trim();}), last=note.pop(); note.splice(1,2);
       return {nodes:nodes,edges:edges,
         key:[{sw:'',text:note.join(' ')},{sw:'acc',text:last}],
         /* feed down and manure up between the two chains: the exchange, not a stage link */

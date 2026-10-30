@@ -349,24 +349,17 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
   .footer-contact{display:inline-flex;align-items:center;min-height:44px;}
 }
 @media(hover:none){.machine-wrap svg .callout{transform:scale(1.3);}}
-/* Callouts as text (clarity plan phase 3, 2026-10-22, on a phone; at every width since 2026-10-26).
+/* Callouts hidden (clarity plan phase 3, 2026-10-22, on a phone; at every width since 2026-10-26).
    The blow-out scales with its box, so its 12.5px labels render at about 5px below 600px and at
-   about 6px on a desktop; the boxes and their leaders hide and the list sections.js builds from
-   the same data takes their place under the drawing. */
+   about 6px on a desktop; the boxes and their leaders hide. The text list that replaced them was
+   removed on 2026-10-30 as non-additive, so the drawing stands without part labels. */
 .machine-wrap svg .callout,.machine-wrap svg .callout-ld{display:none;}
-.callout-list{display:flex;flex-direction:column;gap:8px;list-style:none;margin:14px 0 0;padding:0;}
 @media(max-width:600px){
   /* With the boxes gone the drawing needs no headroom for them, so it takes its own height
      rather than the 44vh the stacked layout reserves above 600px. */
   .stage .machine-wrap{min-height:0;}
   .stage .machine-wrap svg{height:auto;max-height:none;}
 }
-.callout-list li{display:flex;gap:10px;align-items:baseline;font-size:14px;line-height:1.5;color:var(--hmm-text-muted);}
-.callout-list .cl-n{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.1em;color:var(--hmm-caption);flex:0 0 auto;}
-.callout-list b{color:var(--hmm-pearl);font-weight:600;}
-.sec-power .callout-list .is-key .cl-n{color:var(--hmm-nec-power-dark);}
-.sec-eat .callout-list .is-key .cl-n{color:var(--hmm-nec-eat-dark);}
-.sec-heal .callout-list .is-key .cl-n{color:var(--hmm-nec-heal-dark);}
 /* The instance paragraph as a disclosure (2026-10-26): open on a wide screen, closed on a phone. */
 details.card-unit>summary{font-family:var(--hmm-font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--hmm-caption);cursor:pointer;min-height:44px;display:flex;align-items:center;list-style:none;}
 details.card-unit>summary::-webkit-details-marker{display:none;}
@@ -378,9 +371,8 @@ details.card-unit>p{margin-top:4px;}
      page ceiling at 390px: stacked they were 1,330px). Each card still links to its section. */
   .hero-row{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:12px;padding-bottom:6px;}
   .hero-row .box{flex:0 0 84%;scroll-snap-align:start;}
-  /* The system sections: tighter panel air and list rhythm on a phone, for the page ceiling. */
+  /* The system sections: tighter panel air on a phone, for the page ceiling. */
   .nec .panel,.nec[data-flip="1"] .panel{padding:24px 20px 28px;gap:12px;}
-  .callout-list{gap:5px;}
   .card .sd-key p{font-size:12px;line-height:1.45;}
   .sd-key{margin-top:10px;gap:4px;}
   .sd-n{padding:4px 7px;}
@@ -478,3 +470,4 @@ details.card-unit>p{margin-top:4px;}
 #mandate.fit-live p{opacity:var(--fit-text,1);}
 #mandate .fit-dots{position:absolute;inset:0;width:100%;height:100%;max-width:none;margin:0;overflow:visible;pointer-events:none;}
 #mandate .fit-dots.fit-rest{display:none;}
+
