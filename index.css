@@ -321,7 +321,6 @@ body{margin:0;padding:0;font-family:var(--hmm-font-body);color:var(--hmm-pearl);
 .evd-funnel{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:1.4;color:var(--hmm-text-muted);}
 .evd-funnel li{display:grid;grid-template-columns:62px minmax(0,1fr);column-gap:10px;}
 .evd-funnel span{font-family:var(--hmm-font-mono);color:var(--hmm-pearl);text-align:right;}
-.evd-card--pending{border-top-style:dashed;opacity:.7;}
 @media(max-width:900px){.evd-grid{grid-template-columns:minmax(0,1fr);}}
 @media(max-width:640px){.evd{padding:56px 20px;}.evd-fig{font-size:44px;}}
 /* ===== mobile UX pass (UX/perf audit) ===== */

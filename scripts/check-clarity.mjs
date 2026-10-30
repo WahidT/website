@@ -22,10 +22,13 @@ const BASE = (process.argv[2] || 'http://127.0.0.1:8791').replace(/\/$/, '');
 const FLOOR = 12;
 const PAGE_CEILING = 9000;
 /* section id -> ceiling in px at 390. Audit heights: mandate 844, hero 2031, power 1224,
-   eat 1238, heal 1258, s6 6633, s8 1115, s9 973, s10 234. #s8 was removed on 2026-10-21. */
+   eat 1238, heal 1258, s6 6633, s8 1115, s9 973, s10 234. #s8 was removed on 2026-10-21.
+   #evidence was added on 2026-10-30 and measured at 1284 with its three cards filled. It came after
+   the type-scale phase, so it carries no 15 percent allowance: the ceiling is the measurement plus
+   16px, enough for one wrapped source line and not for a fourth card. */
 const CEILINGS = {
   mandate: 1000, hero: 2400, power: 1460, eat: 1480, heal: 1500,
-  s6: 1700, s9: 1170, s10: 320,
+  evidence: 1300, s6: 1700, s9: 1170, s10: 320,
 };
 
 const r = await measure(BASE);
